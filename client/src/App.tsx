@@ -1,10 +1,13 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
+import Navigation from './components/Navigation';
 import { getBlogs } from './API';
 import { useGlobalCss } from './stitches.config';
 
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
+import '@fontsource/raleway/400.css';
+import '@fontsource/raleway/800.css';
 
-const App: React.FC = () => {
+const App = () => {
   const [blogs, setBlogs] = useState<IBlog[]>([]);
 
   useEffect(() => {
@@ -19,7 +22,11 @@ const App: React.FC = () => {
       .catch((err: Error) => console.log(err));
   };
 
-  return <></>;
+  return (
+    <>
+      <Navigation />
+    </>
+  );
 };
 
 export default App;
