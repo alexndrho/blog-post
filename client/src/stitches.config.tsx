@@ -30,11 +30,16 @@ const useGlobalCss = stitches.globalCss({
   },
   'html, body, #root': {
     width: '100%',
-    minHeight: '100%',
+    height: '100%',
+    minHeight: '100% !important',
     padding: 0,
   },
   body: {
     fontFamily: '$default',
+  },
+  '#root': {
+    display: 'flex',
+    flexDirection: 'column',
   },
   button: {
     cursor: 'pointer',
