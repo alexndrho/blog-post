@@ -12,6 +12,9 @@ const stitches = createStitches({
       l: '3rem',
       xl: '3.5rem',
     },
+    sizes: {
+      navHeight: '5rem',
+    },
   },
   media: {
     tablet: '(min-width: 500px)',

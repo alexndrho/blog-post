@@ -7,6 +7,7 @@ const { styled } = stitches;
 
 const Nav = styled('nav', {
   width: '100%',
+  minHeight: '$navHeight',
   padding: '1em 2em',
   display: 'flex',
   justifyContent: 'space-between',
