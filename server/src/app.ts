@@ -1,7 +1,7 @@
 import express, { Express } from 'express';
 import mongoose from 'mongoose';
 import cors from 'cors';
-import blogRoute from './routes/index';
+import blogRoute from './routes/blog';
 
 const app: Express = express();
 

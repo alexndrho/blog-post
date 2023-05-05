@@ -1,5 +1,5 @@
 import { Router } from 'express';
-import { getBlogs, createBlog, deleteBlog } from '../controllers/Blogs';
+import { getBlogs, createBlog, deleteBlog } from '../controllers/Blogs/blog';
 
 const router: Router = Router();
 
