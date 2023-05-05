@@ -5,8 +5,16 @@ const { styled } = stitches;
 const Main = styled('main', {
   flexGrow: 1,
   width: '100%',
-  height: 'auto',
   padding: '5rem',
+  display: 'flex',
+  maxHeight: 'calc(100vh - ($navHeight * 2))',
+  flexDirection: 'column',
+  justifyContent: 'center',
+  alignItems: 'center',
+
+  '@tablet': {
+    alignItems: 'flex-start',
+  },
 });
 
 const Title = styled('h2', {
