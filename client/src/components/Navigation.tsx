@@ -120,7 +120,7 @@ const Navigation = () => {
           </A>
         </Li>
         <Li>
-          <A as={Link} to="/blog/create">
+          <A as={Link} to="/blogs/create">
             Create blog
           </A>
         </Li>
