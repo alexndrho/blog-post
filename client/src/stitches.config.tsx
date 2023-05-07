@@ -2,6 +2,9 @@ import { createStitches } from '@stitches/react';
 
 const stitches = createStitches({
   theme: {
+    colors: {
+      lightGray: '#CBCBCB',
+    },
     fonts: {
       default: 'Raleway, sans-serif',
     },
