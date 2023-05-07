@@ -8,7 +8,7 @@ interface IBlog {
 }
 
 interface BlogProps {
-  todo: Blog;
+  blog: Blog;
 }
 
 type ApiDataType = {
