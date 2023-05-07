@@ -15,8 +15,8 @@ const getBlog = async (req: Request, res: Response) => {
   try {
     const id = req.params.id;
 
-    const blog: IBlog | null = await Blog.findById(id);
-    res.status(200).json({ ...blog });
+    const blog: IBlog | any | null = await Blog.findById(id);
+    res.status(200).json({ ...blog._doc });
   } catch (err) {
     console.log(err);
   }
@@ -33,9 +33,9 @@ const createBlog = async (req: Request, res: Response) => {
       body: body.body,
     });
 
-    const newBlog: IBlog = await blog.save();
+    const newBlog: IBlog | any = await blog.save();
 
-    res.status(201).json({ ...newBlog });
+    res.status(201).json({ ...newBlog._doc });
   } catch (err) {
     console.error(err);
   }
@@ -43,11 +43,11 @@ const createBlog = async (req: Request, res: Response) => {
 
 const deleteBlog = async (req: Request, res: Response) => {
   try {
-    const deletedBlog: IBlog | null = await Blog.findByIdAndDelete(
+    const deletedBlog: IBlog | any | null = await Blog.findByIdAndDelete(
       req.params.id
     );
 
-    res.status(200).json({ ...deletedBlog });
+    res.status(200).json({ ...deletedBlog._doc });
   } catch (err) {
     console.error(err);
   }
