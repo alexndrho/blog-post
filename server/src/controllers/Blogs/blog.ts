@@ -23,11 +23,8 @@ const createBlog = async (req: Request, res: Response) => {
     });
 
     const newBlog: IBlog = await blog.save();
-    const allBlog: IBlog[] = await Blog.find();
 
-    res
-      .status(201)
-      .json({ message: 'Blog added', blog: newBlog, blogs: allBlog });
+    res.status(201).json({ ...newBlog });
   } catch (err) {
     console.error(err);
   }
@@ -38,13 +35,8 @@ const deleteBlog = async (req: Request, res: Response) => {
     const deletedBlog: IBlog | null = await Blog.findByIdAndDelete(
       req.params.id
     );
-    const allBlogs: IBlog[] = await Blog.find();
 
-    res.status(200).json({
-      message: 'Blog Deleted',
-      blog: deletedBlog,
-      blogs: allBlogs,
-    });
+    res.status(200).json({ ...deletedBlog });
   } catch (err) {
     console.error(err);
   }
