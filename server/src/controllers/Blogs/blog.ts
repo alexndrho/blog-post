@@ -11,6 +11,17 @@ const getBlogs = async (req: Request, res: Response) => {
   }
 };
 
+const getBlog = async (req: Request, res: Response) => {
+  try {
+    const id = req.params.id;
+
+    const blog: IBlog | null = await Blog.findById(id);
+    res.status(200).json({ ...blog });
+  } catch (err) {
+    console.log(err);
+  }
+};
+
 const createBlog = async (req: Request, res: Response) => {
   try {
     console.log(req.body);
@@ -42,4 +53,4 @@ const deleteBlog = async (req: Request, res: Response) => {
   }
 };
 
-export { getBlogs, createBlog, deleteBlog };
+export { getBlogs, getBlog, createBlog, deleteBlog };
