@@ -1,4 +1,5 @@
 import Navigation from './components/Navigation';
+import Blog from './components/Blog';
 import CreateBlog from './components/CreateBlog';
 import NotFound from './components/NotFound';
 import { useGlobalCss } from './stitches.config';
@@ -17,6 +18,7 @@ const App = () => {
       <Routes>
         <Route path="/blogs">
           <Route path="create" element={<CreateBlog />} />
+          <Route path=":id" element={<Blog />} />
         </Route>
         <Route path="*" element={<NotFound />} />
       </Routes>
