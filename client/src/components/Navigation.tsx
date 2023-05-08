@@ -52,6 +52,7 @@ const Li = styled('li', { listStyle: 'none', textAlign: 'center' });
 
 const A = styled('a', {
   textDecoration: 'none',
+  fontSize: '$s',
   color: 'Black',
   padding: '0.75rem 1rem',
   display: 'block',
