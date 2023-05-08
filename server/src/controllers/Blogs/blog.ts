@@ -1,6 +1,7 @@
 import { Request, Response } from 'express';
 import IBlog from '../../types/blog';
 import Blog from '../../models/blog';
+import mongoose from 'mongoose';
 
 const getBlogs = async (req: Request, res: Response) => {
   try {
@@ -14,6 +15,10 @@ const getBlogs = async (req: Request, res: Response) => {
 const getBlog = async (req: Request, res: Response) => {
   try {
     const id = req.params.id;
+
+    if (!mongoose.Types.ObjectId.isValid(id)) {
+      res.status(400).json(null);
+    }
 
     const blog: IBlog | any | null = await Blog.findById(id);
     res.status(200).json({ ...blog._doc });
