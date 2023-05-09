@@ -29,10 +29,12 @@ const Title = styled('h2', {
 
 const AllBlogs = () => {
   const [blogs, setBlogs] = useState<{ blogs: IBlog[] } | null>({ blogs: [] });
+  const [isLoading, setIsLoading] = useState(false);
 
   useEffect(() => {
     const getData = async () => {
       try {
+        setIsLoading(true);
         const response = await fetch(
           `${import.meta.env.VITE_BASE_URL_SERVER}/blogs/`,
           {
@@ -42,7 +44,9 @@ const AllBlogs = () => {
 
         const responseData = await response.json();
         setBlogs(responseData);
+        setIsLoading(false);
       } catch (err) {
+        setIsLoading(false);
         console.log(err);
       }
     };
@@ -52,7 +56,7 @@ const AllBlogs = () => {
 
   return (
     <Main>
-      <Title>Blogs</Title>
+      <Title>{isLoading ? 'Loading...' : 'Blogs'}</Title>
       {blogs?.blogs.map((blog) => (
         <BlogItem
           key={blog._id}
