@@ -3,7 +3,11 @@ import stitches from '../stitches.config';
 const { styled } = stitches;
 
 const Div = styled('div', {
-  marginBottom: '2rem',
+  marginBottom: '3rem',
+
+  '@desktop': {
+    marginBottom: '4rem',
+  },
 });
 
 const Link = styled('a', {
@@ -12,12 +16,23 @@ const Link = styled('a', {
 });
 
 const Title = styled('h3', {
-  marginBottom: '0.25rem',
+  marginBottom: '0.75rem',
   fontSize: '$s',
+
+  '@desktop': {
+    marginBottom: '1rem',
+    fontSize: '$m',
+    fontWeight: '700',
+  },
 });
 
 const Snippet = styled('p', {
   fontSize: '$xs',
+  textAlign: 'justify',
+
+  '@desktop': {
+    fontSize: '$s',
+  },
 });
 
 const BlogItem = ({

@@ -8,6 +8,7 @@ import { useGlobalCss } from './stitches.config';
 import { Routes, Route } from 'react-router-dom';
 import '@fontsource/raleway/400.css';
 import '@fontsource/raleway/500.css';
+import '@fontsource/raleway/600.css';
 import '@fontsource/raleway/800.css';
 
 const App = () => {

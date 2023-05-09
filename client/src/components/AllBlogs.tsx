@@ -9,11 +9,22 @@ const Main = styled('main', {
   margin: '0 auto',
   padding: '3rem 0',
   width: '80%',
+
+  '@desktop': {
+    marginTop: '1rem',
+    width: '60%',
+  },
 });
 
 const Title = styled('h2', {
   marginBottom: '1rem',
   fontSize: '$m',
+  fontWeight: '700',
+
+  '@desktop': {
+    marginBottom: '2rem',
+    fontSize: '$l',
+  },
 });
 
 const AllBlogs = () => {
