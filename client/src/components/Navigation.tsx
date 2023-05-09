@@ -121,6 +121,11 @@ const Navigation = () => {
           </A>
         </Li>
         <Li>
+          <A as={Link} to="/blogs">
+            All blogs
+          </A>
+        </Li>
+        <Li>
           <A as={Link} to="/blogs/create">
             Create blog
           </A>

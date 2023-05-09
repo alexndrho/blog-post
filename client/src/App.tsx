@@ -1,4 +1,5 @@
 import Navigation from './components/Navigation';
+import AllBlogs from './components/AllBlogs';
 import Blog from './components/Blog';
 import CreateBlog from './components/CreateBlog';
 import NotFound from './components/NotFound';
@@ -17,6 +18,7 @@ const App = () => {
       <Navigation />
       <Routes>
         <Route path="/blogs">
+          <Route index element={<AllBlogs />} />
           <Route path="create" element={<CreateBlog />} />
           <Route path=":id" element={<Blog />} />
         </Route>
