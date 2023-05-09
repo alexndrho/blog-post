@@ -1,4 +1,4 @@
-import stitches from '../stitches.config';
+import stitches from '../../stitches.config';
 
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';

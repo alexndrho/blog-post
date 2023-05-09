@@ -1,4 +1,4 @@
-import stitches from '../stitches.config';
+import stitches from '../../stitches.config';
 import { Link } from 'react-router-dom';
 
 const { styled } = stitches;

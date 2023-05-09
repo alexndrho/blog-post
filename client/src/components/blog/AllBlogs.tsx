@@ -1,5 +1,5 @@
 import BlogItem from './BlogItem';
-import stitches from '../stitches.config';
+import stitches from '../../stitches.config';
 
 import { useEffect, useState } from 'react';
 

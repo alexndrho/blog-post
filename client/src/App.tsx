@@ -1,7 +1,7 @@
 import Navigation from './components/Navigation';
-import AllBlogs from './components/AllBlogs';
-import Blog from './components/Blog';
-import CreateBlog from './components/CreateBlog';
+import AllBlogs from './components/blog/AllBlogs';
+import Blog from './components/blog/Blog';
+import CreateBlog from './components/blog/CreateBlog';
 import NotFound from './components/NotFound';
 import { useGlobalCss } from './stitches.config';
 
