@@ -1,4 +1,5 @@
 import stitches from '../stitches.config';
+import { Link } from 'react-router-dom';
 
 const { styled } = stitches;
 
@@ -10,7 +11,7 @@ const Div = styled('div', {
   },
 });
 
-const Link = styled('a', {
+const A = styled('a', {
   textDecoration: 'none',
   color: 'Black',
 });
@@ -42,10 +43,10 @@ const BlogItem = ({
 }: Pick<IBlog, '_id' | 'title' | 'snippet'>) => {
   return (
     <Div>
-      <Link href={`${import.meta.env.VITE_BASE_URL_CLIENT}/blogs/${_id}`}>
+      <A as={Link} to={`${import.meta.env.VITE_BASE_URL_CLIENT}/blogs/${_id}`}>
         <Title>{title}</Title>
         <Snippet>{snippet}</Snippet>
-      </Link>
+      </A>
     </Div>
   );
 };
