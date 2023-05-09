@@ -13,13 +13,22 @@ const Main = styled('main', {
 });
 
 const Title = styled('h2', {
-  marginBottom: '0.75rem',
-  fontSize: '$l',
+  marginBottom: '1rem',
+  fontSize: '$s',
+
+  '@tablet': {
+    marginBottom: '2rem',
+    fontSize: '$l',
+  },
 });
 
 const Body = styled('p', {
-  fontSize: '$s',
+  fontSize: '$xs',
   textAlign: 'justify',
+
+  '@tablet': {
+    fontSize: '$s',
+  },
 });
 
 const Blog = () => {
