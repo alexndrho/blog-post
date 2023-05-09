@@ -5,7 +5,7 @@ import { Link } from 'react-router-dom';
 
 const { styled } = stitches;
 
-const Nav = styled('nav', {
+const Header = styled('header', {
   width: '100%',
   minHeight: '$navHeight',
   padding: '1em 2em',
@@ -25,40 +25,52 @@ const TitleWrapper = styled('div', {
 });
 
 const Title = styled('h1', {
+  position: 'relative',
+  zIndex: 99,
   fontSize: '$l',
   userSelect: 'none',
   fontWeight: 'bolder',
 });
-
-const Links = styled('ul', {
-  maxHeight: '0px',
-  overflow: 'hidden',
-  display: 'flex',
-  flexDirection: 'column',
-  height: 'auto',
-  transition: 'all 0.5s ease',
+const Nav = styled('nav', {
+  position: 'fixed',
+  top: 0,
+  left: '100%',
+  zIndex: 98,
+  padding: '$sizes$navHeight',
+  display: 'block',
+  width: '100vw',
+  minWidth: '100vw',
+  minHeight: '100vh',
+  backgroundColor: 'White',
+  transition: 'left 0.5s ease',
 
   '@tablet': {
-    maxHeight: '500px',
-    flexDirection: 'row',
+    height: 'auto',
+    minHeight: 'auto',
+    width: 'auto',
+    minWidth: 'auto',
+    padding: 0,
+    display: 'flex',
+    position: 'static',
+    backgroundColor: 'none',
   },
 
   '&.active': {
-    maxHeight: '500px',
+    left: 0,
   },
 });
 
-const Li = styled('li', { listStyle: 'none', textAlign: 'center' });
-
 const A = styled('a', {
+  marginTop: '1rem',
   textDecoration: 'none',
   fontSize: '$s',
   color: 'Black',
   padding: '0.75rem 1rem',
   display: 'block',
-  // display: 'none',
+  textAlign: 'center',
 
   '@tablet': {
+    marginTop: '0rem',
     display: 'block',
     padding: '1rem',
   },
@@ -66,6 +78,7 @@ const A = styled('a', {
 
 const HambgMenu = styled('a', {
   position: 'absolute',
+  zIndex: 99,
   top: '2rem',
   right: '3rem',
   width: '2rem',
@@ -105,7 +118,7 @@ const Navigation = () => {
   };
 
   return (
-    <Nav>
+    <Header>
       <TitleWrapper as={Link} to="/">
         <Title>BLOG</Title>
       </TitleWrapper>
@@ -114,24 +127,18 @@ const Navigation = () => {
         <Bar />
         <Bar />
       </HambgMenu>
-      <Links ref={linksRef}>
-        <Li>
-          <A as={Link} to="/">
-            Home
-          </A>
-        </Li>
-        <Li>
-          <A as={Link} to="/blogs">
-            All blogs
-          </A>
-        </Li>
-        <Li>
-          <A as={Link} to="/blogs/create">
-            Create blog
-          </A>
-        </Li>
-      </Links>
-    </Nav>
+      <Nav ref={linksRef}>
+        <A as={Link} to="/" onClick={displayNav}>
+          Home
+        </A>
+        <A as={Link} to="/blogs" onClick={displayNav}>
+          All blogs
+        </A>
+        <A as={Link} to="/blogs/create" onClick={displayNav}>
+          Create blog
+        </A>
+      </Nav>
+    </Header>
   );
 };
 
