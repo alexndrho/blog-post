@@ -10,10 +10,3 @@ interface IBlog {
 interface BlogProps {
   blog: Blog;
 }
-
-type ApiDataType = {
-  message: string;
-  status: string;
-  blogs: IBlog[];
-  blog?: IBlog;
-};

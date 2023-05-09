@@ -88,7 +88,6 @@ const CreateBlog = () => {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    console.log(import.meta.env.VITE_BASE_URL_SERVER);
 
     try {
       const response = await fetch(

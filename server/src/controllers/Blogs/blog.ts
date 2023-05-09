@@ -20,10 +20,10 @@ const getBlog = async (req: Request, res: Response) => {
       res.status(400).json(null);
     }
 
-    const blog: IBlog | any | null = await Blog.findById(id);
+    const blog: IBlog | any = await Blog.findById(id);
     res.status(200).json({ ...blog._doc });
   } catch (err) {
-    console.log(err);
+    console.error(err);
   }
 };
 
@@ -48,7 +48,7 @@ const createBlog = async (req: Request, res: Response) => {
 
 const deleteBlog = async (req: Request, res: Response) => {
   try {
-    const deletedBlog: IBlog | any | null = await Blog.findByIdAndDelete(
+    const deletedBlog: IBlog | any = await Blog.findByIdAndDelete(
       req.params.id
     );
 
