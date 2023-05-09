@@ -108,7 +108,7 @@ const CreateBlog = () => {
 
       const responseData = await response.json();
 
-      navigate(`/${responseData._id}`);
+      navigate(`/blogs/${responseData._id}`);
     } catch (err) {
       console.error('Error: ' + err);
     }
