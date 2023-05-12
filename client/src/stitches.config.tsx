@@ -14,6 +14,7 @@ const stitches = createStitches({
       m: '2rem',
       l: '3rem',
       xl: '3.5rem',
+      title: '2.5rem',
     },
     sizes: {
       navHeight: '5rem',

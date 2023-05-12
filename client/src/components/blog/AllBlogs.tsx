@@ -22,8 +22,8 @@ const Title = styled('h2', {
   fontWeight: '700',
 
   '@desktop': {
-    marginBottom: '2rem',
-    fontSize: '$l',
+    marginBottom: '1.5rem',
+    fontSize: '$title',
   },
 });
 

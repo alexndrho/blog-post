@@ -15,6 +15,10 @@ const Main = styled('main', {
 const H2 = styled('h2', {
   marginBottom: '1rem',
   fontSize: '$m',
+
+  '@tablet': {
+    fontSize: '$title',
+  },
 });
 
 const CreateBlog = () => {
