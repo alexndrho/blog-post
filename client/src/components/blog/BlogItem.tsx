@@ -1,4 +1,5 @@
 import stitches from '../../stitches.config';
+import { TitleItem, SnippetItem } from '../stitches/blog';
 import { Link } from 'react-router-dom';
 
 const { styled } = stitches;
@@ -16,26 +17,6 @@ const A = styled('a', {
   color: 'Black',
 });
 
-const Title = styled('h3', {
-  marginBottom: '0.75rem',
-  fontSize: '$s',
-
-  '@desktop': {
-    marginBottom: '1rem',
-    fontSize: '$m',
-    fontWeight: '700',
-  },
-});
-
-const Snippet = styled('p', {
-  fontSize: '$xs',
-  textAlign: 'justify',
-
-  '@desktop': {
-    fontSize: '$s',
-  },
-});
-
 const BlogItem = ({
   _id,
   title,
@@ -44,8 +25,8 @@ const BlogItem = ({
   return (
     <Div>
       <A as={Link} to={`${import.meta.env.VITE_BASE_URL_CLIENT}/blogs/${_id}`}>
-        <Title>{title}</Title>
-        <Snippet>{snippet}</Snippet>
+        <TitleItem mb0_75>{title}</TitleItem>
+        <SnippetItem>{snippet}</SnippetItem>
       </A>
     </Div>
   );

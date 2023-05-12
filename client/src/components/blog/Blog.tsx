@@ -1,4 +1,5 @@
 import stitches from '../../stitches.config';
+import { TitleBlog, BodyBlog } from '../stitches/blog';
 import { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import NotFound from '../NotFound';
@@ -10,25 +11,6 @@ const Main = styled('main', {
   padding: '3rem 0',
   width: '80%',
   maxWidth: '1250px',
-});
-
-const Title = styled('h2', {
-  marginBottom: '1rem',
-  fontSize: '$s',
-
-  '@tablet': {
-    marginBottom: '2rem',
-    fontSize: '$l',
-  },
-});
-
-const Body = styled('p', {
-  fontSize: '$xs',
-  textAlign: 'justify',
-
-  '@tablet': {
-    fontSize: '$s',
-  },
 });
 
 const Blog = () => {
@@ -71,8 +53,8 @@ const Blog = () => {
         <NotFound />
       ) : (
         <Main>
-          <Title>{blogData?.title}</Title>
-          <Body>{blogData?.body}</Body>
+          <TitleBlog mb1>{blogData?.title}</TitleBlog>
+          <BodyBlog>{blogData?.body}</BodyBlog>
         </Main>
       )}
     </>
