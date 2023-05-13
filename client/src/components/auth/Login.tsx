@@ -14,7 +14,7 @@ const Main = styled('main', {
 
 const Title = styled('h2', {
   marginBottom: '1rem',
-  fontSize: '2.5rem',
+  fontSize: '$title',
 });
 
 const Login = () => {
@@ -69,7 +69,7 @@ const Login = () => {
           onChange={(e) => setPassword(e.target.value)}
           mb1
         />
-        <Button onClick={handleLogin}>Submit</Button>
+        <Button>Submit</Button>
       </Form>
     </Main>
   );
