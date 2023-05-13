@@ -1,4 +1,5 @@
 import Login from './components/auth/Login';
+import Register from './components/auth/Register';
 import Navigation from './components/Navigation';
 import AllBlogs from './components/blog/AllBlogs';
 import Blog from './components/blog/Blog';
@@ -47,6 +48,8 @@ const App = () => {
       <Navigation />
       <Routes>
         <Route path="/login" element={<Login />} />
+        <Route path="/register" element={<Register />} />
+
         <Route path="/blogs">
           <Route index element={<AllBlogs />} />
           <Route path="create" element={<CreateBlog />} />
