@@ -16,7 +16,7 @@ const Title = styled('h2', {
   fontSize: '$title',
 });
 
-const Register = () => {
+const SignUp = () => {
   const [username, setUsername] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
@@ -48,7 +48,7 @@ const Register = () => {
   return (
     <Main>
       <Form onSubmit={handleSubmit} size="fullscreen">
-        <Title>Register</Title>
+        <Title>Sign Up</Title>
         <Label htmlFor="form-username" mb0_5>
           Username:
         </Label>
@@ -83,4 +83,4 @@ const Register = () => {
   );
 };
 
-export default Register;
+export default SignUp;

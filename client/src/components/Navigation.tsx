@@ -155,7 +155,7 @@ const Navigation = () => {
     <Header>
       <Div>
         <AuthWrapperMobile>
-          <AStyled size="btn_sm" color="outline" as={Link} to="/register">
+          <AStyled size="btn_sm" color="outline" as={Link} to="/signup">
             Sign up
           </AStyled>
         </AuthWrapperMobile>
@@ -189,7 +189,7 @@ const Navigation = () => {
             <AStyled size="btn_sm" color="none" mr1 as={Link} to="/login">
               Log in
             </AStyled>
-            <AStyled size="btn_sm" color="outline" as={Link} to="/register">
+            <AStyled size="btn_sm" color="outline" as={Link} to="/signup">
               Sign up
             </AStyled>
           </AuthWrapperDesktop>

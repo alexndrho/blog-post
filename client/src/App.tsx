@@ -1,5 +1,5 @@
 import Login from './components/auth/Login';
-import Register from './components/auth/Register';
+import SignUp from './components/auth/SignUp';
 import Navigation from './components/Navigation';
 import AllBlogs from './components/blog/AllBlogs';
 import Blog from './components/blog/Blog';
@@ -48,7 +48,7 @@ const App = () => {
       <Navigation />
       <Routes>
         <Route path="/login" element={<Login />} />
-        <Route path="/register" element={<Register />} />
+        <Route path="/signup" element={<SignUp />} />
 
         <Route path="/blogs">
           <Route index element={<AllBlogs />} />
