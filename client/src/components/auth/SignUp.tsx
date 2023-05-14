@@ -30,7 +30,7 @@ const SignUp = () => {
 
     try {
       const response = await fetch(
-        `${import.meta.env.VITE_BASE_URL_SERVER}/register`,
+        `${import.meta.env.VITE_BASE_URL_SERVER}/signup`,
         {
           method: 'POST',
           headers: {
