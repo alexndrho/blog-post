@@ -7,8 +7,10 @@ import { useNavigate } from 'react-router-dom';
 const { styled } = stitches;
 
 const Main = styled('main', {
+  minHeight: '80%',
   display: 'flex',
   flexDirection: 'column',
+  justifyContent: 'center',
   alignItems: 'center',
 });
 

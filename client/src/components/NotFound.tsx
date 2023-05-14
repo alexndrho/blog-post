@@ -3,11 +3,11 @@ import stitches from '../stitches.config';
 const { styled } = stitches;
 
 const Main = styled('main', {
-  flexGrow: 1,
+  margin: '0 auto',
+  height: '80%',
   width: '100%',
-  padding: '5rem',
+  maxWidth: '$contentWidth',
   display: 'flex',
-  maxHeight: 'calc(100vh - ($navHeight * 2))',
   flexDirection: 'column',
   justifyContent: 'center',
   alignItems: 'center',

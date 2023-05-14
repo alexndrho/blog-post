@@ -18,8 +18,9 @@ const stitches = createStitches({
       title: '2.5rem',
     },
     sizes: {
-      navHeight: '5rem',
       contentWidth: '1280px',
+      contentWidthS: '1000px',
+      formWidth: '800px',
     },
   },
   media: {

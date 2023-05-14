@@ -10,7 +10,7 @@ const Main = styled('main', {
   margin: '0 auto',
   padding: '3rem 0',
   width: '80%',
-  maxWidth: '1250px',
+  maxWidth: '$contentWidth',
 });
 
 const Blog = () => {

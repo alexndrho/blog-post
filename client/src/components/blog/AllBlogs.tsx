@@ -7,12 +7,11 @@ const { styled } = stitches;
 
 const Main = styled('main', {
   margin: '0 auto',
-  padding: '3rem 0',
+  padding: '2rem 0',
   width: '80%',
 
   '@desktop': {
-    marginTop: '1rem',
-    width: '60%',
+    maxWidth: '$contentWidthS',
   },
 });
 

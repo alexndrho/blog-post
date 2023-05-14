@@ -11,10 +11,9 @@ const Form = styled('form', {
     size: {
       fullscreen: {
         width: '80%',
-        maxWidth: '80%',
-        minHeight: 'calc(100vh - $navHeight * 2)',
+        maxWidth: '$formWidth',
 
-        '@desktop': {
+        '@mobile': {
           width: '40%',
         },
       },
