@@ -45,7 +45,7 @@ const Input = stitches.styled('input', {
   border: 'solid 0.09rem $lightGray',
   borderRadius: '0.5rem',
   fontFamily: 'inherit',
-  fontWeight: '500',
+  fontWeight: '600',
   outline: 'none',
 
   '&:focus': {
@@ -111,13 +111,54 @@ const Button = stitches.styled('button', {
   backgroundColor: 'Black',
   color: 'White',
   fontFamily: 'inherit',
-  fontWeight: '500',
+  fontWeight: '600',
 
   variants: {
     size: {
+      btn_sm: {
+        height: '2.75rem',
+        padding: '0 0.75rem',
+        fontSize: '$xs',
+      },
+
+      //form btn
       md: {
         height: '3rem',
         fontSize: '$s',
+      },
+    },
+
+    color: {
+      outline: {
+        border: '0.15rem solid Black',
+        background: 'none',
+        color: 'Black',
+
+        '&:hover': {
+          color: '$lightBlack',
+          borderColor: '$lightBlack',
+        },
+      },
+
+      none: {
+        background: 'none',
+        color: 'Black',
+
+        '&:hover': {
+          color: '$lightBlack',
+        },
+      },
+    },
+
+    heightAuto: {
+      true: {
+        height: 'auto',
+      },
+    },
+
+    mr1: {
+      true: {
+        marginRight: '1rem',
       },
     },
   },

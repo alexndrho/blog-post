@@ -3,6 +3,7 @@ import { createStitches } from '@stitches/react';
 const stitches = createStitches({
   theme: {
     colors: {
+      lightBlack: '#4C4C4C',
       lightGray: '#CBCBCB',
     },
     fonts: {
@@ -12,12 +13,13 @@ const stitches = createStitches({
       xs: '1rem',
       s: '1.25rem',
       m: '2rem',
-      l: '3rem',
+      l: '2.5rem',
       xl: '3.5rem',
       title: '2.5rem',
     },
     sizes: {
       navHeight: '5rem',
+      contentWidth: '1280px',
     },
   },
   media: {
