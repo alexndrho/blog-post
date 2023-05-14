@@ -1,5 +1,5 @@
 import stitches from '../../stitches.config';
-import { TitleBlog, BodyBlog } from '../stitches/blog';
+import { TitleBlog, BodyBlog } from '../../components/stitches/blog';
 import { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import NotFound from '../NotFound';

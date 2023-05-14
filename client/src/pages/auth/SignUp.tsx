@@ -1,7 +1,7 @@
 import stitches from '../../stitches.config';
 import { signUpResponse } from '../../types/authentication';
-import { Form, Label, Input, Button } from '../stitches/form';
-import ErrorMessage from './ErrorMessage';
+import { Form, Label, Input, Button } from '../../components/stitches/form';
+import ErrorMessage from '../../components/auth/ErrorMessage';
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 

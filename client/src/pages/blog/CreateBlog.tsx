@@ -1,5 +1,11 @@
 import stitches from '../../stitches.config';
-import { Form, Label, Input, TextArea, Button } from '../stitches/form';
+import {
+  Form,
+  Label,
+  Input,
+  TextArea,
+  Button,
+} from '../../components/stitches/form';
 
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';

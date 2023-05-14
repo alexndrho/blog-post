@@ -1,10 +1,10 @@
-import Login from './components/auth/Login';
-import SignUp from './components/auth/SignUp';
+import Login from './pages/auth/Login';
+import SignUp from './pages/auth/SignUp';
 import Navigation from './components/Navigation';
-import AllBlogs from './components/blog/AllBlogs';
-import Blog from './components/blog/Blog';
-import CreateBlog from './components/blog/CreateBlog';
-import NotFound from './components/NotFound';
+import AllBlogs from './pages/blog/AllBlogs';
+import Blog from './pages/blog/Blog';
+import CreateBlog from './pages/blog/CreateBlog';
+import NotFound from './pages/NotFound';
 import { useGlobalCss } from './stitches.config';
 
 import { useEffect } from 'react';

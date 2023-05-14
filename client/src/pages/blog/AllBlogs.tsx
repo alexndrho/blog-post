@@ -1,4 +1,4 @@
-import BlogItem from './BlogItem';
+import BlogItem from '../../components/blog/BlogItem';
 import stitches from '../../stitches.config';
 
 import { useEffect, useState } from 'react';
