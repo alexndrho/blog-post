@@ -40,7 +40,7 @@ const Label = styled('label', {
   },
 });
 
-const Input = stitches.styled('input', {
+const Input = styled('input', {
   border: 'solid 0.09rem $lightGray',
   borderRadius: '0.5rem',
   fontFamily: 'inherit',
@@ -59,6 +59,11 @@ const Input = stitches.styled('input', {
         padding: '0 0.7rem',
       },
     },
+    mb0_25: {
+      true: {
+        marginBottom: '0.25rem',
+      },
+    },
     mb1: {
       true: {
         marginBottom: '1rem',
@@ -71,7 +76,7 @@ const Input = stitches.styled('input', {
   },
 });
 
-const TextArea = stitches.styled('textarea', {
+const TextArea = styled('textarea', {
   border: 'solid 0.09rem $lightGray',
   borderRadius: '0.5rem',
   fontFamily: 'inherit',
@@ -104,7 +109,7 @@ const TextArea = stitches.styled('textarea', {
   },
 });
 
-const Button = stitches.styled('button', {
+const Button = styled('button', {
   border: 'none',
   borderRadius: '0.5rem',
   backgroundColor: 'Black',

@@ -1,5 +1,7 @@
 import stitches from '../../stitches.config';
+import { loginResponse } from '../../types/authentication';
 import { Form, Label, Input, Button } from '../stitches/form';
+import ErrorMessage from './ErrorMessage';
 
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
@@ -22,6 +24,7 @@ const Title = styled('h2', {
 const Login = () => {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
+  const [errorMessage, setErrorMessage] = useState('');
 
   const navigate = useNavigate();
 
@@ -40,10 +43,14 @@ const Login = () => {
         }
       );
 
-      const responseData = await response.json();
+      const responseData: loginResponse = await response.json();
+
       if (responseData.message === 'Success') {
         localStorage.setItem('token', responseData.token);
+        setErrorMessage('');
         navigate('/');
+      } else if (responseData.error) {
+        setErrorMessage(responseData.error + '!');
       }
     } catch (err) {
       console.error(err);
@@ -54,7 +61,12 @@ const Login = () => {
     <Main>
       <Form onSubmit={handleLogin} size="fullscreen">
         <Title>Log in</Title>
-        <Label htmlFor="form-username" mb0_5>
+        {errorMessage !== '' ? <ErrorMessage message={errorMessage} /> : <></>}
+        <Label
+          htmlFor="form-username"
+          mb0_5
+          css={{ marginTop: errorMessage === '' ? 0 : '1rem' }}
+        >
           Username:
         </Label>
         <Input

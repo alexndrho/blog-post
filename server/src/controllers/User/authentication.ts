@@ -24,9 +24,9 @@ const verifyJWT = async (req: Request, res: Response, next: NextFunction) => {
     } catch (err) {
       console.error(err);
 
-      throw res.json({
+      throw res.status(400).json({
         isLoggedIn: false,
-        message: 'Failed to Authenticate',
+        error: 'Failed to Authenticate',
       });
     }
   } catch (err) {
@@ -42,11 +42,11 @@ const signUp = async (req: Request, res: Response) => {
     const isEmailTaken = await User.findOne({ email: user.email });
 
     if (isUsernameTaken && isEmailTaken) {
-      res.json({ message: 'Username and email has been taken' });
+      res.status(400).json({ error: 'Username and email has been taken' });
     } else if (isUsernameTaken) {
-      res.json({ message: 'Username has been taken' });
+      res.status(400).json({ error: 'Username has been taken' });
     } else if (isEmailTaken) {
-      res.json({ message: 'Email has been taken' });
+      res.status(400).json({ error: 'Email has been taken' });
     } else {
       user.password = await bcrypt.hash(user.password, 10);
 
@@ -70,7 +70,7 @@ const logIn = async (req: Request, res: Response) => {
 
     const dbUser = await User.findOne({ username: userLoggingIn.username });
     if (!dbUser) {
-      throw res.status(200).json({ message: 'Invalid username' });
+      throw res.status(400).json({ error: 'Invalid username' });
     }
 
     const isPwdCorrect = await bcrypt.compare(
@@ -88,7 +88,7 @@ const logIn = async (req: Request, res: Response) => {
         process.env.JWT_SECRET!,
         { expiresIn: 86400 },
         (err, token) => {
-          if (err) throw res.json({ message: err });
+          if (err) throw res.json({ error: err });
           res.json({
             message: 'Success',
             token: 'Bearer ' + token,
@@ -96,7 +96,7 @@ const logIn = async (req: Request, res: Response) => {
         }
       );
     } else {
-      throw res.json({ message: 'Invalid password' });
+      throw res.json({ error: 'Invalid password' });
     }
   } catch (err) {
     console.error(err);

@@ -5,6 +5,7 @@ const stitches = createStitches({
     colors: {
       lightBlack: '#4C4C4C',
       lightGray: '#CBCBCB',
+      danger: '#CC0000',
     },
     fonts: {
       default: 'Raleway, sans-serif',

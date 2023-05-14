@@ -1,5 +1,7 @@
 import stitches from '../../stitches.config';
+import { signUpResponse } from '../../types/authentication';
 import { Form, Label, Input, Button } from '../stitches/form';
+import ErrorMessage from './ErrorMessage';
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
@@ -22,6 +24,7 @@ const SignUp = () => {
   const [username, setUsername] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [errorMessage, setErrorMessage] = useState('');
 
   const navigate = useNavigate();
 
@@ -40,8 +43,14 @@ const SignUp = () => {
         }
       );
 
-      const responseData = await response.json();
-      if (responseData.message === 'Success') navigate('/login');
+      const responseData: signUpResponse = await response.json();
+
+      if (responseData.message === 'Success') {
+        setErrorMessage('');
+        navigate('/login');
+      } else if (responseData.error) {
+        setErrorMessage(responseData.error);
+      }
     } catch (err) {
       console.error(err);
     }
@@ -51,7 +60,12 @@ const SignUp = () => {
     <Main>
       <Form onSubmit={handleSubmit} size="fullscreen">
         <Title>Sign Up</Title>
-        <Label htmlFor="form-username" mb0_5>
+        {errorMessage !== '' ? <ErrorMessage message={errorMessage} /> : <></>}
+        <Label
+          htmlFor="form-username"
+          mb0_5
+          css={{ marginTop: errorMessage === '' ? 0 : '1rem' }}
+        >
           Username:
         </Label>
         <Input
