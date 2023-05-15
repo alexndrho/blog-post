@@ -30,11 +30,8 @@ const App = () => {
         );
 
         const responseData = await response.json();
-        if (responseData.isloggedIn) {
-          console.log('success');
-        } else {
-          console.log('fail');
-        }
+        if (responseData.isloggedIn)
+          localStorage.setItem('token', responseData.token);
       } catch (err) {
         console.error(err);
       }

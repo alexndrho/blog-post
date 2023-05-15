@@ -19,13 +19,19 @@ const verifyJWT = async (req: Request, res: Response, next: NextFunction) => {
 
         (<any>req).user = {};
         (<any>req).user.id = decoded.id;
+
+        const newToken = jwt.sign(
+          { id: decoded.id } as IJwtPayLoad,
+          process.env.JWT_SECRET!,
+          { expiresIn: 86400 }
+        );
+
+        req.headers['x-access-token'] = 'Bearer ' + newToken;
         next();
       } else {
         throw 'Failed To Authenticate';
       }
     } catch (err) {
-      console.error(err);
-
       throw res.status(400).json({
         isLoggedIn: false,
         error: 'Failed to Authenticate',
