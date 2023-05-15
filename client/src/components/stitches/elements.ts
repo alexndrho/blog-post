@@ -38,8 +38,8 @@ const A = styled('a', {
         color: 'Black',
 
         '&:hover': {
-          color: '$lightBlack',
-          borderColor: '$lightBlack',
+          color: 'DimGray',
+          borderColor: 'DimGray',
         },
       },
 
@@ -48,7 +48,7 @@ const A = styled('a', {
         color: 'Black',
 
         '&:hover': {
-          color: '$lightBlack',
+          color: 'DimGray',
         },
       },
     },
