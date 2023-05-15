@@ -2,6 +2,7 @@ import { Request, Response } from 'express';
 import IBlog from '../../types/blog';
 import IJwtPayLoad from '../../types/IJwtPayLoad';
 import Blog from '../../models/blog';
+import User from '../../models/user';
 
 import mongoose from 'mongoose';
 import jwt from 'jsonwebtoken';
@@ -37,15 +38,18 @@ const createBlog = async (req: Request, res: Response) => {
 
     if (token) {
       const decoded = jwt.verify(token, process.env.JWT_SECRET!) as IJwtPayLoad;
+      const user: IBlog | null = await User.findById(decoded.id);
 
+      if (!user) throw 'Unable to find user';
       const blog: IBlog = new Blog({
         userId: decoded.id,
+        username: user.username,
         title: body.title,
         snippet: body.snippet,
         body: body.body,
       });
 
-      const newBlog: IBlog | any = await blog.save();
+      const newBlog = await blog.save();
 
       res.status(201).json({ ...newBlog._doc });
     } else {
