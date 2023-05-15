@@ -1,5 +1,6 @@
 import User from '../../models/user';
 import IUser from '../../types/user';
+import IJwtPayLoad from '../../types/IJwtPayLoad';
 
 import { Request, Response, NextFunction } from 'express';
 import bcrypt from 'bcrypt';
@@ -11,10 +12,13 @@ const verifyJWT = async (req: Request, res: Response, next: NextFunction) => {
 
     try {
       if (token) {
-        const decoded: any = jwt.verify(token, process.env.JWT_SECRET!);
+        const decoded = jwt.verify(
+          token,
+          process.env.JWT_SECRET!
+        ) as IJwtPayLoad;
+
         (<any>req).user = {};
         (<any>req).user.id = decoded.id;
-        (<any>req).user.username = decoded.username;
         next();
       } else {
         throw 'Failed To Authenticate';
@@ -78,7 +82,6 @@ const logIn = async (req: Request, res: Response) => {
     if (isPwdCorrect) {
       const payload = {
         id: dbUser.id,
-        username: dbUser.username,
       };
 
       jwt.sign(

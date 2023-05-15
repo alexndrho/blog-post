@@ -13,7 +13,7 @@ const PORT: string | number = process.env.PORT || 3000;
 app.use(cors());
 app.use(express.json());
 app.get('/isUserAuth', verifyJWT, (req: Request, res: Response) => {
-  res.json({ isloggedIn: true, username: (<any>req).user.username });
+  res.json({ isloggedIn: true });
 });
 
 app.use('/blogs', blogRoute);

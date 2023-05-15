@@ -40,7 +40,6 @@ const createBlog = async (req: Request, res: Response) => {
 
       const blog: IBlog = new Blog({
         userId: decoded.id,
-        username: decoded.username,
         title: body.title,
         snippet: body.snippet,
         body: body.body,
