@@ -12,12 +12,10 @@ const verifyJWT = async (req: Request, res: Response, next: NextFunction) => {
     try {
       if (token) {
         const decoded: any = jwt.verify(token, process.env.JWT_SECRET!);
-        if (req) {
-          (<any>req).user = {};
-          (<any>req).user.id = decoded.id;
-          (<any>req).user.username = decoded.username;
-          next();
-        }
+        (<any>req).user = {};
+        (<any>req).user.id = decoded.id;
+        (<any>req).user.username = decoded.username;
+        next();
       } else {
         throw 'Failed To Authenticate';
       }
