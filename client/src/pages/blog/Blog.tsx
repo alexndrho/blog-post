@@ -17,6 +17,8 @@ const Blog = () => {
   const { id } = useParams();
   const [blogData, setBlogData] = useState<IBlog | null>({
     _id: '',
+    userId: '',
+    username: '',
     title: 'Loading...',
     snippet: '',
     body: '',

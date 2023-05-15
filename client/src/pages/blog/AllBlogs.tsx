@@ -55,15 +55,20 @@ const AllBlogs = () => {
 
   return (
     <Main>
-      <Title>{isLoading ? 'Loading...' : 'Blogs'}</Title>
-      {blogs?.blogs.map((blog) => (
-        <BlogItem
-          key={blog._id}
-          _id={blog._id}
-          title={blog.title}
-          snippet={blog.snippet}
-        />
-      ))}
+      {isLoading ? (
+        <Title>Loading...</Title>
+      ) : (
+        blogs?.blogs.map((blog) => (
+          <BlogItem
+            key={blog._id}
+            _id={blog._id}
+            username={blog.username}
+            title={blog.title}
+            snippet={blog.snippet}
+            createdAt={blog.createdAt}
+          />
+        ))
+      )}
     </Main>
   );
 };

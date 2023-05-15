@@ -1,5 +1,7 @@
 interface IBlog {
   _id: string;
+  userId: string;
+  username: string;
   title: string;
   snippet: string;
   body: string;

@@ -1,14 +1,13 @@
 import stitches from '../../stitches.config';
-import { TitleItem, SnippetItem } from '../stitches/blog';
 import { Link } from 'react-router-dom';
 
 const { styled } = stitches;
 
 const Div = styled('div', {
-  marginBottom: '3rem',
+  marginBottom: '2rem',
 
   '@desktop': {
-    marginBottom: '4rem',
+    marginBottom: '3rem',
   },
 });
 
@@ -17,15 +16,49 @@ const A = styled('a', {
   color: 'Black',
 });
 
+const Info = styled('p', {
+  marginBottom: '0.25rem',
+  color: 'DimGray',
+  fontWeight: 500,
+});
+
+const TitleItem = styled('h2', {
+  fontSize: '$s',
+  marginBottom: '0.5rem',
+
+  '@desktop': {
+    fontSize: '$m',
+  },
+});
+
+const SnippetItem = styled('p', {
+  textAlign: 'justify',
+  fontSize: '$xs',
+
+  '@desktop': {
+    fontSize: '$s',
+  },
+});
+
 const BlogItem = ({
   _id,
+  username,
   title,
   snippet,
-}: Pick<IBlog, '_id' | 'title' | 'snippet'>) => {
+  createdAt,
+}: Pick<IBlog, '_id' | 'username' | 'title' | 'snippet' | 'createdAt'>) => {
   return (
     <Div>
       <A as={Link} to={`${import.meta.env.VITE_BASE_URL_CLIENT}/blogs/${_id}`}>
-        <TitleItem mb0_75>{title}</TitleItem>
+        <Info>
+          {new Intl.DateTimeFormat('en-US', {
+            month: 'long',
+            day: 'numeric',
+            year: 'numeric',
+          }).format(new Date(createdAt as string))}{' '}
+          &#8226; {username}
+        </Info>
+        <TitleItem>{title}</TitleItem>
         <SnippetItem>{snippet}</SnippetItem>
       </A>
     </Div>
