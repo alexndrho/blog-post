@@ -9,7 +9,7 @@ import jwt from 'jsonwebtoken';
 
 const getBlogs = async (req: Request, res: Response) => {
   try {
-    const blogs: IBlog[] = await Blog.find().sort({ createdAt: -1 });
+    const blogs = await Blog.find().sort({ createdAt: -1 });
     res.status(200).json({ blogs });
   } catch (err) {
     console.error(err);
@@ -24,7 +24,9 @@ const getBlog = async (req: Request, res: Response) => {
       res.status(400).json(null);
     }
 
-    const blog: IBlog | any = await Blog.findById(id);
+    const blog = await Blog.findById(id);
+
+    if (!blog) throw 'Unable to find blog';
     res.status(200).json({ ...blog._doc });
   } catch (err) {
     console.error(err);
@@ -38,7 +40,7 @@ const createBlog = async (req: Request, res: Response) => {
 
     if (token) {
       const decoded = jwt.verify(token, process.env.JWT_SECRET!) as IJwtPayLoad;
-      const user: IBlog | null = await User.findById(decoded.id);
+      const user = await User.findById(decoded.id);
 
       if (!user) throw 'Unable to find user';
       const blog: IBlog = new Blog({
@@ -62,10 +64,9 @@ const createBlog = async (req: Request, res: Response) => {
 
 const deleteBlog = async (req: Request, res: Response) => {
   try {
-    const deletedBlog: IBlog | any = await Blog.findByIdAndDelete(
-      req.params.id
-    );
+    const deletedBlog = await Blog.findByIdAndDelete(req.params.id);
 
+    if (!deletedBlog) throw 'Unable to find blog';
     res.status(200).json({ ...deletedBlog._doc });
   } catch (err) {
     console.error(err);

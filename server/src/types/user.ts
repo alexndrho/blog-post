@@ -1,6 +1,10 @@
 import { Document } from 'mongoose';
 
-interface IUser extends Document {
+interface DocumentResult<T> {
+  _doc: T;
+}
+
+interface IUser extends Document, DocumentResult<IUser> {
   username: string;
   email: string;
   password: string;
