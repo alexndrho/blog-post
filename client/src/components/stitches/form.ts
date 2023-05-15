@@ -44,7 +44,7 @@ const Input = styled('input', {
   border: 'solid 0.09rem $lightGray',
   borderRadius: '0.5rem',
   fontFamily: 'inherit',
-  fontWeight: '600',
+  fontWeight: '500',
   outline: 'none',
 
   '&:focus': {
