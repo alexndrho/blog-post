@@ -47,6 +47,7 @@ const CreateBlog = () => {
           mode: 'cors',
           headers: {
             'Content-Type': 'application/json',
+            'x-access-token': localStorage.getItem('token') as string,
           },
           body: JSON.stringify({ title, snippet, body }),
         }

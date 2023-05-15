@@ -1,7 +1,10 @@
 import { Request, Response } from 'express';
 import IBlog from '../../types/blog';
+import IJwtPayLoad from '../../types/IJwtPayLoad';
 import Blog from '../../models/blog';
+
 import mongoose from 'mongoose';
+import jwt from 'jsonwebtoken';
 
 const getBlogs = async (req: Request, res: Response) => {
   try {
@@ -29,18 +32,26 @@ const getBlog = async (req: Request, res: Response) => {
 
 const createBlog = async (req: Request, res: Response) => {
   try {
-    console.log(req.body);
+    const token = (req.headers['x-access-token'] as string)?.split(' ')[1];
     const body = req.body as Pick<IBlog, 'title' | 'snippet' | 'body'>;
 
-    const blog: IBlog = new Blog({
-      title: body.title,
-      snippet: body.snippet,
-      body: body.body,
-    });
+    if (token) {
+      const decoded = jwt.verify(token, process.env.JWT_SECRET!) as IJwtPayLoad;
 
-    const newBlog: IBlog | any = await blog.save();
+      const blog: IBlog = new Blog({
+        userId: decoded.id,
+        username: decoded.username,
+        title: body.title,
+        snippet: body.snippet,
+        body: body.body,
+      });
 
-    res.status(201).json({ ...newBlog._doc });
+      const newBlog: IBlog | any = await blog.save();
+
+      res.status(201).json({ ...newBlog._doc });
+    } else {
+      throw 'Failed To Authenticate';
+    }
   } catch (err) {
     console.error(err);
   }

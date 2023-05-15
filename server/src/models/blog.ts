@@ -4,6 +4,14 @@ import { model, Schema } from 'mongoose';
 
 const blogSchema = new Schema(
   {
+    userId: {
+      type: String,
+      required: true,
+    },
+    username: {
+      type: String,
+      required: true,
+    },
     title: {
       type: String,
       required: true,
