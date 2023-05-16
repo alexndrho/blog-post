@@ -1,5 +1,4 @@
 import stitches from '../../stitches.config';
-import { TitleBlog, BodyBlog } from '../../components/stitches/blog';
 import { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import NotFound from '../NotFound';
@@ -10,7 +9,37 @@ const Main = styled('main', {
   margin: '0 auto',
   padding: '3rem 0',
   width: '80%',
-  maxWidth: '$contentWidth',
+  maxWidth: '$contentWidthS',
+});
+
+const TitleBlog = styled('h2', {
+  fontSize: '$s',
+  '@desktop': {
+    fontSize: '$m',
+  },
+});
+
+const Info = styled('p', {
+  marginBottom: '$fontSizes$xs',
+  color: 'DimGray',
+  fontSize: '0.85rem',
+  fontWeight: 500,
+
+  '@desktop': {
+    marginBottom: '$fontSizes$s',
+    fontSize: '$xs',
+  },
+});
+
+const BodyBlog = styled('p', {
+  textAlign: 'justify',
+  fontSize: '$xs',
+  marginBottom: '$fontSizes$xs',
+
+  '@desktop': {
+    fontSize: '$s',
+    marginBottom: '$fontSizes$s',
+  },
 });
 
 const Blog = () => {
@@ -50,13 +79,29 @@ const Blog = () => {
 
   return (
     <>
-      {!isloading &&
-      (JSON.stringify(blogData) === '{}' || blogData === null) ? (
+      {!isloading && blogData == null ? (
         <NotFound />
       ) : (
         <Main>
-          <TitleBlog mb1>{blogData?.title}</TitleBlog>
-          <BodyBlog>{blogData?.body}</BodyBlog>
+          <TitleBlog>{blogData?.title}</TitleBlog>
+          {blogData?.updatedAt ? (
+            <Info>
+              By {blogData.username} -{' '}
+              {new Intl.DateTimeFormat('en-US', {
+                month: 'long',
+                day: 'numeric',
+                year: 'numeric',
+              }).format(new Date(blogData?.updatedAt as string))}
+            </Info>
+          ) : (
+            <></>
+          )}
+          {blogData?.body
+            .split(/[\n\r]/)
+            .filter((item) => item.trim() !== '')
+            .map((paragraph) => (
+              <BodyBlog>{paragraph}</BodyBlog>
+            ))}
         </Main>
       )}
     </>

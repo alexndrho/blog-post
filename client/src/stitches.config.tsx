@@ -11,6 +11,7 @@ const stitches = createStitches({
       default: 'Raleway, sans-serif',
     },
     fontSizes: {
+      xxs: '0.75rem',
       xs: '1rem',
       s: '1.25rem',
       m: '2rem',
