@@ -15,6 +15,7 @@ const A = styled('a', {
   color: 'White',
   fontFamily: 'inherit',
   fontWeight: '600',
+  cursor: 'pointer',
 
   variants: {
     size: {
