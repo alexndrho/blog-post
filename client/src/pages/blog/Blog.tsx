@@ -100,7 +100,7 @@ const Blog = () => {
             .split(/[\n\r]/)
             .filter((item) => item.trim() !== '')
             .map((paragraph) => (
-              <BodyBlog>{paragraph}</BodyBlog>
+              <BodyBlog key={crypto.randomUUID()}>{paragraph}</BodyBlog>
             ))}
         </Main>
       )}
