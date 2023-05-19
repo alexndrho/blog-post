@@ -1,9 +1,10 @@
+import { useAuth } from '../../context/useAuth';
 import stitches from '../../stitches.config';
 import { loginResponse } from '../../types/authentication';
 import { Form, Label, Input, Button } from '../../components/stitches/form';
 import ErrorMessage from '../../components/auth/ErrorMessage';
 
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
 const { styled } = stitches;
@@ -22,11 +23,16 @@ const Title = styled('h2', {
 });
 
 const Login = () => {
+  const { isLoggedIn, setLoggedIn } = useAuth();
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const [errorMessage, setErrorMessage] = useState('');
 
   const navigate = useNavigate();
+
+  useEffect(() => {
+    if (isLoggedIn) navigate('/');
+  }, [isLoggedIn, navigate]);
 
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -48,6 +54,7 @@ const Login = () => {
       if (responseData.message === 'Success') {
         localStorage.setItem('token', responseData.token);
         setErrorMessage('');
+        setLoggedIn();
         navigate('/');
       } else if (responseData.error) {
         setErrorMessage(responseData.error + '!');

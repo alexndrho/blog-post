@@ -1,5 +1,6 @@
 import stitches from '../stitches.config';
 import { A as AStyled } from './stitches/elements';
+import { useAuth } from '../context/useAuth';
 
 import { useEffect, useRef } from 'react';
 import { Link } from 'react-router-dom';
@@ -135,6 +136,7 @@ const Bar = styled('span', {
 });
 
 const Navigation = () => {
+  const { isLoggedIn, setLoggedOut } = useAuth();
   const linksRef = useRef<HTMLUListElement>(null);
 
   useEffect(() => {
@@ -146,6 +148,11 @@ const Navigation = () => {
     });
   }, []);
 
+  const logOut = () => {
+    localStorage.removeItem('token');
+    setLoggedOut();
+  };
+
   //display nav links for mobile view
   const displayNav = () => {
     linksRef.current?.classList.toggle('active');
@@ -155,9 +162,15 @@ const Navigation = () => {
     <Header>
       <Div>
         <AuthWrapperMobile>
-          <AStyled size="btn_sm" color="outline" as={Link} to="/signup">
-            Sign up
-          </AStyled>
+          {isLoggedIn ? (
+            <AStyled onClick={logOut} size="btn_sm" color="outline">
+              Log out
+            </AStyled>
+          ) : (
+            <AStyled size="btn_sm" color="outline" as={Link} to="/signup">
+              Sign up
+            </AStyled>
+          )}
         </AuthWrapperMobile>
 
         <TitleWrapper as={Link} to="/">
@@ -186,12 +199,20 @@ const Navigation = () => {
           </Nav>
 
           <AuthWrapperDesktop>
-            <AStyled size="btn_sm" color="none" mr1 as={Link} to="/login">
-              Log in
-            </AStyled>
-            <AStyled size="btn_sm" color="outline" as={Link} to="/signup">
-              Sign up
-            </AStyled>
+            {isLoggedIn ? (
+              <AStyled onClick={logOut} size="btn_sm" color="outline">
+                Log out
+              </AStyled>
+            ) : (
+              <>
+                <AStyled size="btn_sm" color="none" mr1 as={Link} to="/login">
+                  Log in
+                </AStyled>
+                <AStyled size="btn_sm" color="outline" as={Link} to="/signup">
+                  Sign up
+                </AStyled>
+              </>
+            )}
           </AuthWrapperDesktop>
         </Menu>
       </Div>

@@ -1,3 +1,4 @@
+import { useAuth } from './context/useAuth';
 import Login from './pages/auth/Login';
 import SignUp from './pages/auth/SignUp';
 import Navigation from './components/Navigation';
@@ -17,6 +18,8 @@ import '@fontsource/raleway/800.css';
 const App = () => {
   useGlobalCss();
 
+  const { setLoggedIn, setLoggedOut } = useAuth();
+
   useEffect(() => {
     const isUserAuth = async () => {
       try {
@@ -30,15 +33,18 @@ const App = () => {
         );
 
         const responseData = await response.json();
-        if (responseData.isloggedIn)
+        if (responseData.isloggedIn) {
           localStorage.setItem('token', responseData.token);
+          setLoggedIn();
+        }
       } catch (err) {
+        setLoggedOut();
         console.error(err);
       }
     };
 
     isUserAuth();
-  }, []);
+  }, [setLoggedIn, setLoggedOut]);
 
   return (
     <>

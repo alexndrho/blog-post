@@ -1,8 +1,9 @@
+import { useAuth } from '../../context/useAuth';
 import stitches from '../../stitches.config';
 import { signUpResponse } from '../../types/authentication';
 import { Form, Label, Input, Button } from '../../components/stitches/form';
 import ErrorMessage from '../../components/auth/ErrorMessage';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
 const { styled } = stitches;
@@ -21,12 +22,17 @@ const Title = styled('h2', {
 });
 
 const SignUp = () => {
+  const { isLoggedIn } = useAuth();
   const [username, setUsername] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [errorMessage, setErrorMessage] = useState('');
 
   const navigate = useNavigate();
+
+  useEffect(() => {
+    if (isLoggedIn) navigate('/');
+  }, [isLoggedIn, navigate]);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
