@@ -24,6 +24,9 @@ const stitches = createStitches({
       contentWidthS: '1000px',
       formWidth: '800px',
     },
+    space: {
+      mobPadding: '1.5rem',
+    },
   },
   media: {
     tablet: '(min-width: 500px)',

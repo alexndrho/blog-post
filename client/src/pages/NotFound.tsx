@@ -4,6 +4,7 @@ const { styled } = stitches;
 
 const Main = styled('main', {
   margin: '0 auto',
+  padding: '0 $mobPadding 0 $mobPadding',
   height: '80%',
   width: '100%',
   maxWidth: '$contentWidth',

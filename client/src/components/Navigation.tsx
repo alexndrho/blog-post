@@ -14,7 +14,7 @@ const Header = styled('header', {
 
 const Div = styled('div', {
   margin: 'auto',
-  padding: '0 1.5rem 0 1.5rem',
+  padding: '0 $mobPadding 0 $mobPadding',
   maxWidth: '$contentWidth',
   display: 'flex',
   alignItems: 'center',
