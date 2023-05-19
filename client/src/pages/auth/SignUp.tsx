@@ -4,7 +4,7 @@ import { signUpResponse } from '../../types/authentication';
 import { Form, Label, Input, Button } from '../../components/stitches/form';
 import ErrorMessage from '../../components/auth/ErrorMessage';
 import React, { useEffect, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 
 const { styled } = stitches;
 
@@ -19,6 +19,15 @@ const Main = styled('main', {
 const Title = styled('h2', {
   marginBottom: '1rem',
   fontSize: '$title',
+});
+
+const P = styled('p', {
+  marginTop: '0.75rem',
+  fontSize: '$s',
+});
+
+const A = styled('a', {
+  color: 'Black',
 });
 
 const SignUp = () => {
@@ -100,6 +109,12 @@ const SignUp = () => {
           mb1
         />
         <Button>Submit</Button>
+        <P>
+          Already have an account?{' '}
+          <A as={Link} to="/login">
+            Log in
+          </A>
+        </P>
       </Form>
     </Main>
   );
