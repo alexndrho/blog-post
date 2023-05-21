@@ -3,6 +3,7 @@ import IUser from '../../types/user';
 import IJwtPayLoad from '../../types/IJwtPayLoad';
 
 import { Request, Response, NextFunction } from 'express';
+import { Error } from 'mongoose';
 import bcrypt from 'bcrypt';
 import jwt from 'jsonwebtoken';
 
@@ -46,28 +47,53 @@ const signUp = async (req: Request, res: Response) => {
   try {
     const user: IUser = req.body;
 
-    const isUsernameTaken = await User.findOne({ username: user.username });
-    const isEmailTaken = await User.findOne({ email: user.email });
+    const dbUser = new User({
+      username: user.username,
+      email: user.email,
+      password: user.password,
+    });
 
-    if (isUsernameTaken && isEmailTaken) {
-      res.status(400).json({ error: 'Username and email has been taken' });
-    } else if (isUsernameTaken) {
-      res.status(400).json({ error: 'Username has been taken' });
-    } else if (isEmailTaken) {
-      res.status(400).json({ error: 'Email has been taken' });
-    } else {
-      user.password = await bcrypt.hash(user.password, 10);
-
-      const dbUser = new User({
-        username: user.username,
-        email: user.email,
-        password: user.password,
+    User.init()
+      .then(async () => {
+        await dbUser.save();
+        res.status(200).json({ success: true, message: 'success' });
+      })
+      .catch((err) => {
+        if ((<any>err).message.indexOf('duplicate key error') !== -1) {
+          if ((<any>err).message.includes('username')) {
+            res.status(409).json({
+              success: false,
+              message: 'Username has been taken already',
+            });
+          } else if ((<any>err).message.includes('email')) {
+            res.status(409).json({
+              success: false,
+              message: 'Email has been taken already',
+            });
+          }
+        } else if (err instanceof Error.ValidationError) {
+          if (err.errors['username']) {
+            res.status(401).json({
+              success: false,
+              message: err.errors['username'].message,
+            });
+          } else if (err.errors['email']) {
+            res.status(401).json({
+              success: false,
+              message: err.errors['email'].message,
+            });
+          } else if (err.errors['password']) {
+            res.status(401).json({
+              success: false,
+              message: err.errors['password'].message,
+            });
+          } else {
+            throw err;
+          }
+        }
       });
-
-      dbUser.save();
-      res.status(200).json({ message: 'Success' });
-    }
   } catch (err) {
+    res.status(400).json({ success: false, message: 'An error occurred' });
     console.error(err);
   }
 };

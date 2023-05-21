@@ -1,9 +1,6 @@
 interface signUpResponse {
-  message?: 'Success';
-  error?:
-    | 'Username and email has been taken'
-    | 'Username has been taken'
-    | 'Email has been taken';
+  success: true;
+  message: string;
 }
 
 interface loginResponse {
