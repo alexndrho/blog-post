@@ -1,7 +1,13 @@
 import { useAuth } from '../../context/useAuth';
 import stitches from '../../stitches.config';
 import { loginResponse } from '../../types/authentication';
-import { Form, Label, Input, Button } from '../../components/stitches/form';
+import {
+  Title,
+  Form,
+  Label,
+  Input,
+  Button,
+} from '../../components/stitches/form';
 import ErrorMessage from '../../components/auth/ErrorMessage';
 
 import React, { useEffect, useState } from 'react';
@@ -15,11 +21,6 @@ const Main = styled('main', {
   flexDirection: 'column',
   justifyContent: 'center',
   alignItems: 'center',
-});
-
-const Title = styled('h2', {
-  marginBottom: '1rem',
-  fontSize: '$title',
 });
 
 const Login = () => {

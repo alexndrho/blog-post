@@ -21,11 +21,35 @@ const Form = styled('form', {
   },
 });
 
+const Title = styled('h2', {
+  variants: {
+    size: {
+      md: {
+        fontSize: '$m',
+        marginBottom: '0.75rem',
+
+        '@desktop': {
+          marginBottom: '1rem',
+          fontSize: '$title',
+        },
+      },
+    },
+  },
+
+  defaultVariants: {
+    size: 'md',
+  },
+});
+
 const Label = styled('label', {
   variants: {
     size: {
       md: {
-        fontSize: '$s',
+        fontSize: '$xs',
+
+        '@desktop': {
+          fontSize: '$s',
+        },
       },
     },
     mb0_5: {
@@ -54,9 +78,15 @@ const Input = styled('input', {
   variants: {
     size: {
       md: {
-        height: '3rem',
-        fontSize: '$s',
-        padding: '0 0.7rem',
+        height: '2.75rem',
+        fontSize: '$xs',
+        padding: '0 0.65rem',
+
+        '@desktop': {
+          padding: '0 0.7rem',
+          height: '3rem',
+          fontSize: '$s',
+        },
       },
     },
     mb0_25: {
@@ -66,7 +96,10 @@ const Input = styled('input', {
     },
     mb1: {
       true: {
-        marginBottom: '1rem',
+        marginBottom: '0.75rem',
+        '@desktop': {
+          marginBottom: '1rem',
+        },
       },
     },
   },
@@ -92,9 +125,15 @@ const TextArea = styled('textarea', {
     size: {
       md: {
         height: '15rem',
-        padding: '0.75rem',
+        padding: '0.65rem',
         marginBottom: '1rem',
-        fontSize: '$s',
+        fontSize: '$xs',
+
+        '@desktop': {
+          height: '15rem',
+          padding: '0.75rem',
+          fontSize: '$s',
+        },
       },
     },
     mb1: {
@@ -120,15 +159,27 @@ const Button = styled('button', {
   variants: {
     size: {
       btn_sm: {
-        height: '2.75rem',
-        padding: '0 0.75rem',
+        height: '$fontSizes$m',
+        padding: '0 0.45rem',
+        fontSize: '$xs',
+      },
+
+      btn_md: {
+        height: '2.65rem',
+        padding: '0 0.65rem',
         fontSize: '$xs',
       },
 
       //form btn
       md: {
-        height: '3rem',
-        fontSize: '$s',
+        height: '2.75rem',
+        fontSize: '$xs',
+        padding: '0 0.7rem',
+
+        '@desktop': {
+          height: '3rem',
+          fontSize: '$s',
+        },
       },
     },
 
@@ -172,4 +223,24 @@ const Button = styled('button', {
   },
 });
 
-export { Form, Label, Input, TextArea, Button };
+const Info = styled('p', {
+  variants: {
+    size: {
+      md: {
+        marginTop: '0.5rem',
+        fontSize: '$xs',
+
+        '@desktop': {
+          marginTop: '0.75rem',
+          fontSize: '$s',
+        },
+      },
+    },
+  },
+
+  defaultVariants: {
+    size: 'md',
+  },
+});
+
+export { Form, Title, Label, Input, TextArea, Button, Info };

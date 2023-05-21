@@ -1,6 +1,7 @@
 import stitches from '../../stitches.config';
 import {
   Form,
+  Title,
   Label,
   Input,
   TextArea,
@@ -18,15 +19,6 @@ const Main = styled('main', {
   flexDirection: 'column',
   justifyContent: 'center',
   alignItems: 'center',
-});
-
-const H2 = styled('h2', {
-  marginBottom: '1rem',
-  fontSize: '$m',
-
-  '@tablet': {
-    fontSize: '$title',
-  },
 });
 
 const CreateBlog = () => {
@@ -66,7 +58,7 @@ const CreateBlog = () => {
   return (
     <Main>
       <Form onSubmit={handleSubmit} size="fullscreen">
-        <H2>Create Blog</H2>
+        <Title>Create Blog</Title>
         <Label htmlFor="form-title" mb0_5>
           Title:
         </Label>

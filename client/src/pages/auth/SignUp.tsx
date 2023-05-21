@@ -1,7 +1,14 @@
 import { useAuth } from '../../context/useAuth';
 import stitches from '../../stitches.config';
 import { signUpResponse } from '../../types/authentication';
-import { Form, Label, Input, Button } from '../../components/stitches/form';
+import {
+  Form,
+  Title,
+  Label,
+  Input,
+  Button,
+  Info,
+} from '../../components/stitches/form';
 import ErrorMessage from '../../components/auth/ErrorMessage';
 import React, { useEffect, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
@@ -14,16 +21,6 @@ const Main = styled('main', {
   flexDirection: 'column',
   justifyContent: 'center',
   alignItems: 'center',
-});
-
-const Title = styled('h2', {
-  marginBottom: '1rem',
-  fontSize: '$title',
-});
-
-const P = styled('p', {
-  marginTop: '0.75rem',
-  fontSize: '$s',
 });
 
 const A = styled('a', {
@@ -109,12 +106,12 @@ const SignUp = () => {
           mb1
         />
         <Button>Submit</Button>
-        <P>
+        <Info>
           Already have an account?{' '}
           <A as={Link} to="/login">
             Log in
           </A>
-        </P>
+        </Info>
       </Form>
     </Main>
   );
