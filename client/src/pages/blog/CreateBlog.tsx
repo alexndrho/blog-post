@@ -44,7 +44,6 @@ const CreateBlog = () => {
         `${import.meta.env.VITE_BASE_URL_SERVER}/blogs`,
         {
           method: 'POST',
-          mode: 'cors',
           headers: {
             'Content-Type': 'application/json',
             'x-access-token': localStorage.getItem('token') as string,

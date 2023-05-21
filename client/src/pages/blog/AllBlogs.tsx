@@ -38,6 +38,9 @@ const AllBlogs = () => {
           `${import.meta.env.VITE_BASE_URL_SERVER}/blogs/`,
           {
             method: 'GET',
+            headers: {
+              Accept: 'application/json',
+            },
           }
         );
 
