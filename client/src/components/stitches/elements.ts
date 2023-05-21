@@ -20,8 +20,14 @@ const A = styled('a', {
   variants: {
     size: {
       btn_sm: {
-        height: '2.75rem',
-        padding: '0 0.75rem',
+        height: '$fontSizes$m',
+        padding: '0 0.45rem',
+        fontSize: '$xs',
+      },
+
+      btn_md: {
+        height: '2.65rem',
+        padding: '0 0.65rem',
         fontSize: '$xs',
       },
 

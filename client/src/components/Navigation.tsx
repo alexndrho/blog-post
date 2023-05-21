@@ -32,9 +32,13 @@ const TitleWrapper = styled('div', {
 const Title = styled('h1', {
   position: 'relative',
   zIndex: 99,
-  fontSize: '$l',
+  fontSize: '2.25rem',
   userSelect: 'none',
   fontWeight: 'bolder',
+
+  '@desktop': {
+    fontSize: '$l',
+  },
 });
 
 const Menu = styled('div', {
@@ -200,15 +204,15 @@ const Navigation = () => {
 
           <AuthWrapperDesktop>
             {isLoggedIn ? (
-              <AStyled onClick={logOut} size="btn_sm" color="outline">
+              <AStyled onClick={logOut} size="btn_md" color="outline">
                 Log out
               </AStyled>
             ) : (
               <>
-                <AStyled size="btn_sm" color="none" mr1 as={Link} to="/login">
+                <AStyled size="btn_md" color="none" mr1 as={Link} to="/login">
                   Log in
                 </AStyled>
-                <AStyled size="btn_sm" color="outline" as={Link} to="/signup">
+                <AStyled size="btn_md" color="outline" as={Link} to="/signup">
                   Sign up
                 </AStyled>
               </>
