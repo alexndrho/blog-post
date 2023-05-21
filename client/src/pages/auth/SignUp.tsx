@@ -64,7 +64,7 @@ const SignUp = () => {
         setErrorMessage('');
         navigate('/login');
       } else if (responseData.message) {
-        setErrorMessage(responseData.message);
+        setErrorMessage(responseData.message + '!');
       }
     } catch (err) {
       console.error(err);
