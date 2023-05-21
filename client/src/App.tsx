@@ -7,6 +7,7 @@ import Blog from './pages/blog/Blog';
 import CreateBlog from './pages/blog/CreateBlog';
 import NotFound from './pages/NotFound';
 import { useGlobalCss } from './stitches.config';
+import { IUserAuth } from './types/authentication';
 
 import { useEffect } from 'react';
 import { Routes, Route } from 'react-router-dom';
@@ -32,7 +33,7 @@ const App = () => {
           }
         );
 
-        const responseData = await response.json();
+        const responseData: IUserAuth = await response.json();
         if (responseData.isloggedIn) {
           localStorage.setItem('token', responseData.token);
           setLoggedIn();

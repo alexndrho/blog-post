@@ -51,13 +51,13 @@ const Login = () => {
 
       const responseData: loginResponse = await response.json();
 
-      if (responseData.message === 'Success') {
+      if (responseData.success) {
         localStorage.setItem('token', responseData.token);
         setErrorMessage('');
         setLoggedIn();
         navigate('/');
-      } else if (responseData.error) {
-        setErrorMessage(responseData.error + '!');
+      } else if (responseData.message) {
+        setErrorMessage(responseData.message + '!');
       }
     } catch (err) {
       console.error(err);

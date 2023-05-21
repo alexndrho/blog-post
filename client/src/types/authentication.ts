@@ -1,12 +1,17 @@
 interface signUpResponse {
   success: true;
-  message: string;
+  message?: string;
 }
 
 interface loginResponse {
-  message?: 'Success';
-  error?: 'Invalid username' | 'Invalid password';
+  success: boolean;
+  message?: string;
   token: string;
 }
 
-export type { signUpResponse, loginResponse };
+interface IUserAuth {
+  isloggedIn: boolean;
+  token: string;
+}
+
+export type { signUpResponse, loginResponse, IUserAuth };

@@ -15,7 +15,6 @@ app.use(express.json());
 app.get('/isUserAuth', verifyJWT, (req: Request, res: Response) => {
   res.json({
     isloggedIn: true,
-    userId: (<any>req).user.id,
     token: req.headers['x-access-token'],
   });
 });

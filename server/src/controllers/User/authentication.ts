@@ -19,7 +19,6 @@ const verifyJWT = async (req: Request, res: Response, next: NextFunction) => {
         ) as IJwtPayLoad;
 
         (<any>req).user = {};
-        (<any>req).user.id = decoded.id;
 
         const newToken = jwt.sign(
           { id: decoded.id } as IJwtPayLoad,
@@ -30,15 +29,24 @@ const verifyJWT = async (req: Request, res: Response, next: NextFunction) => {
         req.headers['x-access-token'] = 'Bearer ' + newToken;
         next();
       } else {
-        throw 'Failed To Authenticate';
+        res.status(400).json({
+          isLoggedIn: false,
+          error: 'Failed to Authenticate',
+        });
       }
     } catch (err) {
-      throw res.status(400).json({
-        isLoggedIn: false,
-        error: 'Failed to Authenticate',
-      });
+      if (res.headersSent) {
+        res.status(400).json({
+          isLoggedIn: false,
+          error: 'An error occured',
+        });
+      }
+      console.error(err);
     }
   } catch (err) {
+    if (res.headersSent) {
+      res.status(400).json({ isLoggedIn: false, message: 'An error occured' });
+    }
     console.error(err);
   }
 };
@@ -56,7 +64,7 @@ const signUp = async (req: Request, res: Response) => {
     User.init()
       .then(async () => {
         await dbUser.save();
-        res.status(200).json({ success: true, message: 'success' });
+        res.status(200).json({ success: true });
       })
       .catch((err) => {
         if ((<any>err).message.indexOf('duplicate key error') !== -1) {
@@ -93,7 +101,9 @@ const signUp = async (req: Request, res: Response) => {
         }
       });
   } catch (err) {
-    res.status(400).json({ success: false, message: 'An error occurred' });
+    if (res.headersSent) {
+      res.status(400).json({ success: false, message: 'An error occurred' });
+    }
     console.error(err);
   }
 };
@@ -104,7 +114,8 @@ const logIn = async (req: Request, res: Response) => {
 
     const dbUser = await User.findOne({ username: userLoggingIn.username });
     if (!dbUser) {
-      throw res.status(400).json({ error: 'Invalid username' });
+      res.status(400).json({ message: 'Invalid username' });
+      return;
     }
 
     const isPwdCorrect = await bcrypt.compare(
@@ -123,15 +134,18 @@ const logIn = async (req: Request, res: Response) => {
         (err, token) => {
           if (err) throw res.json({ error: err });
           res.json({
-            message: 'Success',
+            success: true,
             token: 'Bearer ' + token,
           });
         }
       );
     } else {
-      throw res.json({ error: 'Invalid password' });
+      res.status(200).json({ success: false, message: 'Invalid password' });
     }
   } catch (err) {
+    if (res.headersSent) {
+      res.status(400).json({ success: false, message: 'An error occured' });
+    }
     console.error(err);
   }
 };
