@@ -1,4 +1,5 @@
 import stitches from '../../stitches.config';
+import LoginToContinue from '../../components/auth/LoginToContinue';
 import {
   Form,
   Title,
@@ -10,6 +11,7 @@ import {
 
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { useAuth } from '../../context/useAuth';
 
 const { styled } = stitches;
 
@@ -22,6 +24,7 @@ const Main = styled('main', {
 });
 
 const CreateBlog = () => {
+  const { isLoggedIn } = useAuth();
   const [title, setTitle] = useState('');
   const [snippet, setSnippet] = useState('');
   const [body, setBody] = useState('');
@@ -56,32 +59,42 @@ const CreateBlog = () => {
   };
 
   return (
-    <Main>
-      <Form onSubmit={handleSubmit} size="fullscreen">
-        <Title>Create Blog</Title>
-        <Label htmlFor="form-title" mb0_5>
-          Title:
-        </Label>
-        <Input id="form-title" onChange={(e) => setTitle(e.target.value)} mb1 />
-        <Label htmlFor="form-snippet" mb0_5>
-          Snippet:
-        </Label>
-        <Input
-          id="form-snippet"
-          onChange={(e) => setSnippet(e.target.value)}
-          mb1
-        />
-        <Label htmlFor="form-body" mb0_5>
-          Body:
-        </Label>
-        <TextArea
-          id="form-body"
-          onChange={(e) => setBody(e.target.value)}
-          mb1
-        />
-        <Button>Submit</Button>
-      </Form>
-    </Main>
+    <>
+      {!isLoggedIn ? (
+        <LoginToContinue />
+      ) : (
+        <Main>
+          <Form onSubmit={handleSubmit} size="fullscreen">
+            <Title>Create Blog</Title>
+            <Label htmlFor="form-title" mb0_5>
+              Title:
+            </Label>
+            <Input
+              id="form-title"
+              onChange={(e) => setTitle(e.target.value)}
+              mb1
+            />
+            <Label htmlFor="form-snippet" mb0_5>
+              Snippet:
+            </Label>
+            <Input
+              id="form-snippet"
+              onChange={(e) => setSnippet(e.target.value)}
+              mb1
+            />
+            <Label htmlFor="form-body" mb0_5>
+              Body:
+            </Label>
+            <TextArea
+              id="form-body"
+              onChange={(e) => setBody(e.target.value)}
+              mb1
+            />
+            <Button>Submit</Button>
+          </Form>
+        </Main>
+      )}
+    </>
   );
 };
 

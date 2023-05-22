@@ -71,6 +71,12 @@ const A = styled('a', {
         marginRight: '1rem',
       },
     },
+
+    mb1: {
+      true: {
+        marginBottom: '1rem',
+      },
+    },
   },
 
   defaultVariants: {
