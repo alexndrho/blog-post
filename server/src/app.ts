@@ -1,5 +1,6 @@
+import authenticationRoute from './routes/authentication';
+import userRoute from './routes/user';
 import blogRoute from './routes/blog';
-import userRoute from './routes/authentication';
 import { verifyJWT } from './controllers/User/authentication';
 
 import express, { Express, Request, Response } from 'express';
@@ -19,8 +20,9 @@ app.get('/isUserAuth', verifyJWT, (req: Request, res: Response) => {
   });
 });
 
+app.use(authenticationRoute);
+app.use('/user', userRoute);
 app.use('/blogs', blogRoute);
-app.use(userRoute);
 
 const uri = `mongodb+srv://${process.env.MONGO_USER}:${process.env.MONGO_PASSWORD}@blog-post.nfrv2qd.mongodb.net/${process.env.MONGO_DB}?retryWrites=true&w=majority`;
 

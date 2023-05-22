@@ -1,5 +1,5 @@
 import { model, Schema } from 'mongoose';
-import IUser from '../types/user';
+import IUser from '../types/model/user';
 import bcrypt from 'bcrypt';
 
 const userSchema = new Schema(
@@ -22,6 +22,7 @@ const userSchema = new Schema(
     password: {
       type: String,
       required: [true, 'Password is required'],
+      select: false,
       minLength: [8, 'Password must be at least 6 characters'],
       maxLength: [16, 'Password must not exceed 16 characters'],
       match: [
@@ -29,12 +30,22 @@ const userSchema = new Schema(
         'Password must at least contain one letter and one number',
       ],
     },
+    profileIconId: {
+      type: String,
+    },
   },
   { timestamps: true }
 );
 
-userSchema.pre('save', async function () {
-  this.password = await bcrypt.hash(this.password, 10);
+userSchema.pre('save', async function (next) {
+  if (this.isModified('password')) {
+    try {
+      this.password = await bcrypt.hash(this.password, 10);
+    } catch (err) {
+      return next(err as Error);
+    }
+  }
+  next();
 });
 
 export default model<IUser>('User', userSchema);

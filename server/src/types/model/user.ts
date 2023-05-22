@@ -8,6 +8,7 @@ interface IUser extends Document, DocumentResult<IUser> {
   username: string;
   email: string;
   password: string;
+  profileIconId: string;
 }
 
 export default IUser;

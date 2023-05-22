@@ -1,5 +1,5 @@
 import { Request, Response } from 'express';
-import IBlog from '../../types/blog';
+import IBlog from '../../types/model/blog';
 import IJwtPayLoad from '../../types/IJwtPayLoad';
 import Blog from '../../models/blog';
 import User from '../../models/user';

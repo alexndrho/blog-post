@@ -1,5 +1,5 @@
 import User from '../../models/user';
-import IUser from '../../types/user';
+import IUser from '../../types/model/user';
 import IJwtPayLoad from '../../types/IJwtPayLoad';
 
 import { Request, Response, NextFunction } from 'express';

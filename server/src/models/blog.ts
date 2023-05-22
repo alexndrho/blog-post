@@ -1,4 +1,4 @@
-import IBlog from '../types/blog';
+import IBlog from '../types/model/blog';
 
 import { model, Schema } from 'mongoose';
 
