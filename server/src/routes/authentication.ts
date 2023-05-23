@@ -1,8 +1,10 @@
 import { Router } from 'express';
-import { signUp, logIn } from '../controllers/User/authentication';
+import { verifyToken } from '../middlewares/user/verifyToken';
+import { signUp, logIn, verifyUser } from '../controllers/User/authentication';
 
 const router: Router = Router();
 
+router.get('/isUserAuth', verifyToken, verifyUser);
 router.post('/signup', signUp);
 router.post('/login', logIn);
 

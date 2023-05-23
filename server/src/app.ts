@@ -1,9 +1,8 @@
 import authenticationRoute from './routes/authentication';
 import userRoute from './routes/user';
 import blogRoute from './routes/blog';
-import { verifyJWT } from './controllers/User/authentication';
 
-import express, { Express, Request, Response } from 'express';
+import express, { Express } from 'express';
 import mongoose from 'mongoose';
 import cors from 'cors';
 
@@ -13,12 +12,12 @@ const PORT: string | number = process.env.PORT || 3000;
 
 app.use(cors());
 app.use(express.json());
-app.get('/isUserAuth', verifyJWT, (req: Request, res: Response) => {
-  res.json({
-    isloggedIn: true,
-    token: req.headers['x-access-token'],
-  });
-});
+// app.get('/isUserAuth', verifyJWT, (req: Request, res: Response) => {
+//   res.json({
+//     isloggedIn: true,
+//     token: req.headers['x-access-token'],
+//   });
+// });
 
 app.use(authenticationRoute);
 app.use('/user', userRoute);

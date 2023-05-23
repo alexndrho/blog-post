@@ -7,47 +7,22 @@ import { Error } from 'mongoose';
 import bcrypt from 'bcrypt';
 import jwt from 'jsonwebtoken';
 
-const verifyJWT = async (req: Request, res: Response, next: NextFunction) => {
+const verifyUser = async (req: Request, res: Response, next: NextFunction) => {
   try {
-    const token = (req.headers['x-access-token'] as string)?.split(' ')[1];
+    const newToken = jwt.sign(
+      { id: req.user?.id } as IJwtPayLoad,
+      process.env.JWT_SECRET!,
+      { expiresIn: 86400 }
+    );
 
-    try {
-      if (token) {
-        const decoded = jwt.verify(
-          token,
-          process.env.JWT_SECRET!
-        ) as IJwtPayLoad;
-
-        (<any>req).user = {};
-
-        const newToken = jwt.sign(
-          { id: decoded.id } as IJwtPayLoad,
-          process.env.JWT_SECRET!,
-          { expiresIn: 86400 }
-        );
-
-        req.headers['x-access-token'] = 'Bearer ' + newToken;
-        next();
-      } else {
-        res.status(400).json({
-          isLoggedIn: false,
-          error: 'Failed to Authenticate',
-        });
-      }
-    } catch (err) {
-      if (res.headersSent) {
-        res.status(400).json({
-          isLoggedIn: false,
-          error: 'An error occured',
-        });
-      }
-      console.error(err);
-    }
+    res.json({
+      isloggedIn: true,
+      token: 'Bearer ' + newToken,
+    });
   } catch (err) {
     if (res.headersSent) {
-      res.status(400).json({ isLoggedIn: false, message: 'An error occured' });
+      res.json({ isLoggedIn: true, message: 'Failed to authenticate' });
     }
-    console.error(err);
   }
 };
 
@@ -107,7 +82,11 @@ const logIn = async (req: Request, res: Response) => {
   try {
     const userLoggingIn: IUser = req.body;
 
-    const dbUser = await User.findOne({ username: userLoggingIn.username });
+    const dbUser = await User.findOne(
+      { username: userLoggingIn.username },
+      '+password'
+    );
+
     if (!dbUser) {
       res.status(400).json({ message: 'Invalid username' });
       return;
@@ -145,4 +124,4 @@ const logIn = async (req: Request, res: Response) => {
   }
 };
 
-export { verifyJWT, signUp, logIn };
+export { verifyUser, signUp, logIn };
