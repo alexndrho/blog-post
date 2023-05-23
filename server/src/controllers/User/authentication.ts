@@ -54,6 +54,13 @@ const verifyJWT = async (req: Request, res: Response, next: NextFunction) => {
 const signUp = async (req: Request, res: Response) => {
   try {
     const user: IUser = req.body;
+    if (await User.findOne({ username: user.username })) {
+      res.status(409).json({
+        success: false,
+        message: 'Username has been taken already',
+      });
+      return;
+    }
 
     const dbUser = new User({
       username: user.username,
@@ -67,14 +74,7 @@ const signUp = async (req: Request, res: Response) => {
         res.status(200).json({ success: true });
       })
       .catch((err) => {
-        if ((<any>err).message.indexOf('duplicate key error') !== -1) {
-          if ((<any>err).message.includes('username')) {
-            res.status(409).json({
-              success: false,
-              message: 'Username has been taken already',
-            });
-          }
-        } else if (err instanceof Error.ValidationError) {
+        if (err instanceof Error.ValidationError) {
           if (err.errors['username']) {
             res.status(401).json({
               success: false,
