@@ -20,9 +20,9 @@ const verifyUser = async (req: Request, res: Response, next: NextFunction) => {
       token: 'Bearer ' + newToken,
     });
   } catch (err) {
-    if (!res.headersSent) {
+    if (!res.headersSent)
       res.json({ isLoggedIn: true, message: 'Failed to authenticate' });
-    }
+    console.error(err);
   }
 };
 
@@ -71,9 +71,8 @@ const signUp = async (req: Request, res: Response) => {
         }
       });
   } catch (err) {
-    if (!res.headersSent) {
+    if (!res.headersSent)
       res.status(400).json({ success: false, message: 'An error occurred' });
-    }
     console.error(err);
   }
 };
@@ -117,9 +116,8 @@ const logIn = async (req: Request, res: Response) => {
       res.status(200).json({ success: false, message: 'Invalid password' });
     }
   } catch (err) {
-    if (!res.headersSent) {
+    if (!res.headersSent)
       res.status(400).json({ success: false, message: 'An error occured' });
-    }
     console.error(err);
   }
 };

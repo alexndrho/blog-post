@@ -10,6 +10,7 @@ const getBlogs = async (req: Request, res: Response) => {
     const blogs = await Blog.find().sort({ createdAt: -1 });
     res.status(200).json({ blogs });
   } catch (err) {
+    if (!res.headersSent) res.json({ sucess: false });
     console.error(err);
   }
 };
@@ -27,6 +28,7 @@ const getBlog = async (req: Request, res: Response) => {
     if (!blog) throw 'Unable to find blog';
     res.status(200).json({ ...blog._doc });
   } catch (err) {
+    if (!res.headersSent) res.json({ sucess: false });
     console.error(err);
   }
 };
@@ -51,6 +53,7 @@ const createBlog = async (req: Request, res: Response) => {
       throw 'Failed To Authenticate';
     }
   } catch (err) {
+    if (!res.headersSent) res.json({ sucess: false });
     console.error(err);
   }
 };
@@ -62,6 +65,7 @@ const deleteBlog = async (req: Request, res: Response) => {
     if (!deletedBlog) throw 'Unable to find blog';
     res.status(200).json({ ...deletedBlog._doc });
   } catch (err) {
+    if (!res.headersSent) res.json({ sucess: false });
     console.error(err);
   }
 };

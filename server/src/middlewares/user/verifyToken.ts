@@ -13,13 +13,8 @@ const verifyToken = async (req: Request, res: Response, next: NextFunction) => {
     req.user = decoded;
     next();
   } catch (err) {
-    if (!res.headersSent && err instanceof Error) {
-      console.log(err);
-      res.status(400).json({ isLoggedIn: false, message: err.message });
-    } else {
-      console.log(err);
+    if (!res.headersSent)
       res.status(400).json({ isLoggedIn: false, message: 'An error occured' });
-    }
     console.error(err);
   }
 };
