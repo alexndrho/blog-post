@@ -73,11 +73,6 @@ const signUp = async (req: Request, res: Response) => {
               success: false,
               message: 'Username has been taken already',
             });
-          } else if ((<any>err).message.includes('email')) {
-            res.status(409).json({
-              success: false,
-              message: 'Email has been taken already',
-            });
           }
         } else if (err instanceof Error.ValidationError) {
           if (err.errors['username']) {

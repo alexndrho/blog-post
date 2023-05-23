@@ -14,7 +14,6 @@ const userSchema = new Schema(
     },
     email: {
       type: String,
-      unique: true,
       required: [true, 'Email is required'],
       maxLength: [254, 'Email must not exceed 254 characters'],
       match: [/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w+)+$/, 'Invalid email'],
