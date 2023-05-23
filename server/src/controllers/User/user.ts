@@ -4,6 +4,7 @@ import User from '../../models/user';
 import jwt from 'jsonwebtoken';
 import { Request, Response } from 'express';
 import IJwtPayLoad from '../../types/IJwtPayLoad';
+import IUser from '../../types/model/user';
 
 const updateUser = async (req: Request, res: Response) => {
   try {
@@ -39,25 +40,57 @@ const updateUser = async (req: Request, res: Response) => {
         userIcon.save();
 
         user.profileIconId = userIcon._id;
-        user.save();
-
-        res.json({ success: true });
       } else {
         const userIcon = new UserIcon({
           userId: decoded.id,
           name: iconName,
           image: req.file.buffer,
         });
-
         userIcon.save();
-        user.profileIconId = userIcon._id;
-        user.save();
 
-        res.json({ success: true });
+        user.profileIconId = userIcon._id;
       }
-    } else {
-      res.json({ success: false });
     }
+
+    const formData = req.body as Partial<IUser>;
+
+    if (formData.username) {
+      if (await User.findOne({ username: formData.username })) {
+        res
+          .status(409)
+          .json({ success: false, message: 'Username already exists' });
+        return;
+      }
+
+      user.username = formData.username;
+    }
+
+    if (formData.email) {
+      user.email = formData.email;
+    }
+
+    if (formData.password) {
+      user.password = formData.password;
+    }
+
+    if (formData.firstName) {
+      user.firstName = formData.firstName;
+    }
+
+    if (formData.lastName) {
+      user.lastName = formData.lastName;
+    }
+
+    if (formData.location) {
+      user.location = formData.location;
+    }
+
+    if (formData.contact) {
+      user.contact = formData.contact;
+    }
+
+    user.save();
+    res.json({ success: true });
   } catch (err) {
     if (res.headersSent) res.json({ sucess: false });
     console.error(err);

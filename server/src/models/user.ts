@@ -31,6 +31,18 @@ const userSchema = new Schema(
     profileIconId: {
       type: String,
     },
+    firstName: {
+      type: String,
+    },
+    lastName: {
+      type: String,
+    },
+    location: {
+      type: String,
+    },
+    contact: {
+      type: String,
+    },
   },
   { timestamps: true }
 );
