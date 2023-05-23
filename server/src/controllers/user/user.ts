@@ -4,6 +4,22 @@ import User from '../../models/user';
 import { Request, Response } from 'express';
 import IUser from '../../types/model/user';
 
+const getUserInfo = async (req: Request, res: Response) => {
+  try {
+    const user = await User.findById(req.user?.id);
+
+    if (!user) {
+      res.status(404).json({ success: false, message: 'User not found' });
+      return;
+    }
+
+    res.status(200).json({ ...user._doc });
+  } catch (err) {
+    if (!res.headersSent) res.json({ sucess: false });
+    console.error(err);
+  }
+};
+
 const updateUser = async (req: Request, res: Response) => {
   try {
     const user = await User.findById(req.user?.id);
@@ -85,4 +101,4 @@ const updateUser = async (req: Request, res: Response) => {
   }
 };
 
-export { updateUser };
+export { getUserInfo, updateUser };
