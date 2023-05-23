@@ -80,7 +80,7 @@ const updateUser = async (req: Request, res: Response) => {
     user.save();
     res.json({ success: true });
   } catch (err) {
-    if (res.headersSent) res.json({ sucess: false });
+    if (!res.headersSent) res.json({ sucess: false });
     console.error(err);
   }
 };
