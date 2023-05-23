@@ -1,4 +1,4 @@
-import { updateUser } from '../controllers/User/user';
+import { updateUser } from '../controllers/user/user';
 import { uploadIcon } from '../middlewares/uploadIcon';
 import { Router } from 'express';
 import { verifyToken } from '../middlewares/user/verifyToken';
