@@ -21,6 +21,22 @@ const getUserInfo = async (req: Request, res: Response) => {
   }
 };
 
+const getUserIcon = async (req: Request, res: Response) => {
+  try {
+    const userIcon = await UserIcon.findOne({ userId: req.user?.id });
+
+    if (!userIcon) {
+      res.status(404).json({ success: false, message: 'User icon not found' });
+      return;
+    }
+
+    res.status(200).json({ ...userIcon._doc });
+  } catch (err) {
+    if (!res.headersSent) res.json({ sucess: false });
+    console.error(err);
+  }
+};
+
 const updateUser = async (req: Request, res: Response) => {
   try {
     const user = await User.findById(req.user?.id);
@@ -115,4 +131,4 @@ const updateUser = async (req: Request, res: Response) => {
   }
 };
 
-export { getUserInfo, updateUser };
+export { getUserInfo, getUserIcon, updateUser };
