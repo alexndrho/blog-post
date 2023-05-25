@@ -8,6 +8,7 @@
     "build": "tsc",
     "start": "concurrently \"tsc -w\" \"nodemon dist/js/app.js\""
   },
+  "type": "module",
   "keywords": [],
   "author": "",
   "license": "ISC",

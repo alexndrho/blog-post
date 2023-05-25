@@ -1,8 +1,8 @@
-import UserIcon from '../../models/userIcon';
-import User from '../../models/user';
+import UserIcon from '../../models/userIcon.js';
+import User from '../../models/user.js';
 
 import { Request, Response } from 'express';
-import IUser from '../../types/model/user';
+import IUser from '../../types/model/user.js';
 
 const getUserInfo = async (req: Request, res: Response) => {
   try {

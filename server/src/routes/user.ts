@@ -1,7 +1,7 @@
-import { getUserInfo, updateUser } from '../controllers/user/user';
-import { uploadIcon } from '../middlewares/uploadIcon';
+import { getUserInfo, updateUser } from '../controllers/user/user.js';
+import { uploadIcon } from '../middlewares/uploadIcon.js';
 import { Router } from 'express';
-import { verifyToken } from '../middlewares/user/verifyToken';
+import { verifyToken } from '../middlewares/user/verifyToken.js';
 
 const router = Router();
 

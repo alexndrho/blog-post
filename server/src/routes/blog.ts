@@ -1,11 +1,11 @@
 import { Router } from 'express';
-import { verifyToken } from '../middlewares/user/verifyToken';
+import { verifyToken } from '../middlewares/user/verifyToken.js';
 import {
   getBlogs,
   getBlog,
   createBlog,
   deleteBlog,
-} from '../controllers/Blogs/blog';
+} from '../controllers/Blogs/blog.js';
 
 const router: Router = Router();
 

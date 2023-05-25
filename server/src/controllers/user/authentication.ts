@@ -1,6 +1,6 @@
-import User from '../../models/user';
-import IUser from '../../types/model/user';
-import IJwtPayLoad from '../../types/IJwtPayLoad';
+import User from '../../models/user.js';
+import IUser from '../../types/model/user.js';
+import IJwtPayLoad from '../../types/IJwtPayLoad.js';
 
 import { Request, Response, NextFunction } from 'express';
 import { Error } from 'mongoose';

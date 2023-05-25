@@ -1,6 +1,10 @@
 import { Router } from 'express';
-import { verifyToken } from '../middlewares/user/verifyToken';
-import { signUp, logIn, verifyUser } from '../controllers/user/authentication';
+import { verifyToken } from '../middlewares/user/verifyToken.js';
+import {
+  signUp,
+  logIn,
+  verifyUser,
+} from '../controllers/user/authentication.js';
 
 const router: Router = Router();
 

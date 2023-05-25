@@ -1,7 +1,7 @@
 import { Request, Response } from 'express';
-import IBlog from '../../types/model/blog';
-import Blog from '../../models/blog';
-import User from '../../models/user';
+import IBlog from '../../types/model/blog.js';
+import Blog from '../../models/blog.js';
+import User from '../../models/user.js';
 
 import mongoose from 'mongoose';
 

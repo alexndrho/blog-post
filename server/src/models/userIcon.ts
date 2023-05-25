@@ -1,4 +1,4 @@
-import IUserIcon from '../types/model/userIcon';
+import IUserIcon from '../types/model/userIcon.js';
 import { Schema, model } from 'mongoose';
 
 const userIconSchema = new Schema({

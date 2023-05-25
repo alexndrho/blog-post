@@ -1,4 +1,4 @@
-import IJwtPayLoad from '../IJwtPayLoad';
+import IJwtPayLoad from '../IJwtPayLoad.js';
 
 declare global {
   namespace Express {

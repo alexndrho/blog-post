@@ -1,5 +1,5 @@
 import { model, Schema } from 'mongoose';
-import IUser from '../types/model/user';
+import IUser from '../types/model/user.js';
 import bcrypt from 'bcrypt';
 
 const userSchema = new Schema(

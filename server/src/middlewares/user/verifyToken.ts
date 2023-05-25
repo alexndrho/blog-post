@@ -1,5 +1,5 @@
+import IJwtPayLoad from '../../types/IJwtPayLoad.js';
 import jwt from 'jsonwebtoken';
-import IJwtPayLoad from '../../types/IJwtPayLoad';
 import { Request, Response, NextFunction } from 'express';
 
 const verifyToken = async (req: Request, res: Response, next: NextFunction) => {

@@ -1,6 +1,6 @@
-import authenticationRoute from './routes/authentication';
-import userRoute from './routes/user';
-import blogRoute from './routes/blog';
+import authenticationRoute from './routes/authentication.js';
+import userRoute from './routes/user.js';
+import blogRoute from './routes/blog.js';
 
 import express, { Express } from 'express';
 import mongoose from 'mongoose';
