@@ -14,6 +14,10 @@ const userIconSchema = new Schema({
     type: Buffer,
     required: true,
   },
+  mime: {
+    type: String,
+    required: true,
+  },
 });
 
 export default model<IUserIcon>('UserIcon', userIconSchema);
