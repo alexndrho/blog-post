@@ -65,6 +65,17 @@ const updateUser = async (req: Request, res: Response) => {
         return;
       }
 
+      const fileMB = req.file.buffer.byteLength / 1024 / 1024;
+
+      console.log(fileMB);
+      if (fileMB > 1) {
+        res.status(422).json({
+          success: false,
+          message: 'Please upload a picture smaller than 1 MB',
+        });
+        return;
+      }
+
       const userIcon = await UserIcon.findOne({ userId: user._id });
       if (userIcon) {
         userIcon.name = iconName;
