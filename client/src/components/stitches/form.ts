@@ -52,6 +52,11 @@ const Label = styled('label', {
         },
       },
     },
+    fw6: {
+      true: {
+        fontWeight: 600,
+      },
+    },
     mb0_5: {
       true: {
         marginBottom: '0.5rem',

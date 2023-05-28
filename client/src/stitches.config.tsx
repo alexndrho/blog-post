@@ -63,6 +63,9 @@ const useGlobalCss = stitches.globalCss({
     animation: 'none !important',
     transition: 'none !important',
   },
+  img: {
+    pointerEvents: 'none',
+  },
 });
 
 export default stitches;
