@@ -1,8 +1,8 @@
-import blogRoute from './routes/blog';
-import userRoute from './routes/authentication';
-import { verifyJWT } from './controllers/User/authentication';
+import authenticationRoute from './routes/authentication.js';
+import userRoute from './routes/user.js';
+import blogRoute from './routes/blog.js';
 
-import express, { Express, Request, Response } from 'express';
+import express, { Express } from 'express';
 import mongoose from 'mongoose';
 import cors from 'cors';
 
@@ -12,15 +12,16 @@ const PORT: string | number = process.env.PORT || 3000;
 
 app.use(cors());
 app.use(express.json());
-app.get('/isUserAuth', verifyJWT, (req: Request, res: Response) => {
-  res.json({
-    isloggedIn: true,
-    token: req.headers['x-access-token'],
-  });
-});
+// app.get('/isUserAuth', verifyJWT, (req: Request, res: Response) => {
+//   res.json({
+//     isloggedIn: true,
+//     token: req.headers['x-access-token'],
+//   });
+// });
 
+app.use(authenticationRoute);
+app.use('/user', userRoute);
 app.use('/blogs', blogRoute);
-app.use(userRoute);
 
 const uri = `mongodb+srv://${process.env.MONGO_USER}:${process.env.MONGO_PASSWORD}@blog-post.nfrv2qd.mongodb.net/${process.env.MONGO_DB}?retryWrites=true&w=majority`;
 

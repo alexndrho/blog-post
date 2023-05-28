@@ -1,5 +1,5 @@
 import { model, Schema } from 'mongoose';
-import IUser from '../types/user';
+import IUser from '../types/model/user.js';
 import bcrypt from 'bcrypt';
 
 const userSchema = new Schema(
@@ -14,7 +14,6 @@ const userSchema = new Schema(
     },
     email: {
       type: String,
-      unique: true,
       required: [true, 'Email is required'],
       maxLength: [254, 'Email must not exceed 254 characters'],
       match: [/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w+)+$/, 'Invalid email'],
@@ -24,17 +23,40 @@ const userSchema = new Schema(
       required: [true, 'Password is required'],
       minLength: [8, 'Password must be at least 6 characters'],
       maxLength: [16, 'Password must not exceed 16 characters'],
+      select: false,
       match: [
         /^(?=.*[A-Za-z])(?=.*\d).*$/,
         'Password must at least contain one letter and one number',
       ],
     },
+    profileIconId: {
+      type: String,
+    },
+    firstName: {
+      type: String,
+    },
+    lastName: {
+      type: String,
+    },
+    location: {
+      type: String,
+    },
+    contact: {
+      type: String,
+    },
   },
   { timestamps: true }
 );
 
-userSchema.pre('save', async function () {
-  this.password = await bcrypt.hash(this.password, 10);
+userSchema.pre('save', async function (next) {
+  if (this.isModified('password')) {
+    try {
+      this.password = await bcrypt.hash(this.password, 10);
+    } catch (err) {
+      return next(err as Error);
+    }
+  }
+  next();
 });
 
 export default model<IUser>('User', userSchema);
