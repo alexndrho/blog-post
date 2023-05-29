@@ -134,7 +134,7 @@ const updateUser = async (req: Request, res: Response) => {
       user.contact = formData.contact;
     }
 
-    user.save();
+    await user.save();
     res.json({ success: true });
   } catch (err) {
     if (!res.headersSent) res.json({ sucess: false });
