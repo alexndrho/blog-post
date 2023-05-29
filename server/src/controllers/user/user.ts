@@ -16,7 +16,7 @@ const getUserInfo = async (req: Request, res: Response) => {
 
     res.status(200).json({ ...user._doc });
   } catch (err) {
-    if (!res.headersSent) res.json({ sucess: false });
+    if (!res.headersSent) res.json({ success: false });
     console.error(err);
   }
 };
@@ -32,7 +32,7 @@ const getUserIcon = async (req: Request, res: Response) => {
 
     res.status(200).json({ ...userIcon._doc });
   } catch (err) {
-    if (!res.headersSent) res.json({ sucess: false });
+    if (!res.headersSent) res.json({ success: false });
     console.error(err);
   }
 };
@@ -137,7 +137,7 @@ const updateUser = async (req: Request, res: Response) => {
     await user.save();
     res.json({ success: true });
   } catch (err) {
-    if (!res.headersSent) res.json({ sucess: false });
+    if (!res.headersSent) res.json({ success: false });
     console.error(err);
   }
 };
