@@ -53,9 +53,13 @@ const App = () => {
           } else {
             setIsLoading(false);
           }
+        } else {
+          setLoggedOut();
+          setIsLoading(false);
         }
       } catch (err) {
         setLoggedOut();
+        setIsLoading(false);
         console.error(err);
       }
     };
