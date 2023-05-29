@@ -25,6 +25,12 @@ const App = () => {
   const { setLoggedIn, setLoggedOut } = useAuth();
   const [isLoading, setIsLoading] = useState(true);
 
+  const delayLoadingDone = (duration: number) => {
+    setTimeout(() => {
+      setIsLoading(false);
+    }, 1000 - duration);
+  };
+
   useEffect(() => {
     const isUserAuth = async () => {
       setIsLoading(true);
@@ -41,21 +47,24 @@ const App = () => {
         );
 
         const responseData: IUserAuth = await response.json();
+        const responseTime = new Date().getTime();
+
         if (responseData.isloggedIn) {
           localStorage.setItem('token', responseData.token);
           setLoggedIn();
-          const responseTime = new Date().getTime();
 
           if (responseTime - currentTime < 1000) {
-            setTimeout(() => {
-              setIsLoading(false);
-            }, 1000 - (responseTime - currentTime));
+            delayLoadingDone(responseTime - currentTime);
           } else {
-            setIsLoading(false);
+            delayLoadingDone(responseTime - currentTime);
           }
+        } else {
+          setLoggedOut();
+          delayLoadingDone(responseTime - currentTime);
         }
       } catch (err) {
         setLoggedOut();
+        delayLoadingDone(1);
         console.error(err);
       }
     };
