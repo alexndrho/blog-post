@@ -1,4 +1,5 @@
 import { useAuth } from './context/useAuth';
+import Loading from './pages/Loading';
 import Navigation from './components/Navigation';
 import Login from './pages/auth/Login';
 import SignUp from './pages/auth/SignUp';
@@ -10,7 +11,7 @@ import NotFound from './pages/NotFound';
 import { useGlobalCss } from './stitches.config';
 import { IUserAuth } from './types/authentication';
 
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { Routes, Route } from 'react-router-dom';
 import '@fontsource/raleway/400.css';
 import '@fontsource/raleway/500.css';
@@ -22,9 +23,13 @@ const App = () => {
   useGlobalCss();
 
   const { setLoggedIn, setLoggedOut } = useAuth();
+  const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
     const isUserAuth = async () => {
+      setIsLoading(true);
+      const currentTime = new Date().getTime();
+
       try {
         const response = await fetch(
           `${import.meta.env.VITE_BASE_URL_SERVER}/isUserAuth`,
@@ -39,6 +44,15 @@ const App = () => {
         if (responseData.isloggedIn) {
           localStorage.setItem('token', responseData.token);
           setLoggedIn();
+          const responseTime = new Date().getTime();
+
+          if (responseTime - currentTime < 1000) {
+            setTimeout(() => {
+              setIsLoading(false);
+            }, 1000 - (responseTime - currentTime));
+          } else {
+            setIsLoading(false);
+          }
         }
       } catch (err) {
         setLoggedOut();
@@ -51,10 +65,16 @@ const App = () => {
 
   return (
     <>
+      {isLoading && <Loading />}
+
       <Navigation />
       <Routes>
         <Route path="/login" element={<Login />} />
         <Route path="/signup" element={<SignUp />} />
+
+        <Route path="/settings" element={<SettingsUser />}>
+          <Route path="profile" element={<SettingsUser />} />
+        </Route>
 
         <Route path="/settings" element={<SettingsUser />}>
           <Route path="profile" element={<SettingsUser />} />
