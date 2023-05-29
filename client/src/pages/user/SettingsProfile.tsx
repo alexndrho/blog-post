@@ -1,12 +1,11 @@
 import stitches from '../../stitches.config';
 import { useAuth } from '../../context/useAuth';
+import Notication from '../../components/Notification';
 import LoginToContinue from '../../components/auth/LoginToContinue';
 import { Title, Label, Input, Button } from '../../components/stitches/form';
 import { IUserIcon } from '../../types/userIcon';
 import { IUser } from '../../types/user';
-
-import React, { useEffect, useRef, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import React, { useEffect, useCallback, useRef, useState } from 'react';
 
 const { styled } = stitches;
 
@@ -172,14 +171,11 @@ const ColumnSpan2 = styled('div', {
 
 const SettingsUser = () => {
   const { isLoggedIn } = useAuth();
-  const navigate = useNavigate();
 
   const [userData, setUserData] = useState<IUser | null>();
   const [base64Icon, setBase64Icon] = useState('');
+  const [showNotification, setShowNotification] = useState(false);
   const [errorMsg, setErrorMsg] = useState('');
-
-  const iconEditDialogRef = useRef<HTMLDialogElement | null>(null);
-  const iconInputRef = useRef<HTMLInputElement | null>(null);
 
   const [profileIcon, setProfileIcon] = useState<File | null>(null);
   const [firstName, setFirstName] = useState('');
@@ -189,53 +185,87 @@ const SettingsUser = () => {
   const [location, setLocation] = useState('');
   const [contact, setContact] = useState('');
 
-  useEffect(() => {
-    const getUserData = async () => {
-      try {
-        const response = await fetch(
-          `${import.meta.env.VITE_BASE_URL_SERVER}/user`,
-          {
-            headers: {
-              'x-access-token': localStorage.getItem('token') as string,
-            },
-          }
-        );
+  const iconEditDialogRef = useRef<HTMLDialogElement | null>(null);
+  const iconInputRef = useRef<HTMLInputElement | null>(null);
 
-        const responseData = await response.json();
-        if (responseData) setUserData(responseData);
-      } catch (err) {
-        console.error(err);
-      }
-    };
+  const firstNameRef = useRef<HTMLInputElement | null>(null);
+  const lastNameRef = useRef<HTMLInputElement | null>(null);
+  const usernameRef = useRef<HTMLInputElement | null>(null);
+  const emailRef = useRef<HTMLInputElement | null>(null);
+  const locationRef = useRef<HTMLInputElement | null>(null);
+  const contactRef = useRef<HTMLInputElement | null>(null);
 
-    getUserData();
+  // callbacks
+  const updateUserData = useCallback(async () => {
+    try {
+      const response = await fetch(
+        `${import.meta.env.VITE_BASE_URL_SERVER}/user`,
+        {
+          headers: {
+            'x-access-token': localStorage.getItem('token') as string,
+          },
+        }
+      );
+
+      const responseData = await response.json();
+      if (responseData) setUserData(responseData);
+    } catch (err) {
+      console.error(err);
+    }
   }, []);
 
-  useEffect(() => {
-    const getUserIcon = async () => {
-      try {
-        const response = await fetch(
-          `${import.meta.env.VITE_BASE_URL_SERVER}/user/icon`,
-          {
-            headers: {
-              'x-access-token': localStorage.getItem('token') as string,
-            },
-          }
+  const updateUserIcon = useCallback(async () => {
+    try {
+      const response = await fetch(
+        `${import.meta.env.VITE_BASE_URL_SERVER}/user/icon`,
+        {
+          headers: {
+            'x-access-token': localStorage.getItem('token') as string,
+          },
+        }
+      );
+
+      const userIcon: IUserIcon = await response.json();
+      if (userIcon)
+        setBase64Icon(
+          `data:${userIcon.mime};base64,` +
+            btoa(String.fromCharCode(...new Uint8Array(userIcon.image.data)))
         );
-
-        const userIcon: IUserIcon = await response.json();
-        if (userIcon)
-          setBase64Icon(
-            `data:${userIcon.mime};base64,` +
-              btoa(String.fromCharCode(...new Uint8Array(userIcon.image.data)))
-          );
-      } catch (err) {
-        console.error(err);
-      }
-    };
-
-    getUserIcon();
+    } catch (err) {
+      console.error(err);
+    }
   }, []);
+
+  // useEffects
+  useEffect(() => {
+    updateUserData();
+  }, [updateUserData]);
+
+  useEffect(() => {
+    updateUserIcon();
+  }, [updateUserIcon]);
+
+  // handlers
+  const resetForm = () => {
+    setProfileIcon(null);
+    setFirstName('');
+    setLastName('');
+    setUserName('');
+    setEmail('');
+    setLocation('');
+    setContact('');
+
+    firstNameRef.current?.value && (firstNameRef.current.value = '');
+    lastNameRef.current?.value && (lastNameRef.current.value = '');
+    usernameRef.current?.value && (usernameRef.current.value = '');
+    emailRef.current?.value && (emailRef.current.value = '');
+    locationRef.current?.value && (locationRef.current.value = '');
+    contactRef.current?.value && (contactRef.current.value = '');
+  };
+
+  const handleCloseNotification = () => {
+    setShowNotification(false);
+  };
 
   const showIconOptions = () => {
     if (iconEditDialogRef.current?.open) {
@@ -285,7 +315,10 @@ const SettingsUser = () => {
 
       const responseData = await response.json();
       if (responseData.success) {
-        navigate(0);
+        resetForm();
+        updateUserData();
+
+        setShowNotification(true);
       } else if (responseData.message) {
         setErrorMsg(responseData.message);
       }
@@ -297,123 +330,137 @@ const SettingsUser = () => {
   if (!isLoggedIn) return <LoginToContinue />;
 
   return (
-    <Main>
-      <Title css={{ marginBottom: '2rem', gridColumn: 'span 2' }}>
-        Public profile
-      </Title>
+    <>
+      {showNotification && (
+        <Notication
+          message={<p>Profile updated successfully</p>}
+          onClose={handleCloseNotification}
+        />
+      )}
+      <Main>
+        <Title css={{ marginBottom: '2rem', gridColumn: 'span 2' }}>
+          Public profile
+        </Title>
 
-      <IconSection>
-        <ProfileContainer>
-          {ErrorMsg && <ErrorMsg>{errorMsg}</ErrorMsg>}
+        <IconSection>
+          <ProfileContainer>
+            {ErrorMsg && <ErrorMsg>{errorMsg}</ErrorMsg>}
 
-          <IconContainer>
-            {base64Icon ? (
-              <Icon src={base64Icon} alt="profile-icon" />
-            ) : (
-              <Icon blank />
-            )}
+            <IconContainer>
+              {base64Icon ? (
+                <Icon src={base64Icon} alt="profile-icon" />
+              ) : (
+                <Icon blank />
+              )}
 
-            <IconButtonContainer>
-              <IconButton onClick={showIconOptions}>
-                <Span>&#128393;</Span>Edit
-              </IconButton>
+              <IconButtonContainer>
+                <IconButton onClick={showIconOptions}>
+                  <Span>&#128393;</Span>Edit
+                </IconButton>
 
-              <IconEditModal ref={iconEditDialogRef}>
-                <IconEditModalOption as="label">
-                  <Input
-                    type="file"
-                    ref={iconInputRef}
-                    accept="image/png, image/jpeg, image/jpg"
-                    multiple={false}
-                    role="menuitem"
-                    onChange={handleIconInput}
-                    css={{ display: 'none' }}
-                  />
-                  Upload a photo
-                </IconEditModalOption>
+                <IconEditModal ref={iconEditDialogRef}>
+                  <IconEditModalOption as="label">
+                    <Input
+                      type="file"
+                      ref={iconInputRef}
+                      accept="image/png, image/jpeg, image/jpg"
+                      multiple={false}
+                      role="menuitem"
+                      onChange={handleIconInput}
+                      css={{ display: 'none' }}
+                    />
+                    Upload a photo
+                  </IconEditModalOption>
 
-                <IconEditModalOption role="menuitem">
-                  Remove photo
-                </IconEditModalOption>
-              </IconEditModal>
-            </IconButtonContainer>
-          </IconContainer>
-        </ProfileContainer>
-      </IconSection>
+                  <IconEditModalOption role="menuitem">
+                    Remove photo
+                  </IconEditModalOption>
+                </IconEditModal>
+              </IconButtonContainer>
+            </IconContainer>
+          </ProfileContainer>
+        </IconSection>
 
-      <Form onSubmit={handleFormSubmit}>
-        <ColumnSpan1>
-          <Label htmlFor="first-name" fw6 mb0_5>
-            First Name
-          </Label>
-          <Input
-            id="first-name"
-            placeholder={`${userData?.firstName ? userData.firstName : ''}`}
-            onChange={(e) => setFirstName(e.target.value)}
-          />
-        </ColumnSpan1>
+        <Form onSubmit={handleFormSubmit}>
+          <ColumnSpan1>
+            <Label htmlFor="first-name" fw6 mb0_5>
+              First Name
+            </Label>
+            <Input
+              id="first-name"
+              placeholder={`${userData?.firstName ? userData.firstName : ''}`}
+              ref={firstNameRef}
+              onChange={(e) => setFirstName(e.target.value)}
+            />
+          </ColumnSpan1>
 
-        <ColumnSpan1>
-          <Label htmlFor="last-name" fw6 mb0_5>
-            Last Name
-          </Label>
-          <Input
-            id="last-name"
-            placeholder={`${userData?.lastName ? userData.lastName : ''}`}
-            onChange={(e) => setLastName(e.target.value)}
-          />
-        </ColumnSpan1>
+          <ColumnSpan1>
+            <Label htmlFor="last-name" fw6 mb0_5>
+              Last Name
+            </Label>
+            <Input
+              id="last-name"
+              placeholder={`${userData?.lastName ? userData.lastName : ''}`}
+              ref={lastNameRef}
+              onChange={(e) => setLastName(e.target.value)}
+            />
+          </ColumnSpan1>
 
-        <ColumnSpan2>
-          <Label htmlFor="username" fw6 mb0_5>
-            Username
-          </Label>
-          <Input
-            id="username"
-            placeholder={`${userData?.username ? userData.username : ''}`}
-            onChange={(e) => setUserName(e.target.value)}
-          />
-        </ColumnSpan2>
+          <ColumnSpan2>
+            <Label htmlFor="username" fw6 mb0_5>
+              Username
+            </Label>
+            <Input
+              id="username"
+              placeholder={`${userData?.username ? userData.username : ''}`}
+              ref={usernameRef}
+              onChange={(e) => setUserName(e.target.value)}
+            />
+          </ColumnSpan2>
 
-        <ColumnSpan2>
-          <Label htmlFor="email" fw6 mb0_5>
-            Email
-          </Label>
-          <Input
-            id="email"
-            type="email"
-            placeholder={`${userData?.email ? userData.email : ''}`}
-            onChange={(e) => setEmail(e.target.value)}
-          />
-        </ColumnSpan2>
+          <ColumnSpan2>
+            <Label htmlFor="email" fw6 mb0_5>
+              Email
+            </Label>
+            <Input
+              id="email"
+              type="email"
+              placeholder={`${userData?.email ? userData.email : ''}`}
+              ref={emailRef}
+              onChange={(e) => setEmail(e.target.value)}
+            />
+          </ColumnSpan2>
 
-        <ColumnSpan2>
-          <Label htmlFor="location" fw6 mb0_5>
-            Location
-          </Label>
-          <Input
-            id="location"
-            placeholder={`${userData?.location ? userData.location : ''}`}
-            onChange={(e) => setLocation(e.target.value)}
-          />
-        </ColumnSpan2>
+          <ColumnSpan2>
+            <Label htmlFor="location" fw6 mb0_5>
+              Location
+            </Label>
+            <Input
+              id="location"
+              placeholder={`${userData?.location ? userData.location : ''}`}
+              ref={locationRef}
+              onChange={(e) => setLocation(e.target.value)}
+            />
+          </ColumnSpan2>
 
-        <ColumnSpan2>
-          <Label htmlFor="contact" fw6 mb0_5>
-            Contact
-          </Label>
-          <Input
-            id="contact"
-            placeholder={`${userData?.contact ? userData.contact : ''}`}
-            onChange={(e) => setContact(e.target.value)}
-          />
-        </ColumnSpan2>
+          <ColumnSpan2>
+            <Label htmlFor="contact" fw6 mb0_5>
+              Contact
+            </Label>
+            <Input
+              id="contact"
+              placeholder={`${userData?.contact ? userData.contact : ''}`}
+              ref={contactRef}
+              onChange={(e) => setContact(e.target.value)}
+            />
+          </ColumnSpan2>
 
-        <ColumnSpan2>
-          <Button>Save</Button>
-        </ColumnSpan2>
-      </Form>
-    </Main>
+          <ColumnSpan2>
+            <Button>Save</Button>
+          </ColumnSpan2>
+        </Form>
+      </Main>
+    </>
   );
 };
 
