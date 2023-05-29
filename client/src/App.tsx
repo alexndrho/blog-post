@@ -76,6 +76,10 @@ const App = () => {
           <Route path="profile" element={<SettingsUser />} />
         </Route>
 
+        <Route path="/settings" element={<SettingsUser />}>
+          <Route path="profile" element={<SettingsUser />} />
+        </Route>
+
         <Route path="/blogs">
           <Route index element={<AllBlogs />} />
           <Route path="create" element={<CreateBlog />} />
