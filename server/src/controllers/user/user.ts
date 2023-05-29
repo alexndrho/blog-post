@@ -3,6 +3,7 @@ import User from '../../models/user.js';
 import IUser from '../../types/model/user.js';
 
 import { Request, Response } from 'express';
+import { Error } from 'mongoose';
 import { fileTypeFromBuffer } from 'file-type';
 
 const getUserInfo = async (req: Request, res: Response) => {
@@ -16,7 +17,7 @@ const getUserInfo = async (req: Request, res: Response) => {
 
     res.status(200).json({ ...user._doc });
   } catch (err) {
-    if (!res.headersSent) res.json({ sucess: false });
+    if (!res.headersSent) res.json({ success: false });
     console.error(err);
   }
 };
@@ -32,7 +33,7 @@ const getUserIcon = async (req: Request, res: Response) => {
 
     res.status(200).json({ ...userIcon._doc });
   } catch (err) {
-    if (!res.headersSent) res.json({ sucess: false });
+    if (!res.headersSent) res.json({ success: false });
     console.error(err);
   }
 };
@@ -134,11 +135,51 @@ const updateUser = async (req: Request, res: Response) => {
       user.contact = formData.contact;
     }
 
-    user.save();
+    await user.save();
     res.json({ success: true });
   } catch (err) {
-    if (!res.headersSent) res.json({ sucess: false });
-    console.error(err);
+    if (err instanceof Error.ValidationError) {
+      if (err.errors.username) {
+        res
+          .status(422)
+          .json({ success: false, message: err.errors['username'].message });
+        return;
+      } else if (err.errors.email) {
+        res
+          .status(422)
+          .json({ success: false, message: err.errors['email'].message });
+        return;
+      } else if (err.errors.password) {
+        res
+          .status(422)
+          .json({ success: false, message: err.errors['password'].message });
+        return;
+      } else if (err.errors.firstName) {
+        res
+          .status(422)
+          .json({ success: false, message: err.errors['firstName'].message });
+        return;
+      } else if (err.errors.lastName) {
+        res
+          .status(422)
+          .json({ success: false, message: err.errors['lastName'].message });
+        return;
+      } else if (err.errors.location) {
+        res
+          .status(422)
+          .json({ success: false, message: err.errors['location'].message });
+        return;
+      } else if (err.errors.contact) {
+        res
+          .status(422)
+          .json({ success: false, message: err.errors['contact'].message });
+        return;
+      } else {
+        res.status(422).json({ success: false, message: 'An error occured' });
+        console.error(err);
+        return;
+      }
+    }
   }
 };
 

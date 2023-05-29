@@ -9,11 +9,15 @@ const NotificationContainer = styled('div', {
   padding: '1.25rem 2rem',
   color: 'White',
   backgroundColor: 'Black',
-  fontSize: '$s',
+  fontSize: '$xs',
 
   display: 'flex',
   justifyContent: 'space-between',
   alignItems: 'center',
+
+  '@desktop': {
+    fontSize: '$s',
+  },
 });
 
 const CloseBtn = styled('button', {

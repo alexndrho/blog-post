@@ -1,6 +1,6 @@
 import stitches from '../../stitches.config';
 import { useAuth } from '../../context/useAuth';
-import Notication from '../../components/Notification';
+import Notification from '../../components/Notification';
 import LoginToContinue from '../../components/auth/LoginToContinue';
 import { Title, Label, Input, Button } from '../../components/stitches/form';
 import { IUserIcon } from '../../types/userIcon';
@@ -41,14 +41,6 @@ const ProfileContainer = styled('div', {
   '@desktop': {
     width: '10rem',
   },
-});
-
-const ErrorMsg = styled('p', {
-  marginBottom: '1rem',
-  width: '100%',
-  color: 'Red',
-  fontSize: '$xs',
-  fontWeight: '500',
 });
 
 const IconContainer = styled('div', {
@@ -316,11 +308,13 @@ const SettingsUser = () => {
       const responseData = await response.json();
       if (responseData.success) {
         resetForm();
+        setErrorMsg('');
         updateUserData();
 
         setShowNotification(true);
       } else if (responseData.message) {
         setErrorMsg(responseData.message);
+        setShowNotification(true);
       }
     } catch (err) {
       console.error(err);
@@ -331,12 +325,16 @@ const SettingsUser = () => {
 
   return (
     <>
-      {showNotification && (
-        <Notication
-          message={<p>Profile updated successfully</p>}
-          onClose={handleCloseNotification}
-        />
-      )}
+      {showNotification &&
+        (errorMsg === '' ? (
+          <Notification
+            message="Profile updated successfully"
+            onClose={handleCloseNotification}
+          />
+        ) : (
+          <Notification message={errorMsg} onClose={handleCloseNotification} />
+        ))}
+
       <Main>
         <Title css={{ marginBottom: '2rem', gridColumn: 'span 2' }}>
           Public profile
@@ -344,8 +342,6 @@ const SettingsUser = () => {
 
         <IconSection>
           <ProfileContainer>
-            {ErrorMsg && <ErrorMsg>{errorMsg}</ErrorMsg>}
-
             <IconContainer>
               {base64Icon ? (
                 <Icon src={base64Icon} alt="profile-icon" />
