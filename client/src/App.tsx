@@ -81,19 +81,16 @@ const App = () => {
         <Route path="/login" element={<Login />} />
         <Route path="/signup" element={<SignUp />} />
 
-        <Route path="/settings" element={<SettingsUser />}>
-          <Route path="profile" element={<SettingsUser />} />
-        </Route>
-
-        <Route path="/settings" element={<SettingsUser />}>
-          <Route path="profile" element={<SettingsUser />} />
-        </Route>
-
         <Route path="/blogs">
           <Route index element={<AllBlogs />} />
           <Route path="create" element={<CreateBlog />} />
           <Route path=":id" element={<Blog />} />
         </Route>
+
+        <Route path="/settings" element={<SettingsUser />}>
+          <Route path="profile" element={<SettingsUser />} />
+        </Route>
+
         <Route path="*" element={<NotFound />} />
       </Routes>
     </>
