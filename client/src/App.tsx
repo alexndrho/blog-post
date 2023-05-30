@@ -3,6 +3,7 @@ import Loading from './pages/Loading';
 import Navigation from './components/Navigation';
 import Login from './pages/auth/Login';
 import SignUp from './pages/auth/SignUp';
+import Profile from './pages/user/Profile';
 import SettingsUser from './pages/user/SettingsProfile';
 import AllBlogs from './pages/blog/AllBlogs';
 import Blog from './pages/blog/Blog';
@@ -91,6 +92,7 @@ const App = () => {
           <Route path="profile" element={<SettingsUser />} />
         </Route>
 
+        <Route path="/:username/*" element={<Profile />} />
         <Route path="*" element={<NotFound />} />
       </Routes>
     </>
