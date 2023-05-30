@@ -54,7 +54,6 @@ const createBlog = async (req: Request, res: Response) => {
     if (user) {
       const blog: IBlog = new Blog({
         userId: req.user?.id,
-        username: user.username,
         title: body.title,
         snippet: body.snippet,
         body: body.body,
