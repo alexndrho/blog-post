@@ -15,6 +15,19 @@ const getBlogs = async (req: Request, res: Response) => {
   }
 };
 
+const getBlogsByUserId = async (req: Request, res: Response) => {
+  try {
+    const blogs = await Blog.find({ userId: req.params.id }).sort({
+      createdAt: -1,
+    });
+
+    res.status(200).json({ blogs });
+  } catch (err) {
+    if (!res.headersSent) res.json({ sucess: false });
+    console.error(err);
+  }
+};
+
 const getBlog = async (req: Request, res: Response) => {
   try {
     const id = req.params.id;
@@ -70,4 +83,4 @@ const deleteBlog = async (req: Request, res: Response) => {
   }
 };
 
-export { getBlogs, getBlog, createBlog, deleteBlog };
+export { getBlogs, getBlogsByUserId, getBlog, createBlog, deleteBlog };
