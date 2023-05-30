@@ -1,4 +1,5 @@
 import {
+  getUsernameById,
   getUserIcon,
   getUserInfo,
   getUserInfoByUsername,
@@ -13,6 +14,7 @@ const router = Router();
 
 router.get('/', verifyToken, getUserInfo);
 router.put('/', verifyToken, uploadIcon.single('profileIcon'), updateUser);
+router.get('/username/:id', getUsernameById);
 router.get('/icon', verifyToken, getUserIcon);
 
 router.get('/:username', getUserInfoByUsername);
