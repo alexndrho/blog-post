@@ -6,6 +6,22 @@ import { Request, Response } from 'express';
 import { Error } from 'mongoose';
 import { fileTypeFromBuffer } from 'file-type';
 
+const getUsernameById = async (req: Request, res: Response) => {
+  try {
+    const user = await User.findById(req.params.id).select('username');
+
+    if (!user) {
+      res.status(404).json({ success: false, message: 'User not found' });
+      return;
+    }
+
+    res.status(200).json({ username: user.username });
+  } catch (err) {
+    if (!res.headersSent) res.json({ success: false });
+    console.error(err);
+  }
+};
+
 const getUserInfo = async (req: Request, res: Response) => {
   try {
     const user = await User.findById(req.user?.id);
@@ -35,6 +51,48 @@ const getUserIcon = async (req: Request, res: Response) => {
   } catch (err) {
     if (!res.headersSent) res.json({ success: false });
     console.error(err);
+  }
+};
+
+const getUserInfoByUsername = async (req: Request, res: Response) => {
+  const username = req.params.username;
+
+  try {
+    const user = await User.findOne({ username: username });
+
+    if (!user) {
+      res.status(404).json({ success: false, message: 'User not found' });
+      return;
+    }
+
+    res.status(200).json({ ...user._doc });
+  } catch (err) {
+    if (!res.headersSent) res.json({ success: false });
+    console.error(err);
+  }
+};
+
+const getUserIconByUsername = async (req: Request, res: Response) => {
+  const username = req.params.username;
+
+  try {
+    const user = await User.findOne({ username: username });
+
+    if (!user) {
+      res.status(404).json({ success: false, message: 'User not found' });
+      return;
+    }
+
+    const userIcon = await UserIcon.findOne({ userId: user._id });
+
+    if (!userIcon) {
+      res.status(404).json({ success: false, message: 'User icon not found' });
+      return;
+    }
+
+    res.status(200).json({ ...userIcon._doc });
+  } catch (err) {
+    if (!res.headersSent) res.json({ success: false });
   }
 };
 
@@ -183,4 +241,11 @@ const updateUser = async (req: Request, res: Response) => {
   }
 };
 
-export { getUserInfo, getUserIcon, updateUser };
+export {
+  getUsernameById,
+  getUserInfo,
+  getUserIcon,
+  getUserInfoByUsername,
+  getUserIconByUsername,
+  updateUser,
+};

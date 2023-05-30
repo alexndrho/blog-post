@@ -53,9 +53,22 @@ const A = styled('a', {
       none: {
         background: 'none',
         color: 'Black',
+        position: 'relative',
 
-        '&:hover': {
-          color: 'DimGray',
+        '&::after': {
+          content: '',
+          position: 'absolute',
+          left: 0,
+          bottom: 0,
+
+          width: 0,
+          height: '0.15rem',
+          backgroundColor: 'Black',
+          transition: 'width 0.25s ease',
+        },
+
+        '&.active::after': {
+          width: '100%',
         },
       },
     },

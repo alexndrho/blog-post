@@ -3,6 +3,7 @@ import Loading from './pages/Loading';
 import Navigation from './components/Navigation';
 import Login from './pages/auth/Login';
 import SignUp from './pages/auth/SignUp';
+import Profile from './pages/user/Profile';
 import SettingsUser from './pages/user/SettingsProfile';
 import AllBlogs from './pages/blog/AllBlogs';
 import Blog from './pages/blog/Blog';
@@ -81,19 +82,17 @@ const App = () => {
         <Route path="/login" element={<Login />} />
         <Route path="/signup" element={<SignUp />} />
 
-        <Route path="/settings" element={<SettingsUser />}>
-          <Route path="profile" element={<SettingsUser />} />
-        </Route>
-
-        <Route path="/settings" element={<SettingsUser />}>
-          <Route path="profile" element={<SettingsUser />} />
-        </Route>
-
         <Route path="/blogs">
           <Route index element={<AllBlogs />} />
           <Route path="create" element={<CreateBlog />} />
           <Route path=":id" element={<Blog />} />
         </Route>
+
+        <Route path="/settings" element={<SettingsUser />}>
+          <Route path="profile" element={<SettingsUser />} />
+        </Route>
+
+        <Route path="/:username/*" element={<Profile />} />
         <Route path="*" element={<NotFound />} />
       </Routes>
     </>
