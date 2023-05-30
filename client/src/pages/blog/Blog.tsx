@@ -47,17 +47,15 @@ const Blog = () => {
   const [blogData, setBlogData] = useState<IBlog | null>({
     _id: '',
     userId: '',
-    username: '',
-    title: 'Loading...',
+    title: '',
     snippet: '',
     body: '',
   });
-  const [isloading, setIsLoading] = useState(false);
+  const [userName, setUserName] = useState<string | null>(null);
 
   useEffect(() => {
     const getData = async () => {
       try {
-        setIsLoading(true);
         const response = await fetch(
           `${import.meta.env.VITE_BASE_URL_SERVER}/blogs/${id}`,
           {
@@ -70,9 +68,7 @@ const Blog = () => {
 
         const responseData = await response.json();
         setBlogData(responseData);
-        setIsLoading(false);
       } catch (err) {
-        setIsLoading(false);
         console.error(err);
       }
     };
@@ -80,31 +76,61 @@ const Blog = () => {
     getData();
   }, [id]);
 
+  useEffect(() => {
+    const getUserNames = async () => {
+      try {
+        const response = await fetch(
+          `${import.meta.env.VITE_BASE_URL_SERVER}/user/username/${
+            blogData?.userId
+          }`,
+          {
+            headers: {
+              Accept: 'application/json',
+            },
+          }
+        );
+
+        if (!response.ok) throw new Error('Could not fetch username');
+
+        const responseData = await response.json();
+        setUserName(responseData.username);
+      } catch (err) {
+        console.log(err);
+      }
+    };
+
+    if (blogData?.userId) getUserNames();
+  }, [blogData?.userId]);
+
   return (
     <>
-      {!isloading && blogData == null ? (
+      {blogData == null ? (
         <NotFound />
       ) : (
         <Main>
-          <TitleBlog>{blogData?.title}</TitleBlog>
-          {blogData?.updatedAt ? (
-            <Info>
-              By {blogData.username} -{' '}
-              {new Intl.DateTimeFormat('en-US', {
-                month: 'long',
-                day: 'numeric',
-                year: 'numeric',
-              }).format(new Date(blogData?.updatedAt as string))}
-            </Info>
-          ) : (
-            <></>
+          <TitleBlog>
+            {blogData && userName ? blogData.title : 'Loading...'}
+          </TitleBlog>
+
+          {blogData && userName && (
+            <>
+              <Info>
+                By {userName} -{' '}
+                {new Intl.DateTimeFormat('en-US', {
+                  month: 'long',
+                  day: 'numeric',
+                  year: 'numeric',
+                }).format(new Date(blogData?.updatedAt as string))}
+              </Info>
+
+              {blogData?.body
+                .split(/[\n\r]/)
+                .filter((item) => item.trim() !== '')
+                .map((paragraph) => (
+                  <BodyBlog key={crypto.randomUUID()}>{paragraph}</BodyBlog>
+                ))}
+            </>
           )}
-          {blogData?.body
-            .split(/[\n\r]/)
-            .filter((item) => item.trim() !== '')
-            .map((paragraph) => (
-              <BodyBlog key={crypto.randomUUID()}>{paragraph}</BodyBlog>
-            ))}
         </Main>
       )}
     </>
