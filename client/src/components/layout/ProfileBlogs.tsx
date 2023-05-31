@@ -11,7 +11,8 @@ interface Props {
 }
 
 const ProfileBlogs = ({ userId }: Props) => {
-  const [blogs, setBlogs] = useState<{ blogs: IBlog[] } | null>(null);
+  const [blogs, setBlogs] = useState<IBlog[] | null>(null);
+  const [userName, setUserName] = useState<string | null>(null);
 
   useEffect(() => {
     const fetchBlogs = async () => {
@@ -36,18 +37,44 @@ const ProfileBlogs = ({ userId }: Props) => {
     fetchBlogs();
   }, [userId]);
 
+  useEffect(() => {
+    const fetchUserName = async () => {
+      try {
+        const response = await fetch(
+          `${import.meta.env.VITE_BASE_URL_SERVER}/user/username/${userId}`,
+          {
+            headers: {
+              Accept: 'application/json',
+            },
+          }
+        );
+
+        if (!response.ok) throw new Error('Could not fetch username');
+
+        const responseData = await response.json();
+
+        setUserName(responseData.username);
+      } catch (err) {
+        console.error(err);
+      }
+    };
+
+    fetchUserName();
+  }, [userId]);
+
   return (
     <Container>
-      {blogs?.blogs.map((blog) => (
-        <BlogItem
-          key={blog._id}
-          _id={blog._id}
-          username={blog.username}
-          title={blog.title}
-          snippet={blog.snippet}
-          createdAt={blog.createdAt}
-        />
-      ))}
+      {userName &&
+        blogs?.map((blog) => (
+          <BlogItem
+            key={blog._id}
+            _id={blog._id}
+            username={userName}
+            title={blog.title}
+            snippet={blog.snippet}
+            createdAt={blog.createdAt}
+          />
+        ))}
     </Container>
   );
 };

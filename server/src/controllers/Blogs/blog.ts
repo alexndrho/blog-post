@@ -8,7 +8,7 @@ import mongoose from 'mongoose';
 const getBlogs = async (req: Request, res: Response) => {
   try {
     const blogs = await Blog.find().sort({ createdAt: -1 });
-    res.status(200).json({ blogs });
+    res.status(200).json([...blogs]);
   } catch (err) {
     if (!res.headersSent) res.json({ sucess: false });
     console.error(err);
@@ -21,7 +21,7 @@ const getBlogsByUserId = async (req: Request, res: Response) => {
       createdAt: -1,
     });
 
-    res.status(200).json({ blogs });
+    res.status(200).json([...blogs]);
   } catch (err) {
     if (!res.headersSent) res.json({ sucess: false });
     console.error(err);
@@ -54,7 +54,6 @@ const createBlog = async (req: Request, res: Response) => {
     if (user) {
       const blog: IBlog = new Blog({
         userId: req.user?.id,
-        username: user.username,
         title: body.title,
         snippet: body.snippet,
         body: body.body,

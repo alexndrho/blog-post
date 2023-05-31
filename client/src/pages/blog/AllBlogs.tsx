@@ -27,14 +27,13 @@ const Title = styled('h2', {
 });
 
 const AllBlogs = () => {
-  const [blogs, setBlogs] = useState<{ blogs: IBlog[] } | null>({ blogs: [] });
-  const [isLoading, setIsLoading] = useState(false);
+  const [blogs, setBlogs] = useState<IBlog[] | null>(null);
+  const [userNames, setUserNames] = useState<string[] | null>(null);
 
   useEffect(() => {
     const getData = async () => {
       try {
-        setIsLoading(true);
-        const response = await fetch(
+        const responseBlog = await fetch(
           `${import.meta.env.VITE_BASE_URL_SERVER}/blogs/`,
           {
             method: 'GET',
@@ -44,11 +43,11 @@ const AllBlogs = () => {
           }
         );
 
-        const responseData = await response.json();
-        setBlogs(responseData);
-        setIsLoading(false);
+        if (!responseBlog.ok) throw new Error('Could not fetch blogs');
+
+        const responseDataBlog = await responseBlog.json();
+        setBlogs(responseDataBlog);
       } catch (err) {
-        setIsLoading(false);
         console.log(err);
       }
     };
@@ -56,16 +55,48 @@ const AllBlogs = () => {
     getData();
   }, []);
 
+  useEffect(() => {
+    const getUserNames = async () => {
+      try {
+        const names = await Promise.all(
+          blogs?.map(async (blog) => {
+            const response = await fetch(
+              `${import.meta.env.VITE_BASE_URL_SERVER}/user/username/${
+                blog.userId
+              }`,
+              {
+                headers: {
+                  Accept: 'application/json',
+                },
+              }
+            );
+
+            if (!response.ok) throw new Error('Could not fetch username');
+
+            const responseData = await response.json();
+            return responseData.username;
+          }) ?? []
+        );
+
+        setUserNames(names);
+      } catch (err) {
+        console.log(err);
+      }
+    };
+
+    if (blogs) getUserNames();
+  }, [blogs]);
+
   return (
     <Main>
-      {isLoading ? (
+      {!userNames ? (
         <Title>Loading...</Title>
       ) : (
-        blogs?.blogs.map((blog) => (
+        blogs?.map((blog, index) => (
           <BlogItem
             key={blog._id}
             _id={blog._id}
-            username={blog.username}
+            username={userNames[index]}
             title={blog.title}
             snippet={blog.snippet}
             createdAt={blog.createdAt}
