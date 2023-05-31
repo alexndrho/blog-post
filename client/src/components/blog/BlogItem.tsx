@@ -40,13 +40,11 @@ const SnippetItem = styled('p', {
   },
 });
 
-const BlogItem = ({
-  _id,
-  username,
-  title,
-  snippet,
-  createdAt,
-}: Pick<IBlog, '_id' | 'username' | 'title' | 'snippet' | 'createdAt'>) => {
+interface Props extends Pick<IBlog, '_id' | 'title' | 'snippet' | 'createdAt'> {
+  username: string;
+}
+
+const BlogItem = ({ _id, username, title, snippet, createdAt }: Props) => {
   return (
     <Div>
       <A as={Link} to={`${import.meta.env.VITE_BASE_URL_CLIENT}/blogs/${_id}`}>
