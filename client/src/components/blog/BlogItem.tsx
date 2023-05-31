@@ -19,7 +19,12 @@ const A = styled('a', {
 const Info = styled('p', {
   marginBottom: '0.25rem',
   color: 'DimGray',
+  fontSize: '$xxs',
   fontWeight: 500,
+
+  '@desktop': {
+    fontSize: '$xs',
+  },
 });
 
 const TitleItem = styled('h2', {
