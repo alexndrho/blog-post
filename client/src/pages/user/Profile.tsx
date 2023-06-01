@@ -4,7 +4,7 @@ import { IUser } from '../../types/user';
 import { IUserIcon } from '../../types/userIcon';
 import { A as NavLink } from '../../components/stitches/elements';
 import ProfileAbout from '../../components/layout/ProfileAbout';
-import ProfileBlogs from '../../components/layout/ProfileBlogs';
+import BlogItem from '../../components/blog/BlogItem';
 
 import { useEffect, useState } from 'react';
 import { useParams, Link, Route, Routes, useMatch } from 'react-router-dom';
@@ -119,13 +119,13 @@ const Profile = () => {
   const matchBlogs = useMatch(`/${username}/blogs`);
 
   const [userData, setUserData] = useState<IUser | null>(null);
+  const [blogs, setBlogs] = useState<IBlog[]>([]);
   const [base64Icon, setBase64Icon] = useState<string>('');
 
   const [userNotFound, setUserNotFound] = useState<boolean>(false);
 
   useEffect(() => {
     const updateUser = async () => {
-      console.log(username);
       try {
         const response = await fetch(
           `${import.meta.env.VITE_BASE_URL_SERVER}/user/${username}`
@@ -144,6 +144,29 @@ const Profile = () => {
 
     updateUser();
   }, [username]);
+
+  useEffect(() => {
+    const fetchBlogs = async () => {
+      try {
+        const response = await fetch(
+          `${import.meta.env.VITE_BASE_URL_SERVER}/blogs/user/${userData?._id}`,
+          {
+            headers: {
+              Accept: 'application/json',
+            },
+          }
+        );
+
+        const responseData = await response.json();
+
+        setBlogs(responseData);
+      } catch (err) {
+        console.error(err);
+      }
+    };
+
+    fetchBlogs();
+  }, [userData?._id]);
 
   useEffect(() => {
     const getUserIcon = async () => {
@@ -235,7 +258,16 @@ const Profile = () => {
 
             <Route
               path="/blogs"
-              element={<ProfileBlogs userId={userData._id} />}
+              element={blogs.map((blog) => (
+                <BlogItem
+                  key={crypto.randomUUID()}
+                  _id={blog._id}
+                  username={userData.username}
+                  title={blog.title}
+                  snippet={blog.snippet}
+                  createdAt={blog.createdAt}
+                />
+              ))}
             />
           </Routes>
         )}
