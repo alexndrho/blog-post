@@ -31,7 +31,7 @@ const Banner = styled('div', {
 
 const Icon = styled('img', {
   marginRight: '1rem',
-  width: '7.5rem',
+  width: '5rem',
   aspectRatio: '1/1',
   borderRadius: '50%',
   objectFit: 'cover',
@@ -39,7 +39,7 @@ const Icon = styled('img', {
 
   '@tablet': {
     marginRight: '1.5rem',
-    width: '10rem',
+    width: '7.5rem',
   },
 
   '@desktop': {
@@ -82,17 +82,35 @@ const BannerDesc = styled('p', {
 // main
 const Main = styled('main', {
   margin: '0 auto',
-  padding: '3rem 0',
+  paddingBottom: '3rem',
   width: '80%',
   maxWidth: '$contentWidthS',
 });
 
 const Nav = styled('div', {
-  margin: '0 auto 2.5rem auto',
+  margin: '1.5rem auto',
   display: 'flex',
   justifyContent: 'space-around',
   alignItems: 'center',
+
+  '@desktop': {
+    margin: '2.5rem auto',
+  },
 });
+
+const LinkCSS = {
+  height: 'auto',
+  padding: '0.35rem',
+  fontSize: '$xxs',
+
+  '@tablet': {
+    fontSize: '$xs',
+  },
+
+  '@desktop': {
+    fontSize: '$s',
+  },
+};
 
 const Profile = () => {
   const { username } = useParams();
@@ -181,10 +199,10 @@ const Profile = () => {
         <Nav>
           <NavLink
             className={matchAbout || matchIndex ? 'active' : ''}
+            css={LinkCSS}
             color="none"
             as={Link}
             to="about"
-            css={{ height: 'auto', padding: '0.35rem' }}
           >
             About
           </NavLink>
@@ -193,7 +211,7 @@ const Profile = () => {
             color="none"
             as={Link}
             to="blogs"
-            css={{ height: 'auto', padding: '0.35rem' }}
+            css={LinkCSS}
           >
             Blogs
           </NavLink>

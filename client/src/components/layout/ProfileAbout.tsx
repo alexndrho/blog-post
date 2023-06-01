@@ -5,29 +5,42 @@ const { styled } = stitches;
 const Container = styled('section');
 
 const Title = styled('h2', {
-  fontSize: '$s',
+  fontSize: '$xs',
   fontWeight: '600',
-  padding: '0.5rem 0',
+  padding: '0.25rem 0',
   borderBottom: '1.5px solid',
-  marginBottom: '2.5rem',
+  marginBottom: '1rem',
+
+  '@tablet': {
+    padding: '0.5rem 0',
+    fontSize: '$xs',
+  },
+
+  '@desktop': {
+    marginBottom: '2.5rem',
+    fontSize: '$s',
+  },
 });
 
 const InfoContainer = styled('div', {
   display: 'grid',
   gridTemplateColumns: '1fr 3fr',
+  gridAutoColumns: 'auto',
   gridRowGap: '0.5rem',
   marginBottom: '1rem',
 });
 
-const InfoLabel = styled('span', {
-  fontSize: '$s',
-  fontWeight: '500',
-  marginRight: '0.5rem',
-});
-
 const InfoText = styled('span', {
-  fontSize: '$s',
+  fontSize: '$xxs',
   fontWeight: '500',
+
+  '@tablet': {
+    fontSize: '$xs',
+  },
+
+  '@desktop': {
+    fontSize: '$s',
+  },
 });
 
 interface Props {
@@ -43,21 +56,21 @@ const ProfileAbout = ({ contact, location, email }: Props) => {
       <InfoContainer>
         {contact && (
           <>
-            <InfoLabel>Contact:</InfoLabel>
+            <InfoText>Contact:</InfoText>
             <InfoText>{contact}</InfoText>
           </>
         )}
 
         {location && (
           <>
-            <InfoLabel>Location:</InfoLabel>
+            <InfoText>Location:</InfoText>
             <InfoText>{location}</InfoText>
           </>
         )}
 
         {email && (
           <>
-            <InfoLabel>Email:</InfoLabel>
+            <InfoText>Email:</InfoText>
             <InfoText>{email}</InfoText>
           </>
         )}
