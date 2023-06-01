@@ -10,7 +10,7 @@ import Blog from './pages/blog/Blog';
 import CreateBlog from './pages/blog/CreateBlog';
 import NotFound from './pages/NotFound';
 import { useGlobalCss } from './stitches.config';
-import { IUserAuth } from './types/authentication';
+import { IUserAuthResponse } from './types/IUser';
 
 import { useEffect, useState } from 'react';
 import { Routes, Route } from 'react-router-dom';
@@ -47,7 +47,7 @@ const App = () => {
           }
         );
 
-        const responseData: IUserAuth = await response.json();
+        const responseData: IUserAuthResponse = await response.json();
         const responseTime = new Date().getTime();
 
         if (responseData.isloggedIn) {

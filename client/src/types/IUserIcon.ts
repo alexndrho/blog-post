@@ -8,4 +8,4 @@ interface IUserIcon {
   mime: string;
 }
 
-export type { IUserIcon };
+export default IUserIcon;

@@ -8,6 +8,4 @@ interface IBlog {
   updatedAt?: string;
 }
 
-interface BlogProps {
-  blog: Blog;
-}
+export default IBlog;

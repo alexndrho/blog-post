@@ -1,6 +1,6 @@
 import { useAuth } from '../../context/useAuth';
 import stitches from '../../stitches.config';
-import { signUpResponse } from '../../types/authentication';
+import { ISignUpResponse } from '../../types/IUser';
 import {
   Form,
   Title,
@@ -55,7 +55,7 @@ const SignUp = () => {
         }
       );
 
-      const responseData: signUpResponse = await response.json();
+      const responseData: ISignUpResponse = await response.json();
 
       if (responseData.success) {
         setErrorMessage('');

@@ -2,6 +2,7 @@ import stitches from '../../stitches.config';
 import { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import NotFound from '../NotFound';
+import IBlog from '../../types/IBlog';
 
 const { styled } = stitches;
 

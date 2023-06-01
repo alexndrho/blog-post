@@ -1,10 +1,11 @@
 import stitches from '../../stitches.config';
 import NotFound from '../NotFound';
-import { IUser } from '../../types/user';
-import { IUserIcon } from '../../types/userIcon';
 import { A as NavLink } from '../../components/common/elements';
 import ProfileAbout from '../../components/layout/profile/ProfileAbout';
 import BlogItem from '../../components/layout/BlogItem';
+import IUser from '../../types/IUser';
+import IBlog from '../../types/IBlog';
+import IUserIcon from '../../types/IUserIcon';
 
 import { useEffect, useState } from 'react';
 import { useParams, Link, Route, Routes, useMatch } from 'react-router-dom';

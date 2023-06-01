@@ -3,8 +3,8 @@ import { useAuth } from '../../context/useAuth';
 import Notification from '../../components/layout/Notification';
 import LoginToContinue from '../LoginToContinue';
 import { Title, Label, Input, Button } from '../../components/common/form';
-import { IUserIcon } from '../../types/userIcon';
-import { IUser } from '../../types/user';
+import IUserIcon from '../../types/IUserIcon';
+import IUser from '../../types/IUser';
 import React, { useEffect, useCallback, useRef, useState } from 'react';
 
 const { styled } = stitches;

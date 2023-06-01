@@ -1,6 +1,6 @@
 import { useAuth } from '../../context/useAuth';
 import stitches from '../../stitches.config';
-import { loginResponse } from '../../types/authentication';
+import { ILoginResponse } from '../../types/IUser';
 import {
   Title,
   Form,
@@ -50,7 +50,7 @@ const Login = () => {
         }
       );
 
-      const responseData: loginResponse = await response.json();
+      const responseData: ILoginResponse = await response.json();
 
       if (responseData.success) {
         localStorage.setItem('token', responseData.token);
