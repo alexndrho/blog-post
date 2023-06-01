@@ -10,7 +10,7 @@ const getBlogs = async (req: Request, res: Response) => {
     const blogs = await Blog.find().sort({ createdAt: -1 });
     res.status(200).json([...blogs]);
   } catch (err) {
-    if (!res.headersSent) res.json({ sucess: false });
+    if (!res.headersSent) res.json({ message: 'Unable to get blogs' });
     console.error(err);
   }
 };
@@ -23,7 +23,8 @@ const getBlogsByUserId = async (req: Request, res: Response) => {
 
     res.status(200).json([...blogs]);
   } catch (err) {
-    if (!res.headersSent) res.json({ sucess: false });
+    if (!res.headersSent)
+      res.json({ message: 'Unable to get blogs by user id' });
     console.error(err);
   }
 };
@@ -39,9 +40,10 @@ const getBlog = async (req: Request, res: Response) => {
     const blog = await Blog.findById(id);
 
     if (!blog) throw 'Unable to find blog';
+
     res.status(200).json({ ...blog._doc });
   } catch (err) {
-    if (!res.headersSent) res.json({ sucess: false });
+    if (!res.headersSent) res.json({ message: 'Unable to get blog' });
     console.error(err);
   }
 };
@@ -59,13 +61,15 @@ const createBlog = async (req: Request, res: Response) => {
         body: body.body,
       });
 
-      await blog.save();
-      res.status(201).json({ success: true });
+      const newBlog = await blog.save();
+      if (!newBlog) throw 'Unable to save blog';
+
+      res.status(201).json(newBlog._doc._id);
     } else {
       throw 'Failed To Authenticate';
     }
   } catch (err) {
-    if (!res.headersSent) res.json({ sucess: false });
+    if (!res.headersSent) res.json({ message: 'Unable to create blog' });
     console.error(err);
   }
 };
@@ -75,9 +79,10 @@ const deleteBlog = async (req: Request, res: Response) => {
     const deletedBlog = await Blog.findByIdAndDelete(req.params.id);
 
     if (!deletedBlog) throw 'Unable to find blog';
+
     res.status(200).json({ ...deletedBlog._doc });
   } catch (err) {
-    if (!res.headersSent) res.json({ sucess: false });
+    if (!res.headersSent) res.json({ message: 'Unable to delete blog' });
     console.error(err);
   }
 };

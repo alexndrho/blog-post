@@ -1,5 +1,6 @@
-import BlogItem from '../../components/layout/BlogItem';
 import stitches from '../../stitches.config';
+import BlogItem from '../../components/layout/BlogItem';
+import { getBlogs, getBlogsUsernames } from '../../utils/blogsApi';
 import IBlog from '../../types/IBlog';
 
 import { useEffect, useState } from 'react';
@@ -29,75 +30,44 @@ const Title = styled('h2', {
 
 const AllBlogs = () => {
   const [blogs, setBlogs] = useState<IBlog[] | null>(null);
-  const [userNames, setUserNames] = useState<string[] | null>(null);
+  const [usernames, setUsernames] = useState<string[] | null>(null);
 
   useEffect(() => {
-    const getData = async () => {
-      try {
-        const responseBlog = await fetch(
-          `${import.meta.env.VITE_BASE_URL_SERVER}/blogs/`,
-          {
-            method: 'GET',
-            headers: {
-              Accept: 'application/json',
-            },
-          }
-        );
-
-        if (!responseBlog.ok) throw new Error('Could not fetch blogs');
-
-        const responseDataBlog = await responseBlog.json();
-        setBlogs(responseDataBlog);
-      } catch (err) {
-        console.log(err);
-      }
-    };
-
-    getData();
+    getBlogs()
+      .then((blogs) => {
+        if (blogs) {
+          setBlogs(blogs);
+        } else {
+          throw new Error('No blogs found');
+        }
+      })
+      .catch((err) => console.error(err));
   }, []);
 
   useEffect(() => {
-    const getUserNames = async () => {
-      try {
-        const names = await Promise.all(
-          blogs?.map(async (blog) => {
-            const response = await fetch(
-              `${import.meta.env.VITE_BASE_URL_SERVER}/user/username/${
-                blog.userId
-              }`,
-              {
-                headers: {
-                  Accept: 'application/json',
-                },
-              }
-            );
+    if (!blogs) return;
 
-            if (!response.ok) throw new Error('Could not fetch username');
-
-            const responseData = await response.json();
-            return responseData.username;
-          }) ?? []
-        );
-
-        setUserNames(names);
-      } catch (err) {
-        console.log(err);
-      }
-    };
-
-    if (blogs) getUserNames();
+    getBlogsUsernames(blogs)
+      .then((usernames) => {
+        if (usernames) {
+          setUsernames(usernames);
+        } else {
+          throw new Error('No usernames found');
+        }
+      })
+      .catch((err) => console.error(err));
   }, [blogs]);
 
   return (
     <Main>
-      {!userNames ? (
+      {!usernames ? (
         <Title>Loading...</Title>
       ) : (
         blogs?.map((blog, index) => (
           <BlogItem
             key={blog._id}
             _id={blog._id}
-            username={userNames[index]}
+            username={usernames[index]}
             title={blog.title}
             snippet={blog.snippet}
             createdAt={blog.createdAt}

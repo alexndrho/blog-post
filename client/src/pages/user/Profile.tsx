@@ -3,6 +3,7 @@ import NotFound from '../NotFound';
 import { A as NavLink } from '../../components/common/elements';
 import ProfileAbout from '../../components/layout/profile/ProfileAbout';
 import BlogItem from '../../components/layout/BlogItem';
+import { getBlogsByUserId } from '../../utils/blogsApi';
 import IUser from '../../types/IUser';
 import IBlog from '../../types/IBlog';
 import IUserIcon from '../../types/IUserIcon';
@@ -147,29 +148,6 @@ const Profile = () => {
   }, [username]);
 
   useEffect(() => {
-    const fetchBlogs = async () => {
-      try {
-        const response = await fetch(
-          `${import.meta.env.VITE_BASE_URL_SERVER}/blogs/user/${userData?._id}`,
-          {
-            headers: {
-              Accept: 'application/json',
-            },
-          }
-        );
-
-        const responseData = await response.json();
-
-        setBlogs(responseData);
-      } catch (err) {
-        console.error(err);
-      }
-    };
-
-    fetchBlogs();
-  }, [userData?._id]);
-
-  useEffect(() => {
     const getUserIcon = async () => {
       try {
         const response = await fetch(
@@ -189,6 +167,20 @@ const Profile = () => {
 
     getUserIcon();
   }, [username]);
+
+  useEffect(() => {
+    if (!userData) return;
+
+    getBlogsByUserId(userData?._id)
+      .then((blogs) => {
+        if (blogs) {
+          setBlogs(blogs);
+        } else {
+          throw new Error('No blogs found');
+        }
+      })
+      .catch((err) => console.error(err));
+  }, [userData]);
 
   if (userNotFound) {
     return <NotFound />;

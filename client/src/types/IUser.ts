@@ -25,5 +25,16 @@ interface IUserAuthResponse {
   token: string;
 }
 
+interface IGetUserameByIDResponse {
+  success?: boolean;
+  message?: string;
+  username?: string;
+}
+
 export default IUser;
-export type { ISignUpResponse, ILoginResponse, IUserAuthResponse };
+export type {
+  ISignUpResponse,
+  ILoginResponse,
+  IUserAuthResponse,
+  IGetUserameByIDResponse,
+};

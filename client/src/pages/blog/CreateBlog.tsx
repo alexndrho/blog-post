@@ -1,5 +1,6 @@
 import stitches from '../../stitches.config';
 import LoginToContinue from '../LoginToContinue';
+import { createBlog } from '../../utils/blogsApi';
 import {
   Form,
   Title,
@@ -34,28 +35,16 @@ const CreateBlog = () => {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
-    try {
-      const response = await fetch(
-        `${import.meta.env.VITE_BASE_URL_SERVER}/blogs`,
-        {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-            'x-access-token': localStorage.getItem('token') as string,
-          },
-          body: JSON.stringify({ title, snippet, body }),
+    createBlog(title, snippet, body)
+      .then((id) => {
+        console.log(id);
+        if (id) {
+          navigate(`/blogs/${id}`);
+        } else {
+          throw new Error('No blog found');
         }
-      );
-
-      if (!response.ok)
-        throw new Error(`HTTP error! Status: ${response.status}`);
-
-      const responseData = await response.json();
-
-      navigate(`/blogs/${responseData._id}`);
-    } catch (err) {
-      console.error('Error: ' + err);
-    }
+      })
+      .catch((err) => console.error(err));
   };
 
   return (

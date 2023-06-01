@@ -1,8 +1,9 @@
 import stitches from '../../stitches.config';
-import { useEffect, useState } from 'react';
-import { useParams } from 'react-router-dom';
+import { getBlog, getBlogsUsernames } from '../../utils/blogsApi';
 import NotFound from '../NotFound';
 import IBlog from '../../types/IBlog';
+import { useEffect, useState } from 'react';
+import { useParams } from 'react-router-dom';
 
 const { styled } = stitches;
 
@@ -55,53 +56,32 @@ const Blog = () => {
   const [userName, setUserName] = useState<string | null>(null);
 
   useEffect(() => {
-    const getData = async () => {
-      try {
-        const response = await fetch(
-          `${import.meta.env.VITE_BASE_URL_SERVER}/blogs/${id}`,
-          {
-            method: 'GET',
-            headers: {
-              Accept: 'application/json',
-            },
-          }
-        );
+    if (!id) return;
 
-        const responseData = await response.json();
-        setBlogData(responseData);
-      } catch (err) {
-        console.error(err);
-      }
-    };
-
-    getData();
+    getBlog(id)
+      .then((blog) => {
+        if (blog) {
+          setBlogData(blog);
+        } else {
+          throw new Error('No blog found');
+        }
+      })
+      .catch((err) => console.error(err));
   }, [id]);
 
   useEffect(() => {
-    const getUserNames = async () => {
-      try {
-        const response = await fetch(
-          `${import.meta.env.VITE_BASE_URL_SERVER}/user/username/${
-            blogData?.userId
-          }`,
-          {
-            headers: {
-              Accept: 'application/json',
-            },
-          }
-        );
+    if (!blogData) return;
 
-        if (!response.ok) throw new Error('Could not fetch username');
-
-        const responseData = await response.json();
-        setUserName(responseData.username);
-      } catch (err) {
-        console.log(err);
-      }
-    };
-
-    if (blogData?.userId) getUserNames();
-  }, [blogData?.userId]);
+    getBlogsUsernames([blogData])
+      .then((usernames) => {
+        if (usernames) {
+          setUserName(usernames[0]);
+        } else {
+          throw new Error('No usernames found');
+        }
+      })
+      .catch((err) => console.error(err));
+  }, [blogData]);
 
   return (
     <>
