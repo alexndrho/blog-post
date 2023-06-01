@@ -3,10 +3,10 @@ import NotFound from '../NotFound';
 import { A as NavLink } from '../../components/common/elements';
 import ProfileAbout from '../../components/layout/profile/ProfileAbout';
 import BlogItem from '../../components/layout/BlogItem';
+import { getUserByUsername, getUserIcon } from '../../utils/userApi';
 import { getBlogsByUserId } from '../../utils/blogsApi';
 import IUser from '../../types/IUser';
 import IBlog from '../../types/IBlog';
-import IUserIcon from '../../types/IUserIcon';
 
 import { useEffect, useState } from 'react';
 import { useParams, Link, Route, Routes, useMatch } from 'react-router-dom';
@@ -127,45 +127,34 @@ const Profile = () => {
   const [userNotFound, setUserNotFound] = useState<boolean>(false);
 
   useEffect(() => {
-    const updateUser = async () => {
-      try {
-        const response = await fetch(
-          `${import.meta.env.VITE_BASE_URL_SERVER}/user/${username}`
-        );
+    if (!username) return;
 
-        const responseData: IUser = await response.json();
-        if (response.ok) {
-          setUserData(responseData);
+    getUserByUsername(username)
+      .then((user) => {
+        if (user) {
+          setUserData(user);
         } else {
           setUserNotFound(true);
         }
-      } catch (err) {
-        console.error(err);
-      }
-    };
-
-    updateUser();
+      })
+      .catch((err) => console.error(err));
   }, [username]);
 
   useEffect(() => {
-    const getUserIcon = async () => {
-      try {
-        const response = await fetch(
-          `${import.meta.env.VITE_BASE_URL_SERVER}/user/${username}/icon`
-        );
+    if (!username) return;
 
-        const userIcon: IUserIcon = await response.json();
-        if (userIcon)
+    getUserIcon(username)
+      .then((icon) => {
+        if (icon) {
           setBase64Icon(
-            `data:${userIcon.mime};base64,` +
-              btoa(String.fromCharCode(...new Uint8Array(userIcon.image.data)))
+            `data:${icon.mime};base64,` +
+              btoa(String.fromCharCode(...new Uint8Array(icon.image.data)))
           );
-      } catch (err) {
-        console.error(err);
-      }
-    };
-
-    getUserIcon();
+        } else {
+          throw new Error('No icon found');
+        }
+      })
+      .catch((err) => console.error(err));
   }, [username]);
 
   useEffect(() => {

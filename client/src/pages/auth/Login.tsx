@@ -1,6 +1,6 @@
 import { useAuth } from '../../context/useAuth';
 import stitches from '../../stitches.config';
-import { ILoginResponse } from '../../types/IUser';
+import { logIn } from '../../utils/userApi';
 import {
   Title,
   Form,
@@ -38,31 +38,21 @@ const Login = () => {
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
 
-    try {
-      const response = await fetch(
-        `${import.meta.env.VITE_BASE_URL_SERVER}/login`,
-        {
-          method: 'POST',
-          headers: {
-            'Content-type': 'application/json',
-          },
-          body: JSON.stringify({ username, password }),
+    logIn(username, password)
+      .then((data) => {
+        if (data?.success) {
+          setErrorMessage('');
+          setLoggedIn();
+          navigate('/');
+        } else if (data?.message) {
+          setErrorMessage(data.message + '!');
+        } else {
+          setErrorMessage('Something went wrong!');
         }
-      );
-
-      const responseData: ILoginResponse = await response.json();
-
-      if (responseData.success) {
-        localStorage.setItem('token', responseData.token);
-        setErrorMessage('');
-        setLoggedIn();
-        navigate('/');
-      } else if (responseData.message) {
-        setErrorMessage(responseData.message + '!');
-      }
-    } catch (err) {
-      console.error(err);
-    }
+      })
+      .catch((err) => {
+        console.error(err);
+      });
   };
 
   return (

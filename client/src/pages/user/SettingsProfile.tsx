@@ -3,7 +3,7 @@ import { useAuth } from '../../context/useAuth';
 import Notification from '../../components/layout/Notification';
 import LoginToContinue from '../LoginToContinue';
 import { Title, Label, Input, Button } from '../../components/common/form';
-import IUserIcon from '../../types/IUserIcon';
+import { getUser, getUserIcon } from '../../utils/userApi';
 import IUser from '../../types/IUser';
 import React, { useEffect, useCallback, useRef, useState } from 'react';
 
@@ -189,43 +189,17 @@ const SettingsUser = () => {
 
   // callbacks
   const updateUserData = useCallback(async () => {
-    try {
-      const response = await fetch(
-        `${import.meta.env.VITE_BASE_URL_SERVER}/user`,
-        {
-          headers: {
-            'x-access-token': localStorage.getItem('token') as string,
-          },
+    getUser()
+      .then((data) => {
+        if (data) {
+          setUserData(data);
+        } else {
+          throw new Error('User not found');
         }
-      );
-
-      const responseData = await response.json();
-      if (responseData) setUserData(responseData);
-    } catch (err) {
-      console.error(err);
-    }
-  }, []);
-
-  const updateUserIcon = useCallback(async () => {
-    try {
-      const response = await fetch(
-        `${import.meta.env.VITE_BASE_URL_SERVER}/user/icon`,
-        {
-          headers: {
-            'x-access-token': localStorage.getItem('token') as string,
-          },
-        }
-      );
-
-      const userIcon: IUserIcon = await response.json();
-      if (userIcon)
-        setBase64Icon(
-          `data:${userIcon.mime};base64,` +
-            btoa(String.fromCharCode(...new Uint8Array(userIcon.image.data)))
-        );
-    } catch (err) {
-      console.error(err);
-    }
+      })
+      .catch((err) => {
+        console.error(err);
+      });
   }, []);
 
   // useEffects
@@ -234,8 +208,24 @@ const SettingsUser = () => {
   }, [updateUserData]);
 
   useEffect(() => {
-    updateUserIcon();
-  }, [updateUserIcon]);
+    if (!userData?.username) return;
+
+    getUserIcon(userData?.username)
+      .then((data) => {
+        if (data) {
+          setBase64Icon(
+            `data:${data.mime};base64,` +
+              btoa(String.fromCharCode(...new Uint8Array(data.image.data)))
+          );
+        } else {
+          setBase64Icon('');
+          throw new Error('User icon not found');
+        }
+      })
+      .catch((err) => {
+        console.error(err);
+      });
+  }, [userData]);
 
   // handlers
   const resetForm = () => {
