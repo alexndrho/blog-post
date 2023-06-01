@@ -1,6 +1,6 @@
 import { useAuth } from './context/useAuth';
 import Loading from './pages/Loading';
-import Navigation from './components/Navigation';
+import Navigation from './components/layout/Navigation';
 import Login from './pages/auth/Login';
 import SignUp from './pages/auth/SignUp';
 import Profile from './pages/user/Profile';

@@ -1,6 +1,6 @@
-import stitches from '../stitches.config';
-import { A as AStyled } from './stitches/elements';
-import { useAuth } from '../context/useAuth';
+import stitches from '../../stitches.config';
+import { A as AStyled } from '../common/elements';
+import { useAuth } from '../../context/useAuth';
 
 import { useEffect, useRef } from 'react';
 import { Link } from 'react-router-dom';

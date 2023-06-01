@@ -1,5 +1,5 @@
 import stitches from '../../stitches.config';
-import LoginToContinue from '../../components/auth/LoginToContinue';
+import LoginToContinue from '../LoginToContinue';
 import {
   Form,
   Title,
@@ -7,7 +7,7 @@ import {
   Input,
   TextArea,
   Button,
-} from '../../components/stitches/form';
+} from '../../components/common/form';
 
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';

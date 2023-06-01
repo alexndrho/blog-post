@@ -1,6 +1,6 @@
-import stitches from '../../stitches.config';
-import { Title } from '../stitches/form';
-import { A } from '../stitches/elements';
+import stitches from '../stitches.config';
+import { Title } from '../components/common/form';
+import { A } from '../components/common/elements';
 import { Link } from 'react-router-dom';
 
 const { styled } = stitches;

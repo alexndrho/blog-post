@@ -1,4 +1,4 @@
-import stitches from '../stitches.config';
+import stitches from '../../stitches.config';
 import React from 'react';
 
 const { styled } = stitches;

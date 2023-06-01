@@ -1,8 +1,8 @@
 import stitches from '../../stitches.config';
 import { useAuth } from '../../context/useAuth';
-import Notification from '../../components/Notification';
-import LoginToContinue from '../../components/auth/LoginToContinue';
-import { Title, Label, Input, Button } from '../../components/stitches/form';
+import Notification from '../../components/layout/Notification';
+import LoginToContinue from '../LoginToContinue';
+import { Title, Label, Input, Button } from '../../components/common/form';
 import { IUserIcon } from '../../types/userIcon';
 import { IUser } from '../../types/user';
 import React, { useEffect, useCallback, useRef, useState } from 'react';

@@ -7,8 +7,8 @@ import {
   Label,
   Input,
   Button,
-} from '../../components/stitches/form';
-import ErrorMessage from '../../components/auth/ErrorMessage';
+} from '../../components/common/form';
+import ErrorMessage from '../../components/layout/ErrorMessage';
 
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
