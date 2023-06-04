@@ -22,7 +22,7 @@ const userSchema = new Schema(
       type: String,
       required: [true, 'Password is required'],
       minLength: [8, 'Password must be at least 6 characters'],
-      maxLength: [16, 'Password must not exceed 16 characters'],
+      maxLength: [30, 'Password must not exceed 30 characters'],
       select: false,
       match: [
         /^(?=.*[A-Za-z])(?=.*\d).*$/,
