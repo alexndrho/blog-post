@@ -172,7 +172,7 @@ const SettingsUser = () => {
   const [profileIcon, setProfileIcon] = useState<File | null>(null);
   const [firstName, setFirstName] = useState('');
   const [lastName, setLastName] = useState('');
-  const [username, setUserName] = useState('');
+  const [username, setUsername] = useState('');
   const [email, setEmail] = useState('');
   const [location, setLocation] = useState('');
   const [contact, setContact] = useState('');
@@ -232,7 +232,7 @@ const SettingsUser = () => {
     setProfileIcon(null);
     setFirstName('');
     setLastName('');
-    setUserName('');
+    setUsername('');
     setEmail('');
     setLocation('');
     setContact('');
@@ -400,7 +400,7 @@ const SettingsUser = () => {
               id="username"
               placeholder={`${userData?.username ? userData.username : ''}`}
               ref={usernameRef}
-              onChange={(e) => setUserName(e.target.value)}
+              onChange={(e) => setUsername(e.target.value)}
             />
           </ColumnSpan2>
 
