@@ -46,6 +46,7 @@ const BodyBlog = styled('p', {
 
 const Blog = () => {
   const { id } = useParams();
+  const [loading, setLoading] = useState<boolean>(true);
   const [blogData, setBlogData] = useState<IBlog | null>(null);
   const [userName, setUserName] = useState<string | null>(null);
 
@@ -72,16 +73,20 @@ const Blog = () => {
       .then((usernames) => {
         if (usernames?.length === 1) {
           setUserName(usernames[0]);
+          setLoading(false);
         } else {
           throw new Error('No usernames found');
         }
       })
-      .catch((err) => console.error(err));
+      .catch((err) => {
+        setLoading(false);
+        console.error(err);
+      });
   }, [blogData]);
 
   return (
     <>
-      {blogData == null ? (
+      {blogData == null && !loading ? (
         <NotFound />
       ) : (
         <Main>
