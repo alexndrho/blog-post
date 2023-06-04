@@ -1,6 +1,5 @@
 import { useAuth } from '../../context/useAuth';
-import stitches from '../../stitches.config';
-import { signUpResponse } from '../../types/authentication';
+import { styled } from '../../stitches.config';
 import {
   Form,
   Title,
@@ -8,12 +7,11 @@ import {
   Input,
   Button,
   Info,
-} from '../../components/stitches/form';
-import ErrorMessage from '../../components/auth/ErrorMessage';
+} from '../../components/common/form';
+import ErrorMessage from '../../components/layout/ErrorMessage';
 import React, { useEffect, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-
-const { styled } = stitches;
+import { signUp } from '../../utils/userApi';
 
 const Main = styled('main', {
   minHeight: '80%',
@@ -44,25 +42,17 @@ const SignUp = () => {
     e.preventDefault();
 
     try {
-      const response = await fetch(
-        `${import.meta.env.VITE_BASE_URL_SERVER}/signup`,
-        {
-          method: 'POST',
-          headers: {
-            'Content-type': 'application/json',
-          },
-          body: JSON.stringify({ username, email, password }),
-        }
-      );
-
-      const responseData: signUpResponse = await response.json();
-
-      if (responseData.success) {
-        setErrorMessage('');
-        navigate('/login');
-      } else if (responseData.message) {
-        setErrorMessage(responseData.message + '!');
-      }
+      signUp(username, email, password)
+        .then((data) => {
+          if (data?.error?.message) {
+            setErrorMessage(data.error.message) + '!';
+          } else if (data) {
+            navigate('/login');
+          } else {
+            throw new Error('No data returned');
+          }
+        })
+        .catch((err) => console.error(err));
     } catch (err) {
       console.error(err);
     }

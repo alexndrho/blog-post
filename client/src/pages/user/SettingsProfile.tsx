@@ -1,13 +1,11 @@
-import stitches from '../../stitches.config';
+import { styled } from '../../stitches.config';
 import { useAuth } from '../../context/useAuth';
-import Notification from '../../components/Notification';
-import LoginToContinue from '../../components/auth/LoginToContinue';
-import { Title, Label, Input, Button } from '../../components/stitches/form';
-import { IUserIcon } from '../../types/userIcon';
-import { IUser } from '../../types/user';
+import Notification from '../../components/layout/Notification';
+import LoginToContinue from '../LoginToContinue';
+import { Title, Label, Input, Button } from '../../components/common/form';
+import { getUser, getUserIcon } from '../../utils/userApi';
+import IUser from '../../types/IUser';
 import React, { useEffect, useCallback, useRef, useState } from 'react';
-
-const { styled } = stitches;
 
 // container
 const Main = styled('main', {
@@ -164,7 +162,7 @@ const ColumnSpan2 = styled('div', {
 const SettingsUser = () => {
   const { isLoggedIn } = useAuth();
 
-  const [userData, setUserData] = useState<IUser | null>();
+  const [userData, setUserData] = useState<IUser | null>(null);
   const [base64Icon, setBase64Icon] = useState('');
   const [showNotification, setShowNotification] = useState(false);
   const [errorMsg, setErrorMsg] = useState('');
@@ -172,7 +170,7 @@ const SettingsUser = () => {
   const [profileIcon, setProfileIcon] = useState<File | null>(null);
   const [firstName, setFirstName] = useState('');
   const [lastName, setLastName] = useState('');
-  const [username, setUserName] = useState('');
+  const [username, setUsername] = useState('');
   const [email, setEmail] = useState('');
   const [location, setLocation] = useState('');
   const [contact, setContact] = useState('');
@@ -189,43 +187,20 @@ const SettingsUser = () => {
 
   // callbacks
   const updateUserData = useCallback(async () => {
-    try {
-      const response = await fetch(
-        `${import.meta.env.VITE_BASE_URL_SERVER}/user`,
-        {
-          headers: {
-            'x-access-token': localStorage.getItem('token') as string,
-          },
+    getUser()
+      .then((data) => {
+        if (data?.error) throw new Error(data.error.message);
+
+        if (data) {
+          setUserData(data as IUser);
+        } else {
+          setUserData(null);
+          throw new Error('User not found');
         }
-      );
-
-      const responseData = await response.json();
-      if (responseData) setUserData(responseData);
-    } catch (err) {
-      console.error(err);
-    }
-  }, []);
-
-  const updateUserIcon = useCallback(async () => {
-    try {
-      const response = await fetch(
-        `${import.meta.env.VITE_BASE_URL_SERVER}/user/icon`,
-        {
-          headers: {
-            'x-access-token': localStorage.getItem('token') as string,
-          },
-        }
-      );
-
-      const userIcon: IUserIcon = await response.json();
-      if (userIcon)
-        setBase64Icon(
-          `data:${userIcon.mime};base64,` +
-            btoa(String.fromCharCode(...new Uint8Array(userIcon.image.data)))
-        );
-    } catch (err) {
-      console.error(err);
-    }
+      })
+      .catch((err) => {
+        console.error(err);
+      });
   }, []);
 
   // useEffects
@@ -234,15 +209,33 @@ const SettingsUser = () => {
   }, [updateUserData]);
 
   useEffect(() => {
-    updateUserIcon();
-  }, [updateUserIcon]);
+    if (!userData?.username) return;
+
+    getUserIcon(userData?.username)
+      .then((icon) => {
+        if (icon?.error) throw new Error(icon.error.message);
+
+        if (icon?.mime && icon?.image?.data) {
+          setBase64Icon(
+            `data:${icon.mime};base64,` +
+              btoa(String.fromCharCode(...new Uint8Array(icon.image.data)))
+          );
+        } else {
+          setBase64Icon('');
+          throw new Error('User icon not found');
+        }
+      })
+      .catch((err) => {
+        console.error(err);
+      });
+  }, [userData]);
 
   // handlers
   const resetForm = () => {
     setProfileIcon(null);
     setFirstName('');
     setLastName('');
-    setUserName('');
+    setUsername('');
     setEmail('');
     setLocation('');
     setContact('');
@@ -299,21 +292,21 @@ const SettingsUser = () => {
         {
           method: 'PUT',
           headers: {
-            'x-access-token': localStorage.getItem('token') as string,
+            'x-access-token': localStorage.getItem('token') || '',
           },
           body: formData,
         }
       );
 
       const responseData = await response.json();
-      if (responseData.success) {
+      if (responseData.error) {
+        setErrorMsg(responseData.error.message);
+        setShowNotification(true);
+      } else {
         resetForm();
         setErrorMsg('');
         updateUserData();
 
-        setShowNotification(true);
-      } else if (responseData.message) {
-        setErrorMsg(responseData.message);
         setShowNotification(true);
       }
     } catch (err) {
@@ -410,7 +403,7 @@ const SettingsUser = () => {
               id="username"
               placeholder={`${userData?.username ? userData.username : ''}`}
               ref={usernameRef}
-              onChange={(e) => setUserName(e.target.value)}
+              onChange={(e) => setUsername(e.target.value)}
             />
           </ColumnSpan2>
 

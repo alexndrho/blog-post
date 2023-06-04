@@ -16,12 +16,16 @@ const verifyUser = async (req: Request, res: Response, next: NextFunction) => {
     );
 
     res.json({
-      isloggedIn: true,
       token: 'Bearer ' + newToken,
     });
   } catch (err) {
-    if (!res.headersSent)
-      res.json({ isLoggedIn: true, message: 'Failed to authenticate' });
+    if (!res.headersSent) {
+      if (err instanceof Error) {
+        res.status(500).json({ error: { message: err.message } });
+      } else {
+        res.status(500).json({ error: { message: 'An error occured' } });
+      }
+    }
     console.error(err);
   }
 };
@@ -29,13 +33,8 @@ const verifyUser = async (req: Request, res: Response, next: NextFunction) => {
 const signUp = async (req: Request, res: Response) => {
   try {
     const user: IUser = req.body;
-    if (await User.findOne({ username: user.username })) {
-      res.status(409).json({
-        success: false,
-        message: 'Username has been taken already',
-      });
-      return;
-    }
+    if (await User.findOne({ username: user.username }))
+      throw new Error('Username already exists');
 
     const dbUser = new User({
       username: user.username,
@@ -46,33 +45,34 @@ const signUp = async (req: Request, res: Response) => {
     User.init()
       .then(async () => {
         await dbUser.save();
-        res.status(200).json({ success: true });
+        res.status(200).json({});
       })
       .catch((err) => {
         if (err instanceof Error.ValidationError) {
-          if (err.errors['username']) {
-            res.status(401).json({
-              success: false,
-              message: err.errors['username'].message,
-            });
-          } else if (err.errors['email']) {
-            res.status(401).json({
-              success: false,
-              message: err.errors['email'].message,
-            });
-          } else if (err.errors['password']) {
-            res.status(401).json({
-              success: false,
-              message: err.errors['password'].message,
-            });
+          const errorFields = ['username', 'email', 'password'];
+          const errorMessage = errorFields.find(
+            (field) => (err as Error.ValidationError).errors[field]
+          );
+
+          if (errorMessage) {
+            res
+              .status(422)
+              .json({ error: { message: err.errors[errorMessage].message } });
           } else {
-            throw err;
+            res.status(500).json({ error: { message: 'An error occured' } });
           }
+        } else {
+          res.status(500).json({ error: { message: 'An error occured' } });
         }
       });
   } catch (err) {
-    if (!res.headersSent)
-      res.status(400).json({ success: false, message: 'An error occurred' });
+    if (!res.headersSent) {
+      if (err instanceof Error) {
+        res.status(400).json({ error: { message: err.message } });
+      } else {
+        res.status(500).json({ error: { message: 'An error occured' } });
+      }
+    }
     console.error(err);
   }
 };
@@ -83,41 +83,39 @@ const logIn = async (req: Request, res: Response) => {
 
     const dbUser = await User.findOne(
       { username: userLoggingIn.username },
-      '+password'
+      'password'
     );
 
-    if (!dbUser) {
-      res.status(400).json({ message: 'Invalid username' });
-      return;
-    }
+    if (!dbUser) throw new Error('Invalid username');
 
     const isPwdCorrect = await bcrypt.compare(
       userLoggingIn.password,
       dbUser.password
     );
-    if (isPwdCorrect) {
-      const payload = {
-        id: dbUser.id,
-      };
 
+    if (isPwdCorrect) {
       jwt.sign(
-        payload,
+        { id: dbUser.id } as IJwtPayLoad,
         process.env.JWT_SECRET!,
         { expiresIn: 86400 },
         (err, token) => {
           if (err) throw res.json({ error: err });
           res.json({
-            success: true,
             token: 'Bearer ' + token,
           });
         }
       );
     } else {
-      res.status(200).json({ success: false, message: 'Invalid password' });
+      throw new Error('Password is incorrect');
     }
   } catch (err) {
-    if (!res.headersSent)
-      res.status(400).json({ success: false, message: 'An error occured' });
+    if (!res.headersSent) {
+      if (err instanceof Error) {
+        res.status(400).json({ error: { message: err.message } });
+      } else {
+        res.status(500).json({ error: { message: 'An error occured' } });
+      }
+    }
     console.error(err);
   }
 };

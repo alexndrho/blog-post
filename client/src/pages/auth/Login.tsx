@@ -1,19 +1,17 @@
 import { useAuth } from '../../context/useAuth';
-import stitches from '../../stitches.config';
-import { loginResponse } from '../../types/authentication';
+import { styled } from '../../stitches.config';
+import { logIn } from '../../utils/userApi';
 import {
   Title,
   Form,
   Label,
   Input,
   Button,
-} from '../../components/stitches/form';
-import ErrorMessage from '../../components/auth/ErrorMessage';
+} from '../../components/common/form';
+import ErrorMessage from '../../components/layout/ErrorMessage';
 
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-
-const { styled } = stitches;
 
 const Main = styled('main', {
   minHeight: '80%',
@@ -38,31 +36,21 @@ const Login = () => {
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
 
-    try {
-      const response = await fetch(
-        `${import.meta.env.VITE_BASE_URL_SERVER}/login`,
-        {
-          method: 'POST',
-          headers: {
-            'Content-type': 'application/json',
-          },
-          body: JSON.stringify({ username, password }),
+    logIn(username, password)
+      .then((data) => {
+        if (data?.error?.message) {
+          setErrorMessage(data.error.message + '!');
+        } else if (data?.token) {
+          localStorage.setItem('token', data.token);
+          setLoggedIn();
+          navigate('/');
+        } else {
+          setErrorMessage('Something went wrong!');
         }
-      );
-
-      const responseData: loginResponse = await response.json();
-
-      if (responseData.success) {
-        localStorage.setItem('token', responseData.token);
-        setErrorMessage('');
-        setLoggedIn();
-        navigate('/');
-      } else if (responseData.message) {
-        setErrorMessage(responseData.message + '!');
-      }
-    } catch (err) {
-      console.error(err);
-    }
+      })
+      .catch((err) => {
+        console.error(err);
+      });
   };
 
   return (

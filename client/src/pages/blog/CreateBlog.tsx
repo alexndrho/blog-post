@@ -1,5 +1,6 @@
-import stitches from '../../stitches.config';
-import LoginToContinue from '../../components/auth/LoginToContinue';
+import { styled } from '../../stitches.config';
+import LoginToContinue from '../LoginToContinue';
+import { createBlog } from '../../utils/blogsApi';
 import {
   Form,
   Title,
@@ -7,13 +8,11 @@ import {
   Input,
   TextArea,
   Button,
-} from '../../components/stitches/form';
+} from '../../components/common/form';
 
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../../context/useAuth';
-
-const { styled } = stitches;
 
 const Main = styled('main', {
   minHeight: '80%',
@@ -34,28 +33,17 @@ const CreateBlog = () => {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
-    try {
-      const response = await fetch(
-        `${import.meta.env.VITE_BASE_URL_SERVER}/blogs`,
-        {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-            'x-access-token': localStorage.getItem('token') as string,
-          },
-          body: JSON.stringify({ title, snippet, body }),
+    createBlog(title, snippet, body)
+      .then((blog) => {
+        if (blog?.error) throw new Error(blog.error.message);
+
+        if (blog) {
+          navigate(`/blogs/${blog.id}`);
+        } else {
+          throw new Error('No blog found');
         }
-      );
-
-      if (!response.ok)
-        throw new Error(`HTTP error! Status: ${response.status}`);
-
-      const responseData = await response.json();
-
-      navigate(`/blogs/${responseData._id}`);
-    } catch (err) {
-      console.error('Error: ' + err);
-    }
+      })
+      .catch((err) => console.error(err));
   };
 
   return (

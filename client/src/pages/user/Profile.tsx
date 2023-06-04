@@ -1,15 +1,15 @@
-import stitches from '../../stitches.config';
+import { styled } from '../../stitches.config';
 import NotFound from '../NotFound';
-import { IUser } from '../../types/user';
-import { IUserIcon } from '../../types/userIcon';
-import { A as NavLink } from '../../components/stitches/elements';
-import ProfileAbout from '../../components/layout/ProfileAbout';
-import ProfileBlogs from '../../components/layout/ProfileBlogs';
+import { A as NavLink } from '../../components/common/elements';
+import ProfileAbout from '../../components/layout/profile/ProfileAbout';
+import BlogItem from '../../components/layout/BlogItem';
+import { getUserByUsername, getUserIcon } from '../../utils/userApi';
+import { getBlogsByUserId } from '../../utils/blogsApi';
+import IUser from '../../types/IUser';
+import IBlog from '../../types/IBlog';
 
 import { useEffect, useState } from 'react';
 import { useParams, Link, Route, Routes, useMatch } from 'react-router-dom';
-
-const { styled } = stitches;
 
 // banner
 const Banner = styled('div', {
@@ -119,52 +119,58 @@ const Profile = () => {
   const matchBlogs = useMatch(`/${username}/blogs`);
 
   const [userData, setUserData] = useState<IUser | null>(null);
+  const [blogs, setBlogs] = useState<IBlog[]>([]);
   const [base64Icon, setBase64Icon] = useState<string>('');
 
-  const [userNotFound, setUserNotFound] = useState<boolean>(false);
+  const [userNotFound, setUserNotFound] = useState<boolean>(true);
 
   useEffect(() => {
-    const updateUser = async () => {
-      console.log(username);
-      try {
-        const response = await fetch(
-          `${import.meta.env.VITE_BASE_URL_SERVER}/user/${username}`
-        );
+    if (!username) return;
 
-        const responseData: IUser = await response.json();
-        if (response.ok) {
-          setUserData(responseData);
-        } else {
-          setUserNotFound(true);
+    getUserByUsername(username)
+      .then((user) => {
+        if (user && !user.error) {
+          setUserData(user as IUser);
+          setUserNotFound(false);
         }
-      } catch (err) {
-        console.error(err);
-      }
-    };
-
-    updateUser();
+      })
+      .catch((err) => console.error(err));
   }, [username]);
 
   useEffect(() => {
-    const getUserIcon = async () => {
-      try {
-        const response = await fetch(
-          `${import.meta.env.VITE_BASE_URL_SERVER}/user/${username}/icon`
-        );
+    if (!username) return;
 
-        const userIcon: IUserIcon = await response.json();
-        if (userIcon)
+    getUserIcon(username)
+      .then((icon) => {
+        if (icon?.error?.message) throw new Error(icon.error.message);
+
+        if (icon?.mime && icon?.image?.data) {
           setBase64Icon(
-            `data:${userIcon.mime};base64,` +
-              btoa(String.fromCharCode(...new Uint8Array(userIcon.image.data)))
+            `data:${icon.mime};base64,` +
+              btoa(String.fromCharCode(...new Uint8Array(icon.image.data)))
           );
-      } catch (err) {
-        console.error(err);
-      }
-    };
-
-    getUserIcon();
+        } else {
+          throw new Error('No icon found');
+        }
+      })
+      .catch((err) => console.error(err));
   }, [username]);
+
+  useEffect(() => {
+    if (!userData) return;
+
+    getBlogsByUserId(userData?._id)
+      .then((blogs) => {
+        if (blogs?.error) throw new Error(blogs.error.message);
+
+        if (blogs) {
+          setBlogs(blogs as IBlog[]);
+        } else {
+          throw new Error('No blogs found');
+        }
+      })
+      .catch((err) => console.error(err));
+  }, [userData]);
 
   if (userNotFound) {
     return <NotFound />;
@@ -235,7 +241,16 @@ const Profile = () => {
 
             <Route
               path="/blogs"
-              element={<ProfileBlogs userId={userData._id} />}
+              element={blogs.map((blog) => (
+                <BlogItem
+                  key={crypto.randomUUID()}
+                  _id={blog._id}
+                  username={userData.username}
+                  title={blog.title}
+                  snippet={blog.snippet}
+                  createdAt={blog.createdAt}
+                />
+              ))}
             />
           </Routes>
         )}

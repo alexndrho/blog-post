@@ -8,9 +8,18 @@ import mongoose from 'mongoose';
 const getBlogs = async (req: Request, res: Response) => {
   try {
     const blogs = await Blog.find().sort({ createdAt: -1 });
+
+    if (!blogs) throw 'Unable to find blogs';
+
     res.status(200).json([...blogs]);
   } catch (err) {
-    if (!res.headersSent) res.json({ sucess: false });
+    if (!res.headersSent) {
+      if (err instanceof Error) {
+        res.status(400).json({ error: { message: err.message } });
+      } else {
+        res.status(500).json({ error: { message: 'An error occured' } });
+      }
+    }
     console.error(err);
   }
 };
@@ -21,9 +30,17 @@ const getBlogsByUserId = async (req: Request, res: Response) => {
       createdAt: -1,
     });
 
+    if (!blogs) throw 'Unable to find blogs';
+
     res.status(200).json([...blogs]);
   } catch (err) {
-    if (!res.headersSent) res.json({ sucess: false });
+    if (!res.headersSent) {
+      if (err instanceof Error) {
+        res.status(400).json({ error: { message: err.message } });
+      } else {
+        res.status(500).json({ error: { message: 'An error occured' } });
+      }
+    }
     console.error(err);
   }
 };
@@ -39,9 +56,16 @@ const getBlog = async (req: Request, res: Response) => {
     const blog = await Blog.findById(id);
 
     if (!blog) throw 'Unable to find blog';
+
     res.status(200).json({ ...blog._doc });
   } catch (err) {
-    if (!res.headersSent) res.json({ sucess: false });
+    if (!res.headersSent) {
+      if (err instanceof Error) {
+        res.status(400).json({ error: { message: err.message } });
+      } else {
+        res.status(500).json({ error: { message: 'An error occured' } });
+      }
+    }
     console.error(err);
   }
 };
@@ -59,13 +83,21 @@ const createBlog = async (req: Request, res: Response) => {
         body: body.body,
       });
 
-      await blog.save();
-      res.status(201).json({ success: true });
+      const newBlog = await blog.save();
+      if (!newBlog) throw 'Unable to create blog';
+
+      res.status(201).json({ id: newBlog._doc._id });
     } else {
       throw 'Failed To Authenticate';
     }
   } catch (err) {
-    if (!res.headersSent) res.json({ sucess: false });
+    if (!res.headersSent) {
+      if (err instanceof Error) {
+        res.status(400).json({ error: { message: err.message } });
+      } else {
+        res.status(500).json({ error: { message: 'An error occured' } });
+      }
+    }
     console.error(err);
   }
 };
@@ -75,9 +107,16 @@ const deleteBlog = async (req: Request, res: Response) => {
     const deletedBlog = await Blog.findByIdAndDelete(req.params.id);
 
     if (!deletedBlog) throw 'Unable to find blog';
+
     res.status(200).json({ ...deletedBlog._doc });
   } catch (err) {
-    if (!res.headersSent) res.json({ sucess: false });
+    if (!res.headersSent) {
+      if (err instanceof Error) {
+        res.status(400).json({ error: { message: err.message } });
+      } else {
+        res.status(500).json({ error: { message: 'An error occured' } });
+      }
+    }
     console.error(err);
   }
 };

@@ -1,9 +1,9 @@
-import stitches from '../../stitches.config';
+import { styled } from '../../stitches.config';
+import { getBlog, getBlogsUsernames } from '../../utils/blogsApi';
+import NotFound from '../NotFound';
+import IBlog from '../../types/IBlog';
 import { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
-import NotFound from '../NotFound';
-
-const { styled } = stitches;
 
 const Main = styled('main', {
   margin: '0 auto',
@@ -44,67 +44,47 @@ const BodyBlog = styled('p', {
 
 const Blog = () => {
   const { id } = useParams();
-  const [blogData, setBlogData] = useState<IBlog | null>({
-    _id: '',
-    userId: '',
-    title: '',
-    snippet: '',
-    body: '',
-  });
+  const [loading, setLoading] = useState<boolean>(true);
+  const [blogData, setBlogData] = useState<IBlog | null>(null);
   const [userName, setUserName] = useState<string | null>(null);
 
   useEffect(() => {
-    const getData = async () => {
-      try {
-        const response = await fetch(
-          `${import.meta.env.VITE_BASE_URL_SERVER}/blogs/${id}`,
-          {
-            method: 'GET',
-            headers: {
-              Accept: 'application/json',
-            },
-          }
-        );
+    if (!id) return;
 
-        const responseData = await response.json();
-        setBlogData(responseData);
-      } catch (err) {
-        console.error(err);
-      }
-    };
+    getBlog(id)
+      .then((blog) => {
+        if (blog?.error) throw new Error(blog.error.message);
 
-    getData();
+        if (blog) {
+          setBlogData(blog as IBlog);
+        } else {
+          throw new Error('No blog found');
+        }
+      })
+      .catch((err) => console.error(err));
   }, [id]);
 
   useEffect(() => {
-    const getUserNames = async () => {
-      try {
-        const response = await fetch(
-          `${import.meta.env.VITE_BASE_URL_SERVER}/user/username/${
-            blogData?.userId
-          }`,
-          {
-            headers: {
-              Accept: 'application/json',
-            },
-          }
-        );
+    if (!blogData) return;
 
-        if (!response.ok) throw new Error('Could not fetch username');
-
-        const responseData = await response.json();
-        setUserName(responseData.username);
-      } catch (err) {
-        console.log(err);
-      }
-    };
-
-    if (blogData?.userId) getUserNames();
-  }, [blogData?.userId]);
+    getBlogsUsernames([blogData])
+      .then((usernames) => {
+        if (usernames?.length === 1) {
+          setUserName(usernames[0]);
+          setLoading(false);
+        } else {
+          throw new Error('No usernames found');
+        }
+      })
+      .catch((err) => {
+        setLoading(false);
+        console.error(err);
+      });
+  }, [blogData]);
 
   return (
     <>
-      {blogData == null ? (
+      {blogData == null && !loading ? (
         <NotFound />
       ) : (
         <Main>

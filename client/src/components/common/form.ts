@@ -1,6 +1,4 @@
-import stitches from '../../stitches.config';
-
-const { styled } = stitches;
+import { styled } from '../../stitches.config';
 
 const Form = styled('form', {
   display: 'flex',
