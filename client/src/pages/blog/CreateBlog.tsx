@@ -1,4 +1,4 @@
-import stitches from '../../stitches.config';
+import { styled } from '../../stitches.config';
 import LoginToContinue from '../LoginToContinue';
 import { createBlog } from '../../utils/blogsApi';
 import {
@@ -13,8 +13,6 @@ import {
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../../context/useAuth';
-
-const { styled } = stitches;
 
 const Main = styled('main', {
   minHeight: '80%',

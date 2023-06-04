@@ -1,8 +1,6 @@
-import stitches from '../../stitches.config';
+import { styled } from '../../stitches.config';
 import { Link } from 'react-router-dom';
 import IBlog from '../../types/IBlog';
-
-const { styled } = stitches;
 
 const Div = styled('div', {
   marginBottom: '2rem',

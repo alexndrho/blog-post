@@ -1,5 +1,5 @@
 import { useAuth } from '../../context/useAuth';
-import stitches from '../../stitches.config';
+import { styled } from '../../stitches.config';
 import { logIn } from '../../utils/userApi';
 import {
   Title,
@@ -12,8 +12,6 @@ import ErrorMessage from '../../components/layout/ErrorMessage';
 
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-
-const { styled } = stitches;
 
 const Main = styled('main', {
   minHeight: '80%',

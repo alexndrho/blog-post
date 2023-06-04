@@ -1,4 +1,4 @@
-import stitches from '../../stitches.config';
+import { styled } from '../../stitches.config';
 import NotFound from '../NotFound';
 import { A as NavLink } from '../../components/common/elements';
 import ProfileAbout from '../../components/layout/profile/ProfileAbout';
@@ -10,8 +10,6 @@ import IBlog from '../../types/IBlog';
 
 import { useEffect, useState } from 'react';
 import { useParams, Link, Route, Routes, useMatch } from 'react-router-dom';
-
-const { styled } = stitches;
 
 // banner
 const Banner = styled('div', {

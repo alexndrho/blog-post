@@ -1,6 +1,4 @@
-import stitches from '../../stitches.config';
-
-const { styled } = stitches;
+import { styled } from '../../stitches.config';
 
 const Div = styled('div', {
   padding: '0 1.25rem',

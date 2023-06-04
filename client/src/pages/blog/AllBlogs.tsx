@@ -1,11 +1,9 @@
-import stitches from '../../stitches.config';
+import { styled } from '../../stitches.config';
 import BlogItem from '../../components/layout/BlogItem';
 import { getBlogs, getBlogsUsernames } from '../../utils/blogsApi';
 import IBlog from '../../types/IBlog';
 
 import { useEffect, useState } from 'react';
-
-const { styled } = stitches;
 
 const Main = styled('main', {
   margin: '0 auto',

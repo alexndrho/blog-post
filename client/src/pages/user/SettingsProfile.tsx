@@ -1,4 +1,4 @@
-import stitches from '../../stitches.config';
+import { styled } from '../../stitches.config';
 import { useAuth } from '../../context/useAuth';
 import Notification from '../../components/layout/Notification';
 import LoginToContinue from '../LoginToContinue';
@@ -6,8 +6,6 @@ import { Title, Label, Input, Button } from '../../components/common/form';
 import { getUser, getUserIcon } from '../../utils/userApi';
 import IUser from '../../types/IUser';
 import React, { useEffect, useCallback, useRef, useState } from 'react';
-
-const { styled } = stitches;
 
 // container
 const Main = styled('main', {

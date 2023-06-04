@@ -1,11 +1,9 @@
-import stitches from '../../stitches.config';
+import { styled } from '../../stitches.config';
 import { A as AStyled } from '../common/elements';
 import { useAuth } from '../../context/useAuth';
 
 import { useEffect, useRef } from 'react';
 import { Link } from 'react-router-dom';
-
-const { styled } = stitches;
 
 const Header = styled('header', {
   paddingTop: '1rem',

@@ -1,6 +1,6 @@
 import { createStitches } from '@stitches/react';
 
-const stitches = createStitches({
+const { styled, globalCss, css } = createStitches({
   theme: {
     colors: {
       lightBlack: '#4C4C4C',
@@ -34,7 +34,7 @@ const stitches = createStitches({
   },
 });
 
-const useGlobalCss = stitches.globalCss({
+const useGlobalCss = globalCss({
   '*': {
     margin: 0,
     padding: 0,
@@ -68,5 +68,4 @@ const useGlobalCss = stitches.globalCss({
   },
 });
 
-export default stitches;
-export { useGlobalCss };
+export { styled, useGlobalCss, css };

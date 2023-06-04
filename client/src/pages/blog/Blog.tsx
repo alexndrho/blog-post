@@ -1,11 +1,9 @@
-import stitches from '../../stitches.config';
+import { styled } from '../../stitches.config';
 import { getBlog, getBlogsUsernames } from '../../utils/blogsApi';
 import NotFound from '../NotFound';
 import IBlog from '../../types/IBlog';
 import { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
-
-const { styled } = stitches;
 
 const Main = styled('main', {
   margin: '0 auto',

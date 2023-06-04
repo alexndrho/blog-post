@@ -1,7 +1,5 @@
-import stitches from '../../stitches.config';
+import { styled } from '../../stitches.config';
 import React from 'react';
-
-const { styled } = stitches;
 
 const NotificationContainer = styled('div', {
   position: 'relative',
