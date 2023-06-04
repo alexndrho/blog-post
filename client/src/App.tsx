@@ -10,7 +10,7 @@ import Blog from './pages/blog/Blog';
 import CreateBlog from './pages/blog/CreateBlog';
 import NotFound from './pages/NotFound';
 import { useGlobalCss } from './stitches.config';
-import { IUserAuthResponse } from './types/IUser';
+import { IVerifyUserResponse } from './types/IUser';
 
 import { useEffect, useState } from 'react';
 import { Routes, Route } from 'react-router-dom';
@@ -47,10 +47,12 @@ const App = () => {
           }
         );
 
-        const responseData: IUserAuthResponse = await response.json();
+        const responseData: IVerifyUserResponse = await response.json();
         const responseTime = new Date().getTime();
 
-        if (responseData.isloggedIn) {
+        if (responseData.error) throw new Error(responseData.error.message);
+
+        if (responseData.token) {
           localStorage.setItem('token', responseData.token);
           setLoggedIn();
 
@@ -65,7 +67,7 @@ const App = () => {
         }
       } catch (err) {
         setLoggedOut();
-        delayLoadingDone(1);
+        delayLoadingDone(0);
         console.error(err);
       }
     };

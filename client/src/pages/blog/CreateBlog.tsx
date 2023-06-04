@@ -36,10 +36,11 @@ const CreateBlog = () => {
     e.preventDefault();
 
     createBlog(title, snippet, body)
-      .then((id) => {
-        console.log(id);
-        if (id) {
-          navigate(`/blogs/${id}`);
+      .then((blog) => {
+        if (blog?.error) throw new Error(blog.error.message);
+
+        if (blog) {
+          navigate(`/blogs/${blog.id}`);
         } else {
           throw new Error('No blog found');
         }

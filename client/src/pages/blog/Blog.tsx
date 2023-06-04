@@ -46,13 +46,7 @@ const BodyBlog = styled('p', {
 
 const Blog = () => {
   const { id } = useParams();
-  const [blogData, setBlogData] = useState<IBlog | null>({
-    _id: '',
-    userId: '',
-    title: '',
-    snippet: '',
-    body: '',
-  });
+  const [blogData, setBlogData] = useState<IBlog | null>(null);
   const [userName, setUserName] = useState<string | null>(null);
 
   useEffect(() => {
@@ -60,8 +54,10 @@ const Blog = () => {
 
     getBlog(id)
       .then((blog) => {
+        if (blog?.error) throw new Error(blog.error.message);
+
         if (blog) {
-          setBlogData(blog);
+          setBlogData(blog as IBlog);
         } else {
           throw new Error('No blog found');
         }
@@ -74,7 +70,7 @@ const Blog = () => {
 
     getBlogsUsernames([blogData])
       .then((usernames) => {
-        if (usernames) {
+        if (usernames?.length === 1) {
           setUserName(usernames[0]);
         } else {
           throw new Error('No usernames found');

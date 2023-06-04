@@ -1,3 +1,5 @@
+import IError from './IError';
+
 interface IUser {
   _id: string;
   username: string;
@@ -9,32 +11,27 @@ interface IUser {
   contact?: string;
 }
 
-interface ISignUpResponse {
-  success: true;
-  message?: string;
+interface IVerifyUserResponse extends Partial<IError> {
+  token?: string;
 }
 
-interface ILoginResponse {
-  success: boolean;
-  message?: string;
-  token: string;
+type ISignUpResponse = Partial<IError>;
+
+interface ILoginResponse extends Partial<IError> {
+  token?: string;
 }
 
-interface IUserAuthResponse {
-  isloggedIn: boolean;
-  token: string;
-}
+interface IGetUserInfoResponse extends Partial<IUser>, Partial<IError> {}
 
-interface IGetUserameByIDResponse {
-  success?: boolean;
-  message?: string;
+interface IGetUsernameByIdResponse extends Partial<IError> {
   username?: string;
 }
 
 export default IUser;
 export type {
+  IVerifyUserResponse,
   ISignUpResponse,
   ILoginResponse,
-  IUserAuthResponse,
-  IGetUserameByIDResponse,
+  IGetUserInfoResponse,
+  IGetUsernameByIdResponse,
 };

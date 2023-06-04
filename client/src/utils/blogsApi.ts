@@ -1,5 +1,9 @@
-import IBlog from '../types/IBlog';
-import { IGetUserameByIDResponse } from '../types/IUser';
+import IBlog, {
+  IBlogCreateResponse,
+  IBlogResponse,
+  IBlogsResponse,
+} from '../types/IBlog';
+import { IGetUsernameByIdResponse } from '../types/IUser';
 
 // get
 const getBlogs = async () => {
@@ -13,9 +17,8 @@ const getBlogs = async () => {
       }
     );
 
-    if (!responseBlog.ok) throw new Error('Could not fetch blogs');
+    const responseDataBlog: IBlogsResponse = await responseBlog.json();
 
-    const responseDataBlog: IBlog[] = await responseBlog.json();
     return responseDataBlog;
   } catch (err) {
     console.log(err);
@@ -34,9 +37,7 @@ const getBlogsByUserId = async (userId: string) => {
       }
     );
 
-    if (!responseBlog.ok) throw new Error('Could not fetch blogs');
-
-    const responseDataBlog: IBlog[] = await responseBlog.json();
+    const responseDataBlog: IBlogsResponse = await responseBlog.json();
 
     return responseDataBlog;
   } catch (err) {
@@ -56,9 +57,8 @@ const getBlog = async (id: string) => {
       }
     );
 
-    if (!responseBlog.ok) throw new Error('Could not fetch blog');
+    const responseDataBlog: IBlogResponse = await responseBlog.json();
 
-    const responseDataBlog: IBlog = await responseBlog.json();
     return responseDataBlog;
   } catch (err) {
     console.log(err);
@@ -81,9 +81,7 @@ const getBlogsUsernames = async (blogs: IBlog[]) => {
           }
         );
 
-        if (!response.ok) throw new Error('Could not fetch username');
-
-        const responseData: IGetUserameByIDResponse = await response.json();
+        const responseData: IGetUsernameByIdResponse = await response.json();
         return responseData.username;
       }) ?? []
     );
@@ -118,9 +116,8 @@ const createBlog = async (title: string, snippet: string, body: string) => {
       }
     );
 
-    if (!response.ok) throw new Error('Could not create blog');
+    const responseData: IBlogCreateResponse = await response.json();
 
-    const responseData: string = await response.json();
     return responseData;
   } catch (err) {
     console.log(err);

@@ -124,17 +124,16 @@ const Profile = () => {
   const [blogs, setBlogs] = useState<IBlog[]>([]);
   const [base64Icon, setBase64Icon] = useState<string>('');
 
-  const [userNotFound, setUserNotFound] = useState<boolean>(false);
+  const [userNotFound, setUserNotFound] = useState<boolean>(true);
 
   useEffect(() => {
     if (!username) return;
 
     getUserByUsername(username)
       .then((user) => {
-        if (user) {
-          setUserData(user);
-        } else {
-          setUserNotFound(true);
+        if (user && !user.error) {
+          setUserData(user as IUser);
+          setUserNotFound(false);
         }
       })
       .catch((err) => console.error(err));
@@ -145,7 +144,9 @@ const Profile = () => {
 
     getUserIcon(username)
       .then((icon) => {
-        if (icon) {
+        if (icon?.error?.message) throw new Error(icon.error.message);
+
+        if (icon?.mime && icon?.image?.data) {
           setBase64Icon(
             `data:${icon.mime};base64,` +
               btoa(String.fromCharCode(...new Uint8Array(icon.image.data)))
@@ -162,8 +163,10 @@ const Profile = () => {
 
     getBlogsByUserId(userData?._id)
       .then((blogs) => {
+        if (blogs?.error) throw new Error(blogs.error.message);
+
         if (blogs) {
-          setBlogs(blogs);
+          setBlogs(blogs as IBlog[]);
         } else {
           throw new Error('No blogs found');
         }

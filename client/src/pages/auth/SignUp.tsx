@@ -46,11 +46,10 @@ const SignUp = () => {
     try {
       signUp(username, email, password)
         .then((data) => {
-          if (data?.success) {
-            setErrorMessage('');
+          if (data?.error?.message) {
+            setErrorMessage(data.error.message) + '!';
+          } else if (data) {
             navigate('/login');
-          } else if (data?.message) {
-            setErrorMessage(data.message) + '!';
           } else {
             throw new Error('No data returned');
           }

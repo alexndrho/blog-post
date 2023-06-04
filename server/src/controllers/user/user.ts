@@ -6,50 +6,21 @@ import { Request, Response } from 'express';
 import { Error } from 'mongoose';
 import { fileTypeFromBuffer } from 'file-type';
 
-const getUsernameById = async (req: Request, res: Response) => {
-  try {
-    const user = await User.findById(req.params.id).select('username');
-
-    if (!user) {
-      res.status(404).json({ success: false, message: 'User not found' });
-      return;
-    }
-
-    res.status(200).json({ username: user.username });
-  } catch (err) {
-    if (!res.headersSent) res.json({ success: false });
-    console.error(err);
-  }
-};
-
 const getUserInfo = async (req: Request, res: Response) => {
   try {
     const user = await User.findById(req.user?.id);
 
-    if (!user) {
-      res.status(404).json({ success: false, message: 'User not found' });
-      return;
-    }
+    if (!user) throw 'Unable to find user';
 
     res.status(200).json({ ...user._doc });
   } catch (err) {
-    if (!res.headersSent) res.json({ success: false });
-    console.error(err);
-  }
-};
-
-const getUserIcon = async (req: Request, res: Response) => {
-  try {
-    const userIcon = await UserIcon.findOne({ userId: req.user?.id });
-
-    if (!userIcon) {
-      res.status(404).json({ success: false, message: 'User icon not found' });
-      return;
+    if (!res.headersSent) {
+      if (err instanceof Error) {
+        res.status(500).json({ error: { message: err.message } });
+      } else {
+        res.status(500).json({ error: { message: 'An error occured' } });
+      }
     }
-
-    res.status(200).json({ ...userIcon._doc });
-  } catch (err) {
-    if (!res.headersSent) res.json({ success: false });
     console.error(err);
   }
 };
@@ -60,14 +31,55 @@ const getUserInfoByUsername = async (req: Request, res: Response) => {
   try {
     const user = await User.findOne({ username: username });
 
-    if (!user) {
-      res.status(404).json({ success: false, message: 'User not found' });
-      return;
-    }
+    if (!user) throw 'Unable to find user';
 
     res.status(200).json({ ...user._doc });
   } catch (err) {
-    if (!res.headersSent) res.json({ success: false });
+    if (!res.headersSent) {
+      if (err instanceof Error) {
+        res.status(500).json({ error: { message: err.message } });
+      } else {
+        res.status(500).json({ error: { message: 'An error occured' } });
+      }
+    }
+    console.error(err);
+  }
+};
+
+const getUsernameById = async (req: Request, res: Response) => {
+  try {
+    const user = await User.findById(req.params.id).select('username');
+
+    if (!user) throw 'Unable to find user';
+
+    res.status(200).json({ username: user.username });
+  } catch (err) {
+    if (!res.headersSent) {
+      if (err instanceof Error) {
+        res.status(500).json({ error: { message: err.message } });
+      } else {
+        res.status(500).json({ error: { message: 'An error occured' } });
+      }
+    }
+    console.error(err);
+  }
+};
+
+const getUserIcon = async (req: Request, res: Response) => {
+  try {
+    const userIcon = await UserIcon.findOne({ userId: req.user?.id });
+
+    if (!userIcon) throw 'Unable to find user icon';
+
+    res.status(200).json({ ...userIcon._doc });
+  } catch (err) {
+    if (!res.headersSent) {
+      if (err instanceof Error) {
+        res.status(500).json({ error: { message: err.message } });
+      } else {
+        res.status(500).json({ error: { message: 'An error occured' } });
+      }
+    }
     console.error(err);
   }
 };
@@ -78,21 +90,22 @@ const getUserIconByUsername = async (req: Request, res: Response) => {
   try {
     const user = await User.findOne({ username: username });
 
-    if (!user) {
-      res.status(404).json({ success: false, message: 'User not found' });
-      return;
-    }
+    if (!user) throw 'Unable to find user';
 
     const userIcon = await UserIcon.findOne({ userId: user._id });
 
-    if (!userIcon) {
-      res.status(404).json({ success: false, message: 'User icon not found' });
-      return;
-    }
+    if (!userIcon) throw 'Unable to find user icon';
 
     res.status(200).json({ ...userIcon._doc });
   } catch (err) {
-    if (!res.headersSent) res.json({ success: false });
+    if (!res.headersSent) {
+      if (err instanceof Error) {
+        res.status(500).json({ error: { message: err.message } });
+      } else {
+        res.status(500).json({ error: { message: 'An error occured' } });
+      }
+    }
+    console.error(err);
   }
 };
 
@@ -100,10 +113,7 @@ const updateUser = async (req: Request, res: Response) => {
   try {
     const user = await User.findById(req.user?.id);
 
-    if (!user) {
-      res.status(404).json({ success: false, message: 'User not found' });
-      return;
-    }
+    if (!user) throw 'Unable to find user';
 
     if (req.file) {
       const iconName =
@@ -117,23 +127,15 @@ const updateUser = async (req: Request, res: Response) => {
       const mime = fileType?.mime;
 
       if (mime === undefined) {
-        res.status(400).json({ success: false, message: 'Error file' });
-        return;
+        throw 'Unable to determine file type';
       } else if (mime !== 'image/png' && mime !== 'image/jpeg') {
-        res.status(422).json({ success: false, message: 'Invalid file type' });
-        return;
+        throw 'Please upload a PNG or JPEG image';
       }
 
       const fileMB = req.file.buffer.byteLength / 1024 / 1024;
 
       console.log(fileMB);
-      if (fileMB > 1) {
-        res.status(422).json({
-          success: false,
-          message: 'Please upload a picture smaller than 1 MB',
-        });
-        return;
-      }
+      if (fileMB > 1) throw 'Please upload an image smaller than 1MB';
 
       const userIcon = await UserIcon.findOne({ userId: user._id });
       if (userIcon) {
@@ -159,12 +161,8 @@ const updateUser = async (req: Request, res: Response) => {
     const formData = req.body as Partial<IUser>;
 
     if (formData.username) {
-      if (await User.findOne({ username: formData.username })) {
-        res
-          .status(409)
-          .json({ success: false, message: 'Username already exists' });
-        return;
-      }
+      if (await User.findOne({ username: formData.username }))
+        throw 'Username already taken';
 
       user.username = formData.username;
     }
@@ -196,46 +194,32 @@ const updateUser = async (req: Request, res: Response) => {
     await user.save();
     res.json({ success: true });
   } catch (err) {
-    if (err instanceof Error.ValidationError) {
-      if (err.errors.username) {
-        res
-          .status(422)
-          .json({ success: false, message: err.errors['username'].message });
-        return;
-      } else if (err.errors.email) {
-        res
-          .status(422)
-          .json({ success: false, message: err.errors['email'].message });
-        return;
-      } else if (err.errors.password) {
-        res
-          .status(422)
-          .json({ success: false, message: err.errors['password'].message });
-        return;
-      } else if (err.errors.firstName) {
-        res
-          .status(422)
-          .json({ success: false, message: err.errors['firstName'].message });
-        return;
-      } else if (err.errors.lastName) {
-        res
-          .status(422)
-          .json({ success: false, message: err.errors['lastName'].message });
-        return;
-      } else if (err.errors.location) {
-        res
-          .status(422)
-          .json({ success: false, message: err.errors['location'].message });
-        return;
-      } else if (err.errors.contact) {
-        res
-          .status(422)
-          .json({ success: false, message: err.errors['contact'].message });
-        return;
+    if (!res.headersSent) {
+      if (err instanceof Error.ValidationError) {
+        const errorFields = [
+          'username',
+          'email',
+          'password',
+          'firstName',
+          'lastName',
+          'location',
+          'contact',
+        ];
+        const errorMessage = errorFields.find(
+          (field) => (err as Error.ValidationError).errors[field]
+        );
+
+        if (errorMessage) {
+          res
+            .status(422)
+            .json({ error: { message: err.errors[errorMessage].message } });
+        } else {
+          res.status(500).json({ error: { message: 'An error occured' } });
+        }
+      } else if (err instanceof Error) {
+        res.status(400).json({ error: { message: err.message } });
       } else {
-        res.status(422).json({ success: false, message: 'An error occured' });
-        console.error(err);
-        return;
+        res.status(500).json({ error: { message: 'An error occured' } });
       }
     }
   }

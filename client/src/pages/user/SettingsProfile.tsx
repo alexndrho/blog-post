@@ -164,7 +164,7 @@ const ColumnSpan2 = styled('div', {
 const SettingsUser = () => {
   const { isLoggedIn } = useAuth();
 
-  const [userData, setUserData] = useState<IUser | null>();
+  const [userData, setUserData] = useState<IUser | null>(null);
   const [base64Icon, setBase64Icon] = useState('');
   const [showNotification, setShowNotification] = useState(false);
   const [errorMsg, setErrorMsg] = useState('');
@@ -191,9 +191,12 @@ const SettingsUser = () => {
   const updateUserData = useCallback(async () => {
     getUser()
       .then((data) => {
+        if (data?.error) throw new Error(data.error.message);
+
         if (data) {
-          setUserData(data);
+          setUserData(data as IUser);
         } else {
+          setUserData(null);
           throw new Error('User not found');
         }
       })
@@ -211,11 +214,13 @@ const SettingsUser = () => {
     if (!userData?.username) return;
 
     getUserIcon(userData?.username)
-      .then((data) => {
-        if (data) {
+      .then((icon) => {
+        if (icon?.error) throw new Error(icon.error.message);
+
+        if (icon?.mime && icon?.image?.data) {
           setBase64Icon(
-            `data:${data.mime};base64,` +
-              btoa(String.fromCharCode(...new Uint8Array(data.image.data)))
+            `data:${icon.mime};base64,` +
+              btoa(String.fromCharCode(...new Uint8Array(icon.image.data)))
           );
         } else {
           setBase64Icon('');
@@ -289,21 +294,21 @@ const SettingsUser = () => {
         {
           method: 'PUT',
           headers: {
-            'x-access-token': localStorage.getItem('token') as string,
+            'x-access-token': localStorage.getItem('token') || '',
           },
           body: formData,
         }
       );
 
       const responseData = await response.json();
-      if (responseData.success) {
+      if (responseData.error) {
+        setErrorMsg(responseData.error.message);
+        setShowNotification(true);
+      } else {
         resetForm();
         setErrorMsg('');
         updateUserData();
 
-        setShowNotification(true);
-      } else if (responseData.message) {
-        setErrorMsg(responseData.message);
         setShowNotification(true);
       }
     } catch (err) {

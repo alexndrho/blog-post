@@ -35,8 +35,10 @@ const AllBlogs = () => {
   useEffect(() => {
     getBlogs()
       .then((blogs) => {
+        if (blogs?.error) throw new Error(blogs.error.message);
+
         if (blogs) {
-          setBlogs(blogs);
+          setBlogs(blogs as IBlog[]);
         } else {
           throw new Error('No blogs found');
         }

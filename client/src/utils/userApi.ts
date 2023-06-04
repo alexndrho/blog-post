@@ -1,5 +1,9 @@
-import IUser, { ILoginResponse, ISignUpResponse } from '../types/IUser';
-import IUserIcon from '../types/IUserIcon';
+import {
+  IGetUserInfoResponse,
+  ILoginResponse,
+  ISignUpResponse,
+} from '../types/IUser';
+import { IUserIconResponse } from '../types/IUserIcon';
 
 const logIn = async (username: string, password: string) => {
   try {
@@ -14,10 +18,7 @@ const logIn = async (username: string, password: string) => {
       }
     );
 
-    if (!response) throw new Error('Could not log in');
-
     const responseData: ILoginResponse = await response.json();
-    localStorage.setItem('token', responseData.token);
 
     return responseData;
   } catch (err) {
@@ -39,12 +40,12 @@ const signUp = async (username: string, email: string, password: string) => {
       }
     );
 
-    if (!response) throw new Error('Could not sign up');
-
     const responseData: ISignUpResponse = await response.json();
+
     return responseData;
   } catch (err) {
     console.error(err);
+    return null;
   }
 };
 
@@ -60,9 +61,8 @@ const getUser = async () => {
       }
     );
 
-    if (!response.ok) throw new Error('Could not fetch user');
+    const responseData: IGetUserInfoResponse = await response.json();
 
-    const responseData: IUser = await response.json();
     return responseData;
   } catch (err) {
     console.log(err);
@@ -81,9 +81,8 @@ const getUserByUsername = async (username: string) => {
       }
     );
 
-    if (!response.ok) throw new Error('Could not fetch user');
+    const responseData: IGetUserInfoResponse = await response.json();
 
-    const responseData: IUser = await response.json();
     return responseData;
   } catch (err) {
     console.log(err);
@@ -102,9 +101,7 @@ const getUserIcon = async (username: string) => {
       }
     );
 
-    if (!response.ok) throw new Error('Could not fetch user icon');
-
-    const responseData: IUserIcon = await response.json();
+    const responseData: IUserIconResponse = await response.json();
     return responseData;
   } catch (err) {
     console.log(err);

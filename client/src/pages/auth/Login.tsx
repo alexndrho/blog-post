@@ -40,12 +40,12 @@ const Login = () => {
 
     logIn(username, password)
       .then((data) => {
-        if (data?.success) {
-          setErrorMessage('');
+        if (data?.error?.message) {
+          setErrorMessage(data.error.message + '!');
+        } else if (data?.token) {
+          localStorage.setItem('token', data.token);
           setLoggedIn();
           navigate('/');
-        } else if (data?.message) {
-          setErrorMessage(data.message + '!');
         } else {
           setErrorMessage('Something went wrong!');
         }
