@@ -90,8 +90,14 @@ const App = () => {
           <Route path=":id" element={<Blog />} />
         </Route>
 
-        <Route path="/settings" element={<SettingsUser />}>
-          <Route path="profile" element={<SettingsUser />} />
+        <Route path="/settings">
+          {['', 'profile'].map((path) => (
+            <Route
+              key={crypto.randomUUID()}
+              path={path}
+              element={<SettingsUser />}
+            />
+          ))}
         </Route>
 
         <Route path="/:username/*" element={<Profile />} />
