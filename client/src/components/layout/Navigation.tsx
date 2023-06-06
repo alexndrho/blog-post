@@ -189,9 +189,6 @@ const Navigation = () => {
             <A as={Link} to="/" onClick={displayNav}>
               Home
             </A>
-            <A as={Link} to="/blogs" onClick={displayNav}>
-              All blogs
-            </A>
             <A as={Link} to="/blogs/create" onClick={displayNav}>
               Create blog
             </A>
