@@ -3,20 +3,15 @@ import { styled } from '../../../stitches.config';
 const Container = styled('section');
 
 const Title = styled('h2', {
-  fontSize: '$xs',
+  fontSize: '$m-5',
   fontWeight: '600',
   padding: '0.25rem 0',
   borderBottom: '1.5px solid',
   marginBottom: '1rem',
 
-  '@tablet': {
-    padding: '0.5rem 0',
-    fontSize: '$xs',
-  },
-
   '@desktop': {
-    marginBottom: '2.5rem',
-    fontSize: '$s',
+    fontSize: '$4',
+    marginBottom: '1.5rem',
   },
 });
 
@@ -29,15 +24,11 @@ const InfoContainer = styled('div', {
 });
 
 const InfoText = styled('span', {
-  fontSize: '$xxs',
+  fontSize: '$m-5',
   fontWeight: '500',
 
-  '@tablet': {
-    fontSize: '$xs',
-  },
-
   '@desktop': {
-    fontSize: '$s',
+    fontSize: '$5',
   },
 });
 

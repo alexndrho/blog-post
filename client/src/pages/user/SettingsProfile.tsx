@@ -76,12 +76,12 @@ const IconButton = styled('button', {
   color: 'White',
   backgroundColor: 'Black',
   fontFamily: 'inherit',
-  fontSize: '$xxs',
+  fontSize: '$m-6',
   fontWeight: '500',
   appearance: 'none',
 
-  '@tablet': {
-    fontSize: '$xs',
+  '@desktop': {
+    fontSize: '$6',
   },
 });
 
@@ -113,7 +113,7 @@ const IconEditModalOption = styled('p', {
   padding: '0.5em 0.75em',
   paddingRight: '2em',
   display: 'block',
-  fontSize: '$xxs',
+  fontSize: '$m-6',
   userSelect: 'none',
   cursor: 'pointer',
 
@@ -121,8 +121,8 @@ const IconEditModalOption = styled('p', {
     backgroundColor: 'gray',
   },
 
-  '@tablet': {
-    fontSize: '$xs',
+  '@desktop': {
+    fontSize: '$6',
   },
 });
 

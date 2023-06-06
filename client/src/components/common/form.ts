@@ -23,12 +23,12 @@ const Title = styled('h2', {
   variants: {
     size: {
       md: {
-        fontSize: '$m',
+        fontSize: '$m-3',
         marginBottom: '0.75rem',
 
         '@desktop': {
           marginBottom: '1rem',
-          fontSize: '$title',
+          fontSize: '$3',
         },
       },
     },
@@ -43,10 +43,10 @@ const Label = styled('label', {
   variants: {
     size: {
       md: {
-        fontSize: '$xs',
+        fontSize: '$m-5',
 
         '@desktop': {
-          fontSize: '$s',
+          fontSize: '$5',
         },
       },
     },
@@ -82,13 +82,13 @@ const Input = styled('input', {
     size: {
       md: {
         height: '2.75rem',
-        fontSize: '$xs',
+        fontSize: '$m-5',
         padding: '0 0.65rem',
 
         '@desktop': {
           padding: '0 0.7rem',
           height: '3rem',
-          fontSize: '$s',
+          fontSize: '$5',
         },
       },
     },
@@ -130,12 +130,12 @@ const TextArea = styled('textarea', {
         height: '15rem',
         padding: '0.65rem',
         marginBottom: '1rem',
-        fontSize: '$xs',
+        fontSize: '$m-5',
 
         '@desktop': {
           height: '15rem',
           padding: '0.75rem',
-          fontSize: '$s',
+          fontSize: '$5',
         },
       },
     },
@@ -162,26 +162,26 @@ const Button = styled('button', {
   variants: {
     size: {
       btn_sm: {
-        height: '$fontSizes$m',
+        height: '$fontSizes$3',
         padding: '0 0.45rem',
-        fontSize: '$xs',
+        fontSize: '$6',
       },
 
       btn_md: {
         height: '2.65rem',
         padding: '0 0.65rem',
-        fontSize: '$xs',
+        fontSize: '$6',
       },
 
       //form btn
       md: {
         height: '2.75rem',
-        fontSize: '$xs',
+        fontSize: '$m-5',
         padding: '0 0.7rem',
 
         '@desktop': {
           height: '3rem',
-          fontSize: '$s',
+          fontSize: '$5',
         },
       },
     },
@@ -231,11 +231,11 @@ const Info = styled('p', {
     size: {
       md: {
         marginTop: '0.5rem',
-        fontSize: '$xs',
+        fontSize: '$m-5',
 
         '@desktop': {
           marginTop: '0.75rem',
-          fontSize: '$s',
+          fontSize: '$5',
         },
       },
     },

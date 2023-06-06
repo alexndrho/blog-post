@@ -30,13 +30,9 @@ const TitleWrapper = styled('div', {
 const Title = styled('h1', {
   position: 'relative',
   zIndex: 99,
-  fontSize: '2.25rem',
+  fontSize: '$3',
   userSelect: 'none',
   fontWeight: 'bolder',
-
-  '@desktop': {
-    fontSize: '$l',
-  },
 });
 
 const Menu = styled('div', {
@@ -76,7 +72,7 @@ const Nav = styled('nav', {
 const A = styled('a', {
   marginTop: '1rem',
   textDecoration: 'none',
-  fontSize: '$xs',
+  fontSize: '$5',
   fontWeight: '600',
   color: 'Black',
   padding: '0.75rem 1rem',
