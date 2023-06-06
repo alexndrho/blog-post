@@ -17,7 +17,7 @@ const Main = styled('main', {
 
 const Title = styled('h2', {
   marginBottom: '1rem',
-  fontSize: '$m',
+  fontSize: '$3',
   fontWeight: '700',
 
   '@desktop': {

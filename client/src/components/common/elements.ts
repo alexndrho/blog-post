@@ -18,7 +18,7 @@ const A = styled('a', {
   variants: {
     size: {
       btn_sm: {
-        height: '$fontSizes$m',
+        height: '$fontSizes$3',
         padding: '0 0.45rem',
         fontSize: '$xs',
       },
@@ -26,13 +26,13 @@ const A = styled('a', {
       btn_md: {
         height: '2.65rem',
         padding: '0 0.65rem',
-        fontSize: '$xs',
+        fontSize: '$6',
       },
 
       //form btn
       md: {
         height: '3rem',
-        fontSize: '$s',
+        fontSize: '$5',
       },
     },
 

@@ -7,14 +7,14 @@ const NotificationContainer = styled('div', {
   padding: '1.25rem 2rem',
   color: 'White',
   backgroundColor: 'Black',
-  fontSize: '$xs',
+  fontSize: '$m-5',
 
   display: 'flex',
   justifyContent: 'space-between',
   alignItems: 'center',
 
   '@desktop': {
-    fontSize: '$s',
+    fontSize: '$5',
   },
 });
 

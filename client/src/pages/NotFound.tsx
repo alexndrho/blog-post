@@ -31,13 +31,14 @@ const Title = styled('h2', {
 });
 
 const P = styled('p', {
-  fontSize: '$m',
+  fontSize: '$m-3',
   textAlign: 'center',
+
   '@tablet': {
     textAlign: 'left',
   },
   '@desktop': {
-    fontSize: '$l',
+    fontSize: '$3',
     textAlign: 'left',
   },
 });

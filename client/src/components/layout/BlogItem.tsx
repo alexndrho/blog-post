@@ -15,32 +15,33 @@ const A = styled('a', {
   color: 'Black',
 });
 
-const Info = styled('p', {
-  marginBottom: '0.25rem',
-  color: 'DimGray',
-  fontSize: '$xxs',
-  fontWeight: 500,
+const TitleItem = styled('h2', {
+  fontSize: '$m-3',
+  marginBottom: '0.125rem',
 
   '@desktop': {
-    fontSize: '$xs',
+    fontSize: '$3',
   },
 });
 
-const TitleItem = styled('h2', {
-  fontSize: '$s',
-  marginBottom: '0.5rem',
+const Info = styled('p', {
+  marginBottom: '1rem',
+  color: 'DimGray',
+  fontSize: '$m-6',
+  fontWeight: 500,
 
   '@desktop': {
-    fontSize: '$m',
+    marginBottom: '1.25rem',
+    fontSize: '$6',
   },
 });
 
 const SnippetItem = styled('p', {
   textAlign: 'justify',
-  fontSize: '$xs',
+  fontSize: '$m-4',
 
   '@desktop': {
-    fontSize: '$s',
+    fontSize: '$4',
   },
 });
 
@@ -52,6 +53,7 @@ const BlogItem = ({ _id, username, title, snippet, createdAt }: Props) => {
   return (
     <Div>
       <A as={Link} to={`${import.meta.env.VITE_BASE_URL_CLIENT}/blogs/${_id}`}>
+        <TitleItem>{title}</TitleItem>
         <Info>
           {new Intl.DateTimeFormat('en-US', {
             month: 'long',
@@ -60,7 +62,7 @@ const BlogItem = ({ _id, username, title, snippet, createdAt }: Props) => {
           }).format(new Date(createdAt as string))}{' '}
           &#8226; {username}
         </Info>
-        <TitleItem>{title}</TitleItem>
+
         <SnippetItem>{snippet}</SnippetItem>
       </A>
     </Div>

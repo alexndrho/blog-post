@@ -13,32 +13,32 @@ const Main = styled('main', {
 });
 
 const TitleBlog = styled('h2', {
-  fontSize: '$s',
+  fontSize: '$m-2',
   '@desktop': {
-    fontSize: '$m',
+    fontSize: '$2',
   },
 });
 
 const Info = styled('p', {
-  marginBottom: '$fontSizes$xs',
+  marginBottom: '$fontSizes$5',
   color: 'DimGray',
-  fontSize: '0.85rem',
+  fontSize: 'm-5',
   fontWeight: 500,
 
   '@desktop': {
-    marginBottom: '$fontSizes$s',
-    fontSize: '$xs',
+    marginBottom: '$fontSizes$5',
+    fontSize: '$5',
   },
 });
 
 const BodyBlog = styled('p', {
   textAlign: 'justify',
-  fontSize: '$xs',
-  marginBottom: '$fontSizes$xs',
+  fontSize: '$m-5',
+  marginBottom: '$fontSizes$m-5',
 
   '@desktop': {
-    fontSize: '$s',
-    marginBottom: '$fontSizes$s',
+    fontSize: '$5',
+    marginBottom: '$fontSizes$5',
   },
 });
 

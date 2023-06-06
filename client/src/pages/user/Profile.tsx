@@ -59,23 +59,27 @@ const Icon = styled('img', {
 const BannerInfoContainer = styled('div');
 
 const BannerTitle = styled('h1', {
-  fontSize: '$s',
+  fontSize: '$m-3',
   fontWeight: '700',
 
   '@tablet': {
-    fontSize: '$m',
+    fontSize: '$4',
   },
 
   '@desktop': {
-    fontSize: '$l',
+    fontSize: '$3',
   },
 });
 
 const BannerDesc = styled('p', {
-  fontSize: '$xs',
+  fontSize: '$m-5',
 
   '@tablet': {
-    fontSize: '$s',
+    fontSize: '$6',
+  },
+
+  '@desktop': {
+    fontSize: '$5',
   },
 });
 
@@ -94,21 +98,21 @@ const Nav = styled('div', {
   alignItems: 'center',
 
   '@desktop': {
-    margin: '2.5rem auto',
+    margin: '2rem auto',
   },
 });
 
 const LinkCSS = {
   height: 'auto',
   padding: '0.35rem',
-  fontSize: '$xxs',
+  fontSize: '$m-5',
 
   '@tablet': {
-    fontSize: '$xs',
+    fontSize: '$6',
   },
 
   '@desktop': {
-    fontSize: '$s',
+    fontSize: '$5',
   },
 };
 

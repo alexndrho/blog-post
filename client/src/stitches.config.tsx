@@ -11,13 +11,31 @@ const { styled, globalCss, css } = createStitches({
       default: 'Raleway, sans-serif',
     },
     fontSizes: {
-      xxs: '0.75rem',
-      xs: '1rem',
-      s: '1.25rem',
-      m: '2rem',
-      l: '2.5rem',
-      xl: '3.5rem',
+      // xxs: '0.75rem',
+      // xs: '1rem',
+      // s: '1.25rem',
+      // m: '2rem',
+      // l: '2.5rem',
+      // xl: '3.5rem',
+
       title: '2.5rem',
+
+      // desktop
+      1: '3.75rem',
+      2: '3rem',
+      3: '2.25rem',
+      4: '1.5rem',
+      5: '1.125rem',
+      6: '1rem',
+      7: '0.75rem',
+
+      // mobile
+      'm-1': '2.5rem',
+      'm-2': '2rem',
+      'm-3': '1.5rem',
+      'm-4': '1.25rem',
+      'm-5': '1rem',
+      'm-6': '0.75rem',
     },
     sizes: {
       contentWidth: '1280px',
