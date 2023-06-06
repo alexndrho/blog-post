@@ -6,6 +6,7 @@ import { useEffect, useRef } from 'react';
 import { Link } from 'react-router-dom';
 
 const Header = styled('header', {
+  backgroundColor: 'White',
   paddingTop: '1rem',
   paddingBottom: '1rem',
 });
