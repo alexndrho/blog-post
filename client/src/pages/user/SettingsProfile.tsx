@@ -1,11 +1,12 @@
 import { styled } from '../../stitches.config';
 import { useAuth } from '../../context/useAuth';
+import { useUser } from '../../context/useUser';
 import Notification from '../../components/layout/Notification';
 import LoginToContinue from '../LoginToContinue';
 import { Title, Label, Input, Button } from '../../components/common/form';
 import { getUser, getUserIcon } from '../../utils/userApi';
 import IUser from '../../types/IUser';
-import React, { useEffect, useCallback, useRef, useState } from 'react';
+import React, { useCallback, useEffect, useRef, useState } from 'react';
 
 // container
 const Main = styled('main', {
@@ -161,12 +162,12 @@ const ColumnSpan2 = styled('div', {
 
 const SettingsUser = () => {
   const { isLoggedIn } = useAuth();
+  const { user, userIcon, setUser, setUserIcon } = useUser();
 
-  const [userData, setUserData] = useState<IUser | null>(null);
-  const [base64Icon, setBase64Icon] = useState('');
   const [showNotification, setShowNotification] = useState(false);
   const [errorMsg, setErrorMsg] = useState('');
 
+  const [previewIcon, setPreviewIcon] = useState(userIcon);
   const [profileIcon, setProfileIcon] = useState<File | null>(null);
   const [firstName, setFirstName] = useState('');
   const [lastName, setLastName] = useState('');
@@ -192,43 +193,37 @@ const SettingsUser = () => {
         if (data?.error) throw new Error(data.error.message);
 
         if (data) {
-          setUserData(data as IUser);
+          setUser(data as IUser);
         } else {
-          setUserData(null);
+          setUser(null);
           throw new Error('User not found');
         }
       })
       .catch((err) => {
         console.error(err);
       });
-  }, []);
-
-  // useEffects
-  useEffect(() => {
-    updateUserData();
-  }, [updateUserData]);
-
-  useEffect(() => {
-    if (!userData?.username) return;
 
     getUserIcon()
       .then((icon) => {
         if (icon?.error) throw new Error(icon.error.message);
 
         if (icon?.mime && icon?.image?.data) {
-          setBase64Icon(
+          setUserIcon(
             `data:${icon.mime};base64,` +
               btoa(String.fromCharCode(...new Uint8Array(icon.image.data)))
           );
         } else {
-          setBase64Icon('');
+          setUserIcon('');
           throw new Error('User icon not found');
         }
       })
-      .catch((err) => {
-        console.error(err);
-      });
-  }, [userData]);
+      .catch((err) => console.error(err));
+  }, [setUser, setUserIcon]);
+
+  // useEffects
+  useEffect(() => {
+    setPreviewIcon(userIcon);
+  }, [userIcon]);
 
   // handlers
   const resetForm = () => {
@@ -270,7 +265,7 @@ const SettingsUser = () => {
     const reader = new FileReader();
     reader.readAsDataURL(file);
     reader.onload = () => {
-      setBase64Icon(reader.result as string);
+      setPreviewIcon(reader.result as string);
     };
   };
 
@@ -336,8 +331,8 @@ const SettingsUser = () => {
         <IconSection>
           <ProfileContainer>
             <IconContainer>
-              {base64Icon ? (
-                <Icon src={base64Icon} alt="profile-icon" />
+              {previewIcon ? (
+                <Icon src={previewIcon} alt="profile-icon" />
               ) : (
                 <Icon blank />
               )}
@@ -377,7 +372,7 @@ const SettingsUser = () => {
             </Label>
             <Input
               id="first-name"
-              placeholder={`${userData?.firstName ? userData.firstName : ''}`}
+              placeholder={`${user?.firstName ? user.firstName : ''}`}
               ref={firstNameRef}
               onChange={(e) => setFirstName(e.target.value)}
             />
@@ -389,7 +384,7 @@ const SettingsUser = () => {
             </Label>
             <Input
               id="last-name"
-              placeholder={`${userData?.lastName ? userData.lastName : ''}`}
+              placeholder={`${user?.lastName ? user.lastName : ''}`}
               ref={lastNameRef}
               onChange={(e) => setLastName(e.target.value)}
             />
@@ -401,7 +396,7 @@ const SettingsUser = () => {
             </Label>
             <Input
               id="username"
-              placeholder={`${userData?.username ? userData.username : ''}`}
+              placeholder={`${user?.username ? user.username : ''}`}
               ref={usernameRef}
               onChange={(e) => setUsername(e.target.value)}
             />
@@ -414,7 +409,7 @@ const SettingsUser = () => {
             <Input
               id="email"
               type="email"
-              placeholder={`${userData?.email ? userData.email : ''}`}
+              placeholder={`${user?.email ? user.email : ''}`}
               ref={emailRef}
               onChange={(e) => setEmail(e.target.value)}
             />
@@ -426,7 +421,7 @@ const SettingsUser = () => {
             </Label>
             <Input
               id="location"
-              placeholder={`${userData?.location ? userData.location : ''}`}
+              placeholder={`${user?.location ? user.location : ''}`}
               ref={locationRef}
               onChange={(e) => setLocation(e.target.value)}
             />
@@ -438,7 +433,7 @@ const SettingsUser = () => {
             </Label>
             <Input
               id="contact"
-              placeholder={`${userData?.contact ? userData.contact : ''}`}
+              placeholder={`${user?.contact ? user.contact : ''}`}
               ref={contactRef}
               onChange={(e) => setContact(e.target.value)}
             />

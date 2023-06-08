@@ -1,4 +1,5 @@
 import { useAuth } from './context/useAuth';
+import { useUser } from './context/useUser';
 import Loading from './pages/Loading';
 import Navigation from './components/layout/Navigation';
 import Login from './pages/auth/Login';
@@ -10,7 +11,8 @@ import Blog from './pages/blog/Blog';
 import CreateBlog from './pages/blog/CreateBlog';
 import NotFound from './pages/NotFound';
 import { useGlobalCss } from './stitches.config';
-import { IVerifyUserResponse } from './types/IUser';
+import { getUser, getUserIcon } from './utils/userApi';
+import IUser, { IVerifyUserResponse } from './types/IUser';
 
 import { useEffect, useState } from 'react';
 import { Routes, Route } from 'react-router-dom';
@@ -24,6 +26,7 @@ const App = () => {
   useGlobalCss();
 
   const { setLoggedIn, setLoggedOut } = useAuth();
+  const { user, setUser, setUserIcon } = useUser();
   const [isLoading, setIsLoading] = useState(true);
 
   const delayLoadingDone = (duration: number) => {
@@ -74,6 +77,43 @@ const App = () => {
 
     isUserAuth();
   }, [setLoggedIn, setLoggedOut]);
+
+  useEffect(() => {
+    getUser()
+      .then((data) => {
+        if (data?.error) throw new Error(data.error.message);
+
+        if (data) {
+          setUser(data as IUser);
+        } else {
+          setUser(null);
+          throw new Error('User not found');
+        }
+      })
+      .catch((err) => {
+        console.error(err);
+      });
+  }, [setUser]);
+
+  useEffect(() => {
+    if (user) return;
+
+    getUserIcon()
+      .then((icon) => {
+        if (icon?.error) throw new Error(icon.error.message);
+
+        if (icon?.mime && icon?.image?.data) {
+          setUserIcon(
+            `data:${icon.mime};base64,` +
+              btoa(String.fromCharCode(...new Uint8Array(icon.image.data)))
+          );
+        } else {
+          setUserIcon('');
+          throw new Error('User icon not found');
+        }
+      })
+      .catch((err) => console.error(err));
+  }, [user, setUserIcon]);
 
   return (
     <>
