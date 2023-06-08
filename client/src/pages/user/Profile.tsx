@@ -3,7 +3,7 @@ import NotFound from '../NotFound';
 import { A as NavLink } from '../../components/common/elements';
 import ProfileAbout from '../../components/layout/profile/ProfileAbout';
 import BlogItem from '../../components/layout/BlogItem';
-import { getUserByUsername, getUserIcon } from '../../utils/userApi';
+import { getUserByUsername, getUserIconByUsername } from '../../utils/userApi';
 import { getBlogsByUserId } from '../../utils/blogsApi';
 import IUser from '../../types/IUser';
 import IBlog from '../../types/IBlog';
@@ -144,7 +144,7 @@ const Profile = () => {
   useEffect(() => {
     if (!username) return;
 
-    getUserIcon(username)
+    getUserIconByUsername(username)
       .then((icon) => {
         if (icon?.error?.message) throw new Error(icon.error.message);
 

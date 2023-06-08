@@ -211,7 +211,7 @@ const SettingsUser = () => {
   useEffect(() => {
     if (!userData?.username) return;
 
-    getUserIcon(userData?.username)
+    getUserIcon()
       .then((icon) => {
         if (icon?.error) throw new Error(icon.error.message);
 

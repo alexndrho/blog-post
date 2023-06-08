@@ -70,6 +70,26 @@ const getUser = async () => {
   }
 };
 
+const getUserIcon = async () => {
+  try {
+    const response = await fetch(
+      `${import.meta.env.VITE_BASE_URL_SERVER}/user/icon`,
+      {
+        headers: {
+          Accept: 'application/json',
+          'x-access-token': localStorage.getItem('token') || '',
+        },
+      }
+    );
+
+    const responseData: IUserIconResponse = await response.json();
+    return responseData;
+  } catch (err) {
+    console.log(err);
+    return null;
+  }
+};
+
 const getUserByUsername = async (username: string) => {
   try {
     const response = await fetch(
@@ -90,7 +110,7 @@ const getUserByUsername = async (username: string) => {
   }
 };
 
-const getUserIcon = async (username: string) => {
+const getUserIconByUsername = async (username: string) => {
   try {
     const response = await fetch(
       `${import.meta.env.VITE_BASE_URL_SERVER}/user/${username}/icon`,
@@ -109,4 +129,11 @@ const getUserIcon = async (username: string) => {
   }
 };
 
-export { logIn, signUp, getUser, getUserByUsername, getUserIcon };
+export {
+  logIn,
+  signUp,
+  getUser,
+  getUserIcon,
+  getUserByUsername,
+  getUserIconByUsername,
+};
