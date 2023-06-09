@@ -1,5 +1,4 @@
 import { styled } from '../../stitches.config';
-import { UsernameLink } from '../common/UsernameLink';
 import { Link } from 'react-router-dom';
 import IBlog from '../../types/IBlog';
 
@@ -55,20 +54,17 @@ const BlogItem = ({ _id, username, title, snippet, createdAt }: Props) => {
     <Div>
       <A as={Link} to={`${import.meta.env.VITE_BASE_URL_CLIENT}/blogs/${_id}`}>
         <TitleItem>{title}</TitleItem>
-        <Info>
-          {new Intl.DateTimeFormat('en-US', {
-            month: 'long',
-            day: 'numeric',
-            year: 'numeric',
-          }).format(new Date(createdAt as string))}{' '}
-          &#8226;{' '}
-          <UsernameLink as={Link} to={`/${username}`}>
-            {username}
-          </UsernameLink>
-        </Info>
-
-        <SnippetItem>{snippet}</SnippetItem>
       </A>
+      <Info>
+        {new Intl.DateTimeFormat('en-US', {
+          month: 'long',
+          day: 'numeric',
+          year: 'numeric',
+        }).format(new Date(createdAt as string))}{' '}
+        &#8226; {username}
+      </Info>
+
+      <SnippetItem>{snippet}</SnippetItem>
     </Div>
   );
 };
