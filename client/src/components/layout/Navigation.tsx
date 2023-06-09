@@ -181,6 +181,7 @@ const Arrow = styled('span', {
 
 const ProfileModal = styled('dialog', {
   inset: 'calc(100% + 0.5rem) 0 auto auto',
+  zIndex: 98,
 
   borderRadius: '0.5rem',
   border: 'none',
