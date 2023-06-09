@@ -269,11 +269,18 @@ const SettingsUser = () => {
     };
   };
 
+  const handleIconRemove = () => {
+    iconEditDialogRef.current?.close();
+
+    setProfileIcon(null);
+    setPreviewIcon('');
+  };
+
   const handleFormSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
     const formData = new FormData();
-    if (profileIcon) formData.append('profileIcon', profileIcon);
+    formData.append('profileIcon', profileIcon || '');
     formData.append('firstName', firstName);
     formData.append('lastName', lastName);
     formData.append('username', username);
@@ -356,7 +363,10 @@ const SettingsUser = () => {
                     Upload a photo
                   </IconEditModalOption>
 
-                  <IconEditModalOption role="menuitem">
+                  <IconEditModalOption
+                    role="menuitem"
+                    onClick={handleIconRemove}
+                  >
                     Remove photo
                   </IconEditModalOption>
                 </IconEditModal>
