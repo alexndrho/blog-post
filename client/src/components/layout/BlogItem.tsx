@@ -1,4 +1,5 @@
 import { styled } from '../../stitches.config';
+import { UsernameLink } from '../common/UsernameLink';
 import { Link } from 'react-router-dom';
 import IBlog from '../../types/IBlog';
 
@@ -60,7 +61,10 @@ const BlogItem = ({ _id, username, title, snippet, createdAt }: Props) => {
             day: 'numeric',
             year: 'numeric',
           }).format(new Date(createdAt as string))}{' '}
-          &#8226; {username}
+          &#8226;{' '}
+          <UsernameLink as={Link} to={`/${username}`}>
+            {username}
+          </UsernameLink>
         </Info>
 
         <SnippetItem>{snippet}</SnippetItem>

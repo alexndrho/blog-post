@@ -1,9 +1,11 @@
 import { styled } from '../../stitches.config';
+import { UsernameLink } from '../../components/common/UsernameLink';
 import { getBlog, getBlogsUsernames } from '../../utils/blogsApi';
 import NotFound from '../NotFound';
 import IBlog from '../../types/IBlog';
 import { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 
 const Main = styled('main', {
   margin: '0 auto',
@@ -95,7 +97,11 @@ const Blog = () => {
           {blogData && userName && (
             <>
               <Info>
-                By {userName} -{' '}
+                By{' '}
+                <UsernameLink as={Link} to={`/${userName}`}>
+                  {userName}
+                </UsernameLink>{' '}
+                -{' '}
                 {new Intl.DateTimeFormat('en-US', {
                   month: 'long',
                   day: 'numeric',
