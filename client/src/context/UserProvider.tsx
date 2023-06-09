@@ -1,14 +1,14 @@
 import { createContext, useState } from 'react';
 import IUser from '../types/IUser';
 
-interface UserContextData {
+interface IUserContext {
   user: IUser | null;
   setUser: (user: IUser | null) => void;
   userIcon: string;
   setUserIcon: (userIcon: string) => void;
 }
 
-const UserContext = createContext<UserContextData>({} as UserContextData);
+const UserContext = createContext<IUserContext>({} as IUserContext);
 
 interface Prop {
   children: React.ReactNode;
@@ -27,3 +27,4 @@ const UserProvider = ({ children }: Prop) => {
 
 export default UserProvider;
 export { UserContext };
+export type { IUserContext };

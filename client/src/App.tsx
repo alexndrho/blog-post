@@ -12,74 +12,45 @@ import CreateBlog from './pages/blog/CreateBlog';
 import NotFound from './pages/NotFound';
 import { useGlobalCss } from './stitches.config';
 import { getUser, getUserIcon } from './utils/userApi';
-import IUser, { IVerifyUserResponse } from './types/IUser';
+import IUser from './types/IUser';
 
-import { useEffect, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import { Routes, Route } from 'react-router-dom';
 import '@fontsource/raleway/400.css';
 import '@fontsource/raleway/500.css';
 import '@fontsource/raleway/600.css';
 import '@fontsource/raleway/700.css';
 import '@fontsource/raleway/800.css';
+import { isUserAuth } from './utils/authApi';
 
 const App = () => {
   useGlobalCss();
 
-  const { setLoggedIn, setLoggedOut } = useAuth();
-  const { user, setUser, setUserIcon } = useUser();
+  const { isLoggedIn, setLoggedIn, setLoggedOut } = useAuth();
+  const { setUser, setUserIcon } = useUser();
   const [isLoading, setIsLoading] = useState(true);
 
   const delayLoadingDone = (duration: number) => {
+    if (duration > 1000) {
+      setIsLoading(false);
+      return;
+    }
+
     setTimeout(() => {
       setIsLoading(false);
     }, 1000 - duration);
   };
 
-  useEffect(() => {
-    const isUserAuth = async () => {
-      setIsLoading(true);
-      const currentTime = new Date().getTime();
+  const updateUser = useCallback(async () => {
+    if (!isLoggedIn) {
+      delayLoadingDone(0);
+      return;
+    }
 
-      try {
-        const response = await fetch(
-          `${import.meta.env.VITE_BASE_URL_SERVER}/isUserAuth`,
-          {
-            headers: {
-              'x-access-token': localStorage.getItem('token') as string,
-            },
-          }
-        );
+    setIsLoading(true);
+    const startTime = Date.now();
 
-        const responseData: IVerifyUserResponse = await response.json();
-        const responseTime = new Date().getTime();
-
-        if (responseData.error) throw new Error(responseData.error.message);
-
-        if (responseData.token) {
-          localStorage.setItem('token', responseData.token);
-          setLoggedIn();
-
-          if (responseTime - currentTime < 1000) {
-            delayLoadingDone(responseTime - currentTime);
-          } else {
-            delayLoadingDone(responseTime - currentTime);
-          }
-        } else {
-          setLoggedOut();
-          delayLoadingDone(responseTime - currentTime);
-        }
-      } catch (err) {
-        setLoggedOut();
-        delayLoadingDone(0);
-        console.error(err);
-      }
-    };
-
-    isUserAuth();
-  }, [setLoggedIn, setLoggedOut]);
-
-  useEffect(() => {
-    getUser()
+    await getUser()
       .then((data) => {
         if (data?.error) throw new Error(data.error.message);
 
@@ -93,12 +64,8 @@ const App = () => {
       .catch((err) => {
         console.error(err);
       });
-  }, [setUser]);
 
-  useEffect(() => {
-    if (user) return;
-
-    getUserIcon()
+    await getUserIcon()
       .then((icon) => {
         if (icon?.error) throw new Error(icon.error.message);
 
@@ -113,7 +80,17 @@ const App = () => {
         }
       })
       .catch((err) => console.error(err));
-  }, [user, setUserIcon]);
+
+    delayLoadingDone(Date.now() - startTime);
+  }, [isLoggedIn, setUser, setUserIcon]);
+
+  useEffect(() => {
+    isUserAuth(setLoggedIn, setLoggedOut).catch((err) => console.error(err));
+  }, [setLoggedIn, setLoggedOut]);
+
+  useEffect(() => {
+    updateUser();
+  }, [isLoggedIn, updateUser]);
 
   return (
     <>

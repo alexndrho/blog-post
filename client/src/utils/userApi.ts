@@ -1,53 +1,5 @@
-import {
-  IGetUserInfoResponse,
-  ILoginResponse,
-  ISignUpResponse,
-} from '../types/IUser';
+import { IGetUserInfoResponse } from '../types/IUser';
 import { IUserIconResponse } from '../types/IUserIcon';
-
-const logIn = async (username: string, password: string) => {
-  try {
-    const response = await fetch(
-      `${import.meta.env.VITE_BASE_URL_SERVER}/login`,
-      {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({ username, password }),
-      }
-    );
-
-    const responseData: ILoginResponse = await response.json();
-
-    return responseData;
-  } catch (err) {
-    console.log(err);
-    return null;
-  }
-};
-
-const signUp = async (username: string, email: string, password: string) => {
-  try {
-    const response = await fetch(
-      `${import.meta.env.VITE_BASE_URL_SERVER}/signup`,
-      {
-        method: 'POST',
-        headers: {
-          'Content-type': 'application/json',
-        },
-        body: JSON.stringify({ username, email, password }),
-      }
-    );
-
-    const responseData: ISignUpResponse = await response.json();
-
-    return responseData;
-  } catch (err) {
-    console.error(err);
-    return null;
-  }
-};
 
 const getUser = async () => {
   try {
@@ -129,11 +81,4 @@ const getUserIconByUsername = async (username: string) => {
   }
 };
 
-export {
-  logIn,
-  signUp,
-  getUser,
-  getUserIcon,
-  getUserByUsername,
-  getUserIconByUsername,
-};
+export { getUser, getUserIcon, getUserByUsername, getUserIconByUsername };

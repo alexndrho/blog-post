@@ -1,12 +1,12 @@
 import React, { createContext, useState } from 'react';
 
-interface AuthContextData {
+interface IAuthContext {
   isLoggedIn: boolean;
   setLoggedIn: () => void;
   setLoggedOut: () => void;
 }
 
-const AuthContext = createContext<AuthContextData>({} as AuthContextData);
+const AuthContext = createContext<IAuthContext>({} as IAuthContext);
 
 interface Prop {
   children: React.ReactNode;
@@ -32,3 +32,4 @@ const AuthProvider = ({ children }: Prop) => {
 
 export default AuthProvider;
 export { AuthContext };
+export type { IAuthContext };

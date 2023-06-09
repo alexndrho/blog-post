@@ -2,6 +2,7 @@ import { styled } from '../../stitches.config';
 import { A as AStyled } from '../common/elements';
 import { useAuth } from '../../context/useAuth';
 import { useUser } from '../../context/useUser';
+import { logOut } from '../../utils/authApi';
 
 import { useEffect, useRef } from 'react';
 import { Link } from 'react-router-dom';
@@ -211,7 +212,7 @@ const tabletCss = {
 
 const Navigation = () => {
   const { isLoggedIn, setLoggedOut } = useAuth();
-  const { user, userIcon } = useUser();
+  const { user, userIcon, setUser, setUserIcon } = useUser();
   const linksRef = useRef<HTMLUListElement>(null);
 
   const profileModalRef = useRef<HTMLDialogElement>(null);
@@ -225,11 +226,6 @@ const Navigation = () => {
       }, 2000);
     });
   }, []);
-
-  const logOut = () => {
-    localStorage.removeItem('token');
-    setLoggedOut();
-  };
 
   const toggleProfileMenu = () => {
     arrowRef.current?.classList.toggle('active');
@@ -294,7 +290,7 @@ const Navigation = () => {
                   as={Link}
                   to="/"
                   onClick={() => {
-                    logOut();
+                    logOut(setLoggedOut, setUser, setUserIcon);
                     toggleDisplayNav();
                   }}
                   css={tabletCss}
@@ -336,7 +332,11 @@ const Navigation = () => {
                   <ProfileModalLink as={Link} to={`/settings/profile`}>
                     Settings
                   </ProfileModalLink>
-                  <ProfileModalLink as={Link} to="/" onClick={logOut}>
+                  <ProfileModalLink
+                    as={Link}
+                    to="/"
+                    onClick={() => logOut(setLoggedOut, setUser, setUserIcon)}
+                  >
                     Log out
                   </ProfileModalLink>
                 </ProfileModal>

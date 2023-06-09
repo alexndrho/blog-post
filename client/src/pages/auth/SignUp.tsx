@@ -11,7 +11,7 @@ import {
 import ErrorMessage from '../../components/layout/ErrorMessage';
 import React, { useEffect, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import { signUp } from '../../utils/userApi';
+import { signUp } from '../../utils/authApi';
 
 const Main = styled('main', {
   minHeight: '80%',

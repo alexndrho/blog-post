@@ -1,6 +1,6 @@
 import { useAuth } from '../../context/useAuth';
 import { styled } from '../../stitches.config';
-import { logIn } from '../../utils/userApi';
+import { logIn } from '../../utils/authApi';
 import {
   Title,
   Form,
@@ -36,13 +36,12 @@ const Login = () => {
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
 
-    logIn(username, password)
+    logIn(username, password, setLoggedIn)
       .then((data) => {
         if (data?.error?.message) {
           setErrorMessage(data.error.message + '!');
         } else if (data?.token) {
           localStorage.setItem('token', data.token);
-          setLoggedIn();
           navigate('/');
         } else {
           setErrorMessage('Something went wrong!');
