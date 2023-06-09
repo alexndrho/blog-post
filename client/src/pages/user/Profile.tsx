@@ -126,7 +126,7 @@ const Profile = () => {
   const [blogs, setBlogs] = useState<IBlog[]>([]);
   const [base64Icon, setBase64Icon] = useState<string>('');
 
-  const [userNotFound, setUserNotFound] = useState<boolean>(true);
+  const [userNotFound, setUserNotFound] = useState<boolean>(false);
 
   useEffect(() => {
     if (!username) return;
@@ -136,6 +136,8 @@ const Profile = () => {
         if (user && !user.error) {
           setUserData(user as IUser);
           setUserNotFound(false);
+        } else {
+          setUserNotFound(true);
         }
       })
       .catch((err) => console.error(err));
