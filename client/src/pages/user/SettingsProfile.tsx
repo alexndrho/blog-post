@@ -5,6 +5,7 @@ import Notification from '../../components/layout/Notification';
 import LoginToContinue from '../LoginToContinue';
 import { Title, Label, Input, Button } from '../../components/common/form';
 import { getUser, getUserIcon } from '../../utils/userApi';
+import { convertImageDataToBlobUrl } from '../../utils/convertImage';
 import IUser from '../../types/IUser';
 import React, { useCallback, useEffect, useRef, useState } from 'react';
 
@@ -208,10 +209,9 @@ const SettingsUser = () => {
         if (icon?.error) throw new Error(icon.error.message);
 
         if (icon?.mime && icon?.image?.data) {
-          setUserIcon(
-            `data:${icon.mime};base64,` +
-              btoa(String.fromCharCode(...new Uint8Array(icon.image.data)))
-          );
+          const blobUrl = convertImageDataToBlobUrl(icon.mime, icon.image);
+
+          setUserIcon(blobUrl);
         } else {
           setUserIcon('');
           throw new Error('User icon not found');

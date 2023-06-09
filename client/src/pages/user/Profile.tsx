@@ -5,6 +5,7 @@ import ProfileAbout from '../../components/layout/profile/ProfileAbout';
 import BlogItem from '../../components/layout/BlogItem';
 import { getUserByUsername, getUserIconByUsername } from '../../utils/userApi';
 import { getBlogsByUserId } from '../../utils/blogsApi';
+import { convertImageDataToBlobUrl } from '../../utils/convertImage';
 import IUser from '../../types/IUser';
 import IBlog from '../../types/IBlog';
 
@@ -124,7 +125,7 @@ const Profile = () => {
 
   const [userData, setUserData] = useState<IUser | null>(null);
   const [blogs, setBlogs] = useState<IBlog[]>([]);
-  const [base64Icon, setBase64Icon] = useState<string>('');
+  const [iconBlobUrl, setIconBlobUrl] = useState<string>('');
 
   const [userNotFound, setUserNotFound] = useState<boolean>(false);
 
@@ -151,10 +152,9 @@ const Profile = () => {
         if (icon?.error?.message) throw new Error(icon.error.message);
 
         if (icon?.mime && icon?.image?.data) {
-          setBase64Icon(
-            `data:${icon.mime};base64,` +
-              btoa(String.fromCharCode(...new Uint8Array(icon.image.data)))
-          );
+          const blobUrl = convertImageDataToBlobUrl(icon.mime, icon.image);
+
+          setIconBlobUrl(blobUrl);
         } else {
           throw new Error('No icon found');
         }
@@ -185,8 +185,8 @@ const Profile = () => {
   return (
     <>
       <Banner>
-        {base64Icon ? (
-          <Icon src={base64Icon} alt="profile-icon" />
+        {iconBlobUrl ? (
+          <Icon src={iconBlobUrl} alt="profile-icon" />
         ) : (
           <Icon blank />
         )}

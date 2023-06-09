@@ -12,6 +12,7 @@ import CreateBlog from './pages/blog/CreateBlog';
 import NotFound from './pages/NotFound';
 import { useGlobalCss } from './stitches.config';
 import { getUser, getUserIcon } from './utils/userApi';
+import { convertImageDataToBlobUrl } from './utils/convertImage';
 import IUser from './types/IUser';
 
 import { useCallback, useEffect, useState } from 'react';
@@ -70,10 +71,9 @@ const App = () => {
         if (icon?.error) throw new Error(icon.error.message);
 
         if (icon?.mime && icon?.image?.data) {
-          setUserIcon(
-            `data:${icon.mime};base64,` +
-              btoa(String.fromCharCode(...new Uint8Array(icon.image.data)))
-          );
+          const blobUrl = convertImageDataToBlobUrl(icon.mime, icon.image);
+
+          setUserIcon(blobUrl);
         } else {
           setUserIcon('');
           throw new Error('User icon not found');
