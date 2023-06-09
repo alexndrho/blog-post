@@ -188,7 +188,7 @@ const SettingsUser = () => {
 
   // callbacks
   const updateUserData = useCallback(async () => {
-    getUser()
+    await getUser()
       .then((data) => {
         if (data?.error) throw new Error(data.error.message);
 
@@ -203,7 +203,7 @@ const SettingsUser = () => {
         console.error(err);
       });
 
-    getUserIcon()
+    await getUserIcon()
       .then((icon) => {
         if (icon?.error) throw new Error(icon.error.message);
 
