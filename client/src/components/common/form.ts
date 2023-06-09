@@ -154,8 +154,6 @@ const TextArea = styled('textarea', {
 const Button = styled('button', {
   border: 'none',
   borderRadius: '0.5rem',
-  backgroundColor: 'Black',
-  color: 'White',
   fontFamily: 'inherit',
   fontWeight: '600',
 
@@ -187,6 +185,15 @@ const Button = styled('button', {
     },
 
     color: {
+      black: {
+        backgroundColor: 'Black',
+        color: 'White',
+
+        '&:active': {
+          backgroundColor: 'Gray',
+        },
+      },
+
       outline: {
         border: '0.15rem solid Black',
         background: 'none',
@@ -223,6 +230,7 @@ const Button = styled('button', {
 
   defaultVariants: {
     size: 'md',
+    color: 'black',
   },
 });
 
