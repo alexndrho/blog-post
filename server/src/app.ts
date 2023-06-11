@@ -12,12 +12,6 @@ const PORT: string | number = process.env.PORT || 3000;
 
 app.use(cors());
 app.use(express.json());
-// app.get('/isUserAuth', verifyJWT, (req: Request, res: Response) => {
-//   res.json({
-//     isloggedIn: true,
-//     token: req.headers['x-access-token'],
-//   });
-// });
 
 app.use(authenticationRoute);
 app.use('/user', userRoute);

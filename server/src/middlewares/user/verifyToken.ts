@@ -15,7 +15,6 @@ const verifyToken = async (req: Request, res: Response, next: NextFunction) => {
   } catch (err) {
     if (!res.headersSent)
       res.status(400).json({ isLoggedIn: false, message: 'An error occured' });
-    console.error(err);
   }
 };
 

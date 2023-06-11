@@ -21,7 +21,6 @@ const getUserInfo = async (req: Request, res: Response) => {
         res.status(500).json({ error: { message: 'An error occured' } });
       }
     }
-    console.error(err);
   }
 };
 
@@ -42,7 +41,6 @@ const getUserInfoByUsername = async (req: Request, res: Response) => {
         res.status(500).json({ error: { message: 'An error occured' } });
       }
     }
-    console.error(err);
   }
 };
 
@@ -61,7 +59,6 @@ const getUsernameById = async (req: Request, res: Response) => {
         res.status(500).json({ error: { message: 'An error occured' } });
       }
     }
-    console.error(err);
   }
 };
 
@@ -80,7 +77,6 @@ const getUserIcon = async (req: Request, res: Response) => {
         res.status(500).json({ error: { message: 'An error occured' } });
       }
     }
-    console.error(err);
   }
 };
 
@@ -105,7 +101,6 @@ const getUserIconByUsername = async (req: Request, res: Response) => {
         res.status(500).json({ error: { message: 'An error occured' } });
       }
     }
-    console.error(err);
   }
 };
 
@@ -134,7 +129,6 @@ const updateUser = async (req: Request, res: Response) => {
 
       const fileMB = req.file.buffer.byteLength / 1024 / 1024;
 
-      console.log(fileMB);
       if (fileMB > 1) throw 'Please upload an image smaller than 1MB';
 
       const userIcon = await UserIcon.findOne({ userId: user._id });

@@ -20,7 +20,6 @@ const getBlogs = async (req: Request, res: Response) => {
         res.status(500).json({ error: { message: 'An error occured' } });
       }
     }
-    console.error(err);
   }
 };
 
@@ -41,7 +40,6 @@ const getBlogsByUserId = async (req: Request, res: Response) => {
         res.status(500).json({ error: { message: 'An error occured' } });
       }
     }
-    console.error(err);
   }
 };
 
@@ -66,7 +64,6 @@ const getBlog = async (req: Request, res: Response) => {
         res.status(500).json({ error: { message: 'An error occured' } });
       }
     }
-    console.error(err);
   }
 };
 
@@ -98,7 +95,6 @@ const createBlog = async (req: Request, res: Response) => {
         res.status(500).json({ error: { message: 'An error occured' } });
       }
     }
-    console.error(err);
   }
 };
 
@@ -117,7 +113,6 @@ const deleteBlog = async (req: Request, res: Response) => {
         res.status(500).json({ error: { message: 'An error occured' } });
       }
     }
-    console.error(err);
   }
 };
 

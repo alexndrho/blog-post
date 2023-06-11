@@ -26,7 +26,6 @@ const verifyUser = async (req: Request, res: Response, next: NextFunction) => {
         res.status(500).json({ error: { message: 'An error occured' } });
       }
     }
-    console.error(err);
   }
 };
 
@@ -73,7 +72,6 @@ const signUp = async (req: Request, res: Response) => {
         res.status(500).json({ error: { message: 'An error occured' } });
       }
     }
-    console.error(err);
   }
 };
 
@@ -116,7 +114,6 @@ const logIn = async (req: Request, res: Response) => {
         res.status(500).json({ error: { message: 'An error occured' } });
       }
     }
-    console.error(err);
   }
 };
 
