@@ -51,6 +51,9 @@ const userSchema = new Schema(
 userSchema.pre('save', async function (next) {
   if (this.isModified('password')) {
     try {
+      if (this.password === undefined)
+        throw new Error('Password is not provided');
+
       this.password = await bcrypt.hash(this.password, 10);
     } catch (err) {
       return next(err as Error);
