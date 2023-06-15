@@ -1,9 +1,11 @@
 import { model, Schema } from 'mongoose';
 import IUser from '../types/model/user.js';
 import bcrypt from 'bcrypt';
+import { userIconSchema } from './userIcon.js';
 
 const userSchema = new Schema(
   {
+    icon: userIconSchema,
     username: {
       type: String,
       unique: true,
@@ -28,9 +30,6 @@ const userSchema = new Schema(
         /^(?=.*[A-Za-z])(?=.*\d).*$/,
         'Password must at least contain one letter and one number',
       ],
-    },
-    profileIconId: {
-      type: String,
     },
     firstName: {
       type: String,

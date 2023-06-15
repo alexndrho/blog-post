@@ -4,7 +4,7 @@ import { useUser } from '../../context/useUser';
 import Notification from '../../components/layout/Notification';
 import LoginToContinue from '../LoginToContinue';
 import { Title, Label, Input, Button } from '../../components/common/form';
-import { getUser, getUserIcon } from '../../utils/userApi';
+import { getUser } from '../../utils/userApi';
 import { convertImageDataToBlobUrl } from '../../utils/convertImage';
 import IUser from '../../types/IUser';
 import React, { useCallback, useEffect, useRef, useState } from 'react';
@@ -195,6 +195,12 @@ const SettingsUser = () => {
 
         if (data) {
           setUser(data as IUser);
+
+          if (data.icon?.mime && data.icon?.image) {
+            setUserIcon(
+              convertImageDataToBlobUrl(data.icon.mime, data.icon.image)
+            );
+          }
         } else {
           setUser(null);
           throw new Error('User not found');
@@ -203,21 +209,6 @@ const SettingsUser = () => {
       .catch((err) => {
         console.error(err);
       });
-
-    await getUserIcon()
-      .then((icon) => {
-        if (icon?.error) throw new Error(icon.error.message);
-
-        if (icon?.mime && icon?.image?.data) {
-          const blobUrl = convertImageDataToBlobUrl(icon.mime, icon.image);
-
-          setUserIcon(blobUrl);
-        } else {
-          setUserIcon('');
-          throw new Error('User icon not found');
-        }
-      })
-      .catch((err) => console.error(err));
   }, [setUser, setUserIcon]);
 
   // useEffects

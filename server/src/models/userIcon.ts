@@ -1,11 +1,6 @@
-import IUserIcon from '../types/model/userIcon.js';
-import { Schema, model } from 'mongoose';
+import { Schema } from 'mongoose';
 
 const userIconSchema = new Schema({
-  userId: {
-    type: String,
-    required: true,
-  },
   name: {
     type: String,
     required: true,
@@ -20,4 +15,4 @@ const userIconSchema = new Schema({
   },
 });
 
-export default model<IUserIcon>('UserIcon', userIconSchema);
+export { userIconSchema };

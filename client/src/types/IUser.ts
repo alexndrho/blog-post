@@ -1,7 +1,9 @@
+import IUserIcon from './IUserIcon';
 import IError from './IError';
 
 interface IUser {
   _id: string;
+  icon: IUserIcon;
   username: string;
   email: string;
   profileIconId?: string;

@@ -3,7 +3,7 @@ import NotFound from '../NotFound';
 import { A as NavLink } from '../../components/common/elements';
 import ProfileAbout from '../../components/layout/profile/ProfileAbout';
 import BlogItem from '../../components/layout/BlogItem';
-import { getUserByUsername, getUserIconByUsername } from '../../utils/userApi';
+import { getUserByUsername } from '../../utils/userApi';
 import { getBlogsByUserId } from '../../utils/blogsApi';
 import { convertImageDataToBlobUrl } from '../../utils/convertImage';
 import IUser from '../../types/IUser';
@@ -136,27 +136,16 @@ const Profile = () => {
       .then((user) => {
         if (user && !user.error) {
           setUserData(user as IUser);
+
+          if (user.icon?.mime && user.icon?.image) {
+            setIconBlobUrl(
+              convertImageDataToBlobUrl(user.icon.mime, user.icon.image)
+            );
+          }
+
           setUserNotFound(false);
         } else {
           setUserNotFound(true);
-        }
-      })
-      .catch((err) => console.error(err));
-  }, [username]);
-
-  useEffect(() => {
-    if (!username) return;
-
-    getUserIconByUsername(username)
-      .then((icon) => {
-        if (icon?.error?.message) throw new Error(icon.error.message);
-
-        if (icon?.mime && icon?.image?.data) {
-          const blobUrl = convertImageDataToBlobUrl(icon.mime, icon.image);
-
-          setIconBlobUrl(blobUrl);
-        } else {
-          throw new Error('No icon found');
         }
       })
       .catch((err) => console.error(err));

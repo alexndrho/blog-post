@@ -1,4 +1,3 @@
-import UserIcon from '../../models/userIcon.js';
 import User from '../../models/user.js';
 import IUser from '../../types/model/user.js';
 
@@ -62,48 +61,6 @@ const getUsernameById = async (req: Request, res: Response) => {
   }
 };
 
-const getUserIcon = async (req: Request, res: Response) => {
-  try {
-    const userIcon = await UserIcon.findOne({ userId: req.user?.id });
-
-    if (!userIcon) throw 'Unable to find user icon';
-
-    res.status(200).json({ ...userIcon._doc });
-  } catch (err) {
-    if (!res.headersSent) {
-      if (err instanceof Error) {
-        res.status(500).json({ error: { message: err.message } });
-      } else {
-        res.status(500).json({ error: { message: 'An error occured' } });
-      }
-    }
-  }
-};
-
-const getUserIconByUsername = async (req: Request, res: Response) => {
-  const username = req.params.username;
-
-  try {
-    const user = await User.findOne({ username: username });
-
-    if (!user) throw 'Unable to find user';
-
-    const userIcon = await UserIcon.findOne({ userId: user._id });
-
-    if (!userIcon) throw 'Unable to find user icon';
-
-    res.status(200).json({ ...userIcon._doc });
-  } catch (err) {
-    if (!res.headersSent) {
-      if (err instanceof Error) {
-        res.status(500).json({ error: { message: err.message } });
-      } else {
-        res.status(500).json({ error: { message: 'An error occured' } });
-      }
-    }
-  }
-};
-
 const updateUser = async (req: Request, res: Response) => {
   try {
     const user = await User.findById(req.user?.id);
@@ -131,25 +88,11 @@ const updateUser = async (req: Request, res: Response) => {
 
       if (fileMB > 1) throw 'Please upload an image smaller than 1MB';
 
-      const userIcon = await UserIcon.findOne({ userId: user._id });
-      if (userIcon) {
-        userIcon.name = iconName;
-        userIcon.image = req.file.buffer;
-        userIcon.mime = mime;
-        userIcon.save();
-
-        user.profileIconId = userIcon._id;
-      } else {
-        const userIcon = new UserIcon({
-          userId: user._id,
-          name: iconName,
-          image: req.file.buffer,
-          mime: mime,
-        });
-        userIcon.save();
-
-        user.profileIconId = userIcon._id;
-      }
+      user.icon = {
+        name: iconName,
+        image: req.file.buffer,
+        mime: mime,
+      };
     }
 
     const formData = req.body as Partial<IUser>;
@@ -219,11 +162,4 @@ const updateUser = async (req: Request, res: Response) => {
   }
 };
 
-export {
-  getUsernameById,
-  getUserInfo,
-  getUserIcon,
-  getUserInfoByUsername,
-  getUserIconByUsername,
-  updateUser,
-};
+export { getUsernameById, getUserInfo, getUserInfoByUsername, updateUser };
