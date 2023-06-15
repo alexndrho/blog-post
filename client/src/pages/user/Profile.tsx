@@ -3,6 +3,7 @@ import NotFound from '../NotFound';
 import { A as NavLink } from '../../components/common/elements';
 import ProfileAbout from '../../components/layout/profile/ProfileAbout';
 import BlogItem from '../../components/layout/BlogItem';
+import { useUser } from '../../context/useUser';
 import { getUserByUsername } from '../../utils/userApi';
 import { getBlogsByUserId } from '../../utils/blogsApi';
 import { convertImageDataToBlobUrl } from '../../utils/convertImage';
@@ -123,6 +124,7 @@ const Profile = () => {
   const matchAbout = useMatch(`/${username}/about`);
   const matchBlogs = useMatch(`/${username}/blogs`);
 
+  const { user, userIcon } = useUser();
   const [userData, setUserData] = useState<IUser | null>(null);
   const [blogs, setBlogs] = useState<IBlog[]>([]);
   const [iconBlobUrl, setIconBlobUrl] = useState<string>('');
@@ -131,6 +133,13 @@ const Profile = () => {
 
   useEffect(() => {
     if (!username) return;
+
+    if (user?.username === username) {
+      setUserData(user);
+      setIconBlobUrl(userIcon);
+      setUserNotFound(false);
+      return;
+    }
 
     getUserByUsername(username)
       .then((user) => {
@@ -149,7 +158,7 @@ const Profile = () => {
         }
       })
       .catch((err) => console.error(err));
-  }, [username]);
+  }, [username, user, userIcon]);
 
   useEffect(() => {
     if (!userData) return;
