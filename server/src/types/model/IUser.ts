@@ -1,5 +1,5 @@
 import { Document } from 'mongoose';
-import IUserIcon from '../../types/model/userIcon.js';
+import IUserIcon from './IUserIcon.js';
 
 interface DocumentResult<T> {
   _doc: T;

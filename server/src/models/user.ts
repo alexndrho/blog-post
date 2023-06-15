@@ -1,5 +1,5 @@
 import { model, Schema } from 'mongoose';
-import IUser from '../types/model/user.js';
+import IUser from '../types/model/IUser.js';
 import bcrypt from 'bcrypt';
 import { userIconSchema } from './userIcon.js';
 

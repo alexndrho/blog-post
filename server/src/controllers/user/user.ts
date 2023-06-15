@@ -1,5 +1,5 @@
 import User from '../../models/user.js';
-import IUser from '../../types/model/user.js';
+import IUser from '../../types/model/IUser.js';
 
 import { Request, Response } from 'express';
 import { Error } from 'mongoose';

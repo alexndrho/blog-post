@@ -1,5 +1,5 @@
 import { Request, Response } from 'express';
-import IBlog from '../../types/model/blog.js';
+import IBlog from '../../types/model/IBlog.js';
 import Blog from '../../models/blog.js';
 import User from '../../models/user.js';
 
