@@ -8,10 +8,17 @@ import { getUserByUsername } from '../../utils/userApi';
 import { getBlogsByUserId } from '../../utils/blogsApi';
 import { convertImageDataToBlobUrl } from '../../utils/convertImage';
 import IUser from '../../types/IUser';
-import { IBlogData } from '../../types/IBlog';
+import IBlog from '../../types/IBlog';
 
-import { useEffect, useState } from 'react';
-import { useParams, Link, Route, Routes, useMatch } from 'react-router-dom';
+import { useMemo, useState } from 'react';
+import {
+  useParams,
+  Link,
+  Route,
+  Routes,
+  useMatch,
+  useLocation,
+} from 'react-router-dom';
 
 // banner
 const Banner = styled('div', {
@@ -120,18 +127,21 @@ const LinkCSS = {
 
 const Profile = () => {
   const { username } = useParams();
+  const location = useLocation();
+  const page = new URLSearchParams(location.search).get('page');
+
   const matchIndex = useMatch(`/${username}`);
   const matchAbout = useMatch(`/${username}/about`);
   const matchBlogs = useMatch(`/${username}/blogs`);
 
   const { user, userIcon } = useUser();
   const [userData, setUserData] = useState<IUser | null>(null);
-  const [blogs, setBlogs] = useState<IBlogData[]>([]);
+  const [blogs, setBlogs] = useState<IBlog | null>(null);
   const [iconBlobUrl, setIconBlobUrl] = useState<string>('');
 
   const [userNotFound, setUserNotFound] = useState<boolean>(false);
 
-  useEffect(() => {
+  useMemo(() => {
     if (!username) return;
 
     if (user?.username === username) {
@@ -160,21 +170,23 @@ const Profile = () => {
       .catch((err) => console.error(err));
   }, [username, user, userIcon]);
 
-  useEffect(() => {
+  useMemo(() => {
     if (!userData) return;
 
-    getBlogsByUserId(userData?._id)
+    setBlogs(null);
+
+    getBlogsByUserId(userData?._id, page ? parseInt(page) : 1)
       .then((blogs) => {
         if (blogs?.error) throw new Error(blogs.error.message);
 
         if (blogs) {
-          setBlogs(blogs as IBlogData[]);
+          setBlogs(blogs as IBlog);
         } else {
           throw new Error('No blogs found');
         }
       })
       .catch((err) => console.error(err));
-  }, [userData]);
+  }, [userData, page]);
 
   if (userNotFound) {
     return <NotFound />;
@@ -243,12 +255,19 @@ const Profile = () => {
               />
             ))}
 
-            <Route
-              path="/blogs"
-              element={
-                <ProfileBlogs username={userData.username} blogs={blogs} />
-              }
-            />
+            {blogs && (
+              <Route
+                path="/blogs"
+                element={
+                  <ProfileBlogs
+                    username={userData.username}
+                    blogs={blogs}
+                    route={location.pathname}
+                    currentPage={page ? parseInt(page) : 1}
+                  />
+                }
+              />
+            )}
           </Routes>
         )}
       </Main>

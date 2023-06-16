@@ -10,7 +10,7 @@ import { IGetUsernameByIdResponse } from '../types/IUser';
 const getBlogs = async (page: number) => {
   try {
     const responseBlog = await fetch(
-      `${import.meta.env.VITE_BASE_URL_SERVER}/blogs/?page=${page}`,
+      `${import.meta.env.VITE_BASE_URL_SERVER}/blogs?page=${page}`,
       {
         headers: {
           Accept: 'application/json',
@@ -27,10 +27,12 @@ const getBlogs = async (page: number) => {
   }
 };
 
-const getBlogsByUserId = async (userId: string) => {
+const getBlogsByUserId = async (userId: string, page: number) => {
   try {
     const responseBlog = await fetch(
-      `${import.meta.env.VITE_BASE_URL_SERVER}/blogs/user/${userId}`,
+      `${
+        import.meta.env.VITE_BASE_URL_SERVER
+      }/blogs/user/${userId}?page=${page}`,
       {
         headers: {
           Accept: 'application/json',

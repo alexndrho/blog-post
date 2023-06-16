@@ -1,18 +1,24 @@
 import { styled } from '../../../stitches.config';
 import BlogItem from '../BlogItem';
-import { IBlogData } from '../../../types/IBlog';
+import PaginationBar from '../PaginationBar';
+import IBlog from '../../../types/IBlog';
 
-const Container = styled('section');
+const Container = styled('section', {
+  display: 'flex',
+  flexDirection: 'column',
+});
 
 interface Props {
   username: string;
-  blogs: IBlogData[];
+  blogs: IBlog;
+  route: string;
+  currentPage: number;
 }
 
-const ProfileBlogs = ({ username, blogs }: Props) => {
+const ProfileBlogs = ({ username, blogs, route, currentPage }: Props) => {
   return (
     <Container>
-      {blogs.map((blog) => (
+      {blogs.dataBlogs.map((blog) => (
         <BlogItem
           key={crypto.randomUUID()}
           _id={blog._id}
@@ -22,6 +28,12 @@ const ProfileBlogs = ({ username, blogs }: Props) => {
           createdAt={blog.createdAt}
         />
       ))}
+
+      <PaginationBar
+        route={route}
+        currentPage={currentPage}
+        totalPages={blogs.totalPages}
+      />
     </Container>
   );
 };
