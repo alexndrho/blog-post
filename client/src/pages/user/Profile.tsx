@@ -2,7 +2,7 @@ import { styled } from '../../stitches.config';
 import NotFound from '../NotFound';
 import { A as NavLink } from '../../components/common/elements';
 import ProfileAbout from '../../components/layout/profile/ProfileAbout';
-import BlogItem from '../../components/layout/BlogItem';
+import ProfileBlogs from '../../components/layout/profile/ProfileBlogs';
 import { useUser } from '../../context/useUser';
 import { getUserByUsername } from '../../utils/userApi';
 import { getBlogsByUserId } from '../../utils/blogsApi';
@@ -245,16 +245,9 @@ const Profile = () => {
 
             <Route
               path="/blogs"
-              element={blogs.map((blog) => (
-                <BlogItem
-                  key={crypto.randomUUID()}
-                  _id={blog._id}
-                  username={userData.username}
-                  title={blog.title}
-                  snippet={blog.snippet}
-                  createdAt={blog.createdAt}
-                />
-              ))}
+              element={
+                <ProfileBlogs username={userData.username} blogs={blogs} />
+              }
             />
           </Routes>
         )}
