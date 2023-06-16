@@ -8,7 +8,7 @@ import { getUserByUsername } from '../../utils/userApi';
 import { getBlogsByUserId } from '../../utils/blogsApi';
 import { convertImageDataToBlobUrl } from '../../utils/convertImage';
 import IUser from '../../types/IUser';
-import IBlog from '../../types/IBlog';
+import { IBlogData } from '../../types/IBlog';
 
 import { useEffect, useState } from 'react';
 import { useParams, Link, Route, Routes, useMatch } from 'react-router-dom';
@@ -126,7 +126,7 @@ const Profile = () => {
 
   const { user, userIcon } = useUser();
   const [userData, setUserData] = useState<IUser | null>(null);
-  const [blogs, setBlogs] = useState<IBlog[]>([]);
+  const [blogs, setBlogs] = useState<IBlogData[]>([]);
   const [iconBlobUrl, setIconBlobUrl] = useState<string>('');
 
   const [userNotFound, setUserNotFound] = useState<boolean>(false);
@@ -168,7 +168,7 @@ const Profile = () => {
         if (blogs?.error) throw new Error(blogs.error.message);
 
         if (blogs) {
-          setBlogs(blogs as IBlog[]);
+          setBlogs(blogs as IBlogData[]);
         } else {
           throw new Error('No blogs found');
         }

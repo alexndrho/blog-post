@@ -1,15 +1,16 @@
-import IBlog, {
+import {
   IBlogCreateResponse,
+  IBlogData,
   IBlogResponse,
   IBlogsResponse,
 } from '../types/IBlog';
 import { IGetUsernameByIdResponse } from '../types/IUser';
 
 // get
-const getBlogs = async () => {
+const getBlogs = async (page: number) => {
   try {
     const responseBlog = await fetch(
-      `${import.meta.env.VITE_BASE_URL_SERVER}/blogs/`,
+      `${import.meta.env.VITE_BASE_URL_SERVER}/blogs/?page=${page}`,
       {
         headers: {
           Accept: 'application/json',
@@ -66,7 +67,7 @@ const getBlog = async (id: string) => {
   }
 };
 
-const getBlogsUsernames = async (blogs: IBlog[]) => {
+const getBlogsUsernames = async (blogs: IBlogData[]) => {
   try {
     const names: (string | undefined)[] = await Promise.all(
       blogs?.map(async (blog) => {

@@ -1,14 +1,18 @@
 import { styled } from '../../stitches.config';
 import BlogItem from '../../components/layout/BlogItem';
+import PaginationBar from '../../components/layout/PaginationBar';
 import { getBlogs, getBlogsUsernames } from '../../utils/blogsApi';
 import IBlog from '../../types/IBlog';
 
-import { useEffect, useState } from 'react';
+import { useMemo, useState } from 'react';
+import { useLocation } from 'react-router-dom';
 
 const Main = styled('main', {
   margin: '0 auto',
   padding: '2rem 0',
   width: '80%',
+  display: 'flex',
+  flexDirection: 'column',
 
   '@desktop': {
     maxWidth: '$contentWidthS',
@@ -27,27 +31,32 @@ const Title = styled('h2', {
 });
 
 const AllBlogs = () => {
-  const [blogs, setBlogs] = useState<IBlog[] | null>(null);
+  const location = useLocation();
+  const page = new URLSearchParams(location.search).get('page');
+  const [blogs, setBlogs] = useState<IBlog | null>(null);
   const [usernames, setUsernames] = useState<string[] | null>(null);
 
-  useEffect(() => {
-    getBlogs()
+  useMemo(() => {
+    setBlogs(null);
+    setUsernames(null);
+
+    getBlogs(page ? parseInt(page) : 1)
       .then((blogs) => {
         if (blogs?.error) throw new Error(blogs.error.message);
 
         if (blogs) {
-          setBlogs(blogs as IBlog[]);
+          setBlogs(blogs as IBlog);
         } else {
           throw new Error('No blogs found');
         }
       })
       .catch((err) => console.error(err));
-  }, []);
+  }, [page]);
 
-  useEffect(() => {
+  useMemo(() => {
     if (!blogs) return;
 
-    getBlogsUsernames(blogs)
+    getBlogsUsernames(blogs.dataBlogs)
       .then((usernames) => {
         if (usernames) {
           setUsernames(usernames);
@@ -63,16 +72,26 @@ const AllBlogs = () => {
       {!usernames ? (
         <Title>Loading...</Title>
       ) : (
-        blogs?.map((blog, index) => (
-          <BlogItem
-            key={blog._id}
-            _id={blog._id}
-            username={usernames[index]}
-            title={blog.title}
-            snippet={blog.snippet}
-            createdAt={blog.createdAt}
-          />
-        ))
+        <>
+          {blogs?.dataBlogs.map((blog, index) => (
+            <BlogItem
+              key={blog._id}
+              _id={blog._id}
+              username={usernames[index]}
+              title={blog.title}
+              snippet={blog.snippet}
+              createdAt={blog.createdAt}
+            />
+          ))}
+
+          {blogs && (
+            <PaginationBar
+              route={'/blogs'}
+              currentPage={page ? parseInt(page) : 1}
+              totalPages={blogs.totalPages}
+            />
+          )}
+        </>
       )}
     </Main>
   );

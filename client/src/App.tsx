@@ -96,6 +96,7 @@ const App = () => {
 
         <Route path="/blogs">
           <Route index element={<AllBlogs />} />
+          <Route path="page/:page" element={<AllBlogs />} />
           <Route path="create" element={<CreateBlog />} />
           <Route path=":id" element={<Blog />} />
         </Route>

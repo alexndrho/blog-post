@@ -1,6 +1,6 @@
 import IError from './IError';
 
-interface IBlog {
+interface IBlogData {
   _id: string;
   userId: string;
   title: string;
@@ -10,13 +10,18 @@ interface IBlog {
   updatedAt?: string;
 }
 
-interface IBlogsResponse extends Partial<IBlog[]>, Partial<IError> {}
+interface IBlog {
+  dataBlogs: [IBlogData];
+  totalPages: number;
+}
 
-interface IBlogResponse extends Partial<IBlog>, Partial<IError> {}
+interface IBlogsResponse extends Partial<IBlog>, Partial<IError> {}
+
+interface IBlogResponse extends Partial<IBlogData>, Partial<IError> {}
 
 interface IBlogCreateResponse extends Partial<IError> {
   id?: string;
 }
 
 export default IBlog;
-export type { IBlogsResponse, IBlogResponse, IBlogCreateResponse };
+export type { IBlogData, IBlogsResponse, IBlogResponse, IBlogCreateResponse };
