@@ -23,7 +23,9 @@ app.use(authenticationRoute);
 app.use('/user', userRoute);
 app.use('/blogs', blogRoute);
 
-const uri = `mongodb+srv://${process.env.MONGO_USER}:${process.env.MONGO_PASSWORD}@blog-post.nfrv2qd.mongodb.net/${process.env.MONGO_DB}?retryWrites=true&w=majority`;
+const uri = `mongodb+srv://${process.env.MONGO_USER}:${
+  process.env.MONGO_PASSWORD
+}@${process.env.MONGO_CLUSTER}/${process.env.MONGO_DB ?? ''}`;
 
 mongoose
   .connect(uri)
