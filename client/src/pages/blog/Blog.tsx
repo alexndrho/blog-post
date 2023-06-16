@@ -2,7 +2,7 @@ import { styled } from '../../stitches.config';
 import { UsernameLink } from '../../components/common/UsernameLink';
 import { getBlog, getBlogsUsernames } from '../../utils/blogsApi';
 import NotFound from '../NotFound';
-import IBlog from '../../types/IBlog';
+import { IBlogData } from '../../types/IBlog';
 import { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import { Link } from 'react-router-dom';
@@ -47,7 +47,7 @@ const BodyBlog = styled('p', {
 const Blog = () => {
   const { id } = useParams();
   const [loading, setLoading] = useState<boolean>(true);
-  const [blogData, setBlogData] = useState<IBlog | null>(null);
+  const [blogData, setBlogData] = useState<IBlogData | null>(null);
   const [userName, setUserName] = useState<string | null>(null);
 
   useEffect(() => {
@@ -58,7 +58,7 @@ const Blog = () => {
         if (blog?.error) throw new Error(blog.error.message);
 
         if (blog) {
-          setBlogData(blog as IBlog);
+          setBlogData(blog as IBlogData);
         } else {
           throw new Error('No blog found');
         }

@@ -2,16 +2,19 @@ import { Request, Response } from 'express';
 import IBlog from '../../types/model/IBlog.js';
 import Blog from '../../models/blog.js';
 import User from '../../models/user.js';
+import paginate from '../../helpers/paginate.js';
 
 import mongoose from 'mongoose';
 
 const getBlogs = async (req: Request, res: Response) => {
   try {
-    const blogs = await Blog.find().sort({ createdAt: -1 });
+    const page: number = req.query.page
+      ? parseInt(req.query.page as string)
+      : 1;
 
-    if (!blogs) throw 'Unable to find blogs';
+    const { documents: blogs, totalPages } = await paginate(Blog, page);
 
-    res.status(200).json([...blogs]);
+    res.status(200).json({ dataBlogs: [...blogs], totalPages });
   } catch (err) {
     if (!res.headersSent) {
       if (err instanceof Error) {
@@ -25,13 +28,13 @@ const getBlogs = async (req: Request, res: Response) => {
 
 const getBlogsByUserId = async (req: Request, res: Response) => {
   try {
-    const blogs = await Blog.find({ userId: req.params.id }).sort({
-      createdAt: -1,
-    });
+    const page: number = req.query.page
+      ? parseInt(req.query.page as string)
+      : 1;
 
-    if (!blogs) throw 'Unable to find blogs';
+    const { documents: blogs, totalPages } = await paginate(Blog, page);
 
-    res.status(200).json([...blogs]);
+    res.status(200).json({ dataBlogs: [...blogs], totalPages });
   } catch (err) {
     if (!res.headersSent) {
       if (err instanceof Error) {
