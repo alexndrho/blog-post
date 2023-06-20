@@ -41,6 +41,8 @@ const TextFormatOption = styled('option');
 
 const CreateBlog = () => {
   const { isLoggedIn } = useAuth();
+  const [creatingBlog, setCreatingBlog] = useState(false);
+
   const [title, setTitle] = useState('');
   const [snippet, setSnippet] = useState('');
   const [body, setBody] = useState('');
@@ -50,8 +52,10 @@ const CreateBlog = () => {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    if (creatingBlog) return;
     if (!textFormatRef.current) throw new Error('No format selected');
 
+    setCreatingBlog(true);
     createBlog(title, snippet, body, textFormatRef.current.value)
       .then((blog) => {
         if (blog?.error) throw new Error(blog.error.message);
@@ -62,7 +66,10 @@ const CreateBlog = () => {
           throw new Error('No blog found');
         }
       })
-      .catch((err) => console.error(err));
+      .catch((err) => {
+        setCreatingBlog(false);
+        console.error(err);
+      });
   };
 
   return (
@@ -106,7 +113,7 @@ const CreateBlog = () => {
               onChange={(e) => setBody(e.target.value)}
               mb1
             />
-            <Button>Submit</Button>
+            <Button>{!creatingBlog ? 'Create' : 'Creating...'}</Button>
           </Form>
         </Main>
       )}
