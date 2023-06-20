@@ -18,9 +18,9 @@ const Main = styled('main', {
 });
 
 const TitleBlog = styled('h2', {
-  fontSize: '$m-1',
+  fontSize: '3rem',
   '@desktop': {
-    fontSize: '$1',
+    fontSize: '3.25rem',
   },
 });
 
