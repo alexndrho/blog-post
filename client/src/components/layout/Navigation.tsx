@@ -11,6 +11,7 @@ const Header = styled('header', {
   backgroundColor: 'White',
   paddingTop: '1rem',
   paddingBottom: '1rem',
+  zIndex: 90,
 });
 
 const Div = styled('div', {
@@ -54,7 +55,6 @@ const Nav = styled('nav', {
   display: 'block',
   width: '100vw',
   minHeight: '100vh',
-  backgroundColor: 'White',
   transition: 'left 0.5s ease',
 
   '@desktop': {
