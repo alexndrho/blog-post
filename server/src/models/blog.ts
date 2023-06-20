@@ -20,6 +20,10 @@ const blogSchema = new Schema(
       type: String,
       required: true,
     },
+    format: {
+      type: String,
+      required: true,
+    },
   },
   { timestamps: true }
 );

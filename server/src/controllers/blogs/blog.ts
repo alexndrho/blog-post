@@ -72,24 +72,26 @@ const getBlog = async (req: Request, res: Response) => {
 
 const createBlog = async (req: Request, res: Response) => {
   try {
-    const body = req.body as Pick<IBlog, 'title' | 'snippet' | 'body'>;
+    const body = req.body as Pick<
+      IBlog,
+      'title' | 'snippet' | 'body' | 'format'
+    >;
     const user = await User.findById(req.user?.id);
 
-    if (user) {
-      const blog: IBlog = new Blog({
-        userId: req.user?.id,
-        title: body.title,
-        snippet: body.snippet,
-        body: body.body,
-      });
+    if (!user) throw 'Unable to find user';
 
-      const newBlog = await blog.save();
-      if (!newBlog) throw 'Unable to create blog';
+    const blog: IBlog = new Blog({
+      userId: req.user?.id,
+      title: body.title,
+      snippet: body.snippet,
+      body: body.body,
+      format: body.format,
+    });
 
-      res.status(201).json({ id: newBlog._doc._id });
-    } else {
-      throw 'Failed To Authenticate';
-    }
+    const newBlog = await blog.save();
+    if (!newBlog) throw 'Unable to create blog';
+
+    res.status(201).json({ id: newBlog._doc._id });
   } catch (err) {
     if (!res.headersSent) {
       if (err instanceof Error) {

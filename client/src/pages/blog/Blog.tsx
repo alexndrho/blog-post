@@ -3,9 +3,12 @@ import { UsernameLink } from '../../components/common/UsernameLink';
 import { getBlog, getBlogsUsernames } from '../../utils/blogsApi';
 import NotFound from '../NotFound';
 import { IBlogData } from '../../types/IBlog';
+
 import { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import { Link } from 'react-router-dom';
+import { marked } from 'marked';
+import DOMPurify from 'dompurify';
 
 const Main = styled('main', {
   margin: '0 auto',
@@ -15,9 +18,9 @@ const Main = styled('main', {
 });
 
 const TitleBlog = styled('h2', {
-  fontSize: '$m-2',
+  fontSize: '$m-1',
   '@desktop': {
-    fontSize: '$2',
+    fontSize: '$1',
   },
 });
 
@@ -33,16 +36,7 @@ const Info = styled('p', {
   },
 });
 
-const BodyBlog = styled('p', {
-  textAlign: 'justify',
-  fontSize: '$m-5',
-  marginBottom: '$fontSizes$m-5',
-
-  '@desktop': {
-    fontSize: '$5',
-    marginBottom: '$fontSizes$5',
-  },
-});
+const Content = styled('section');
 
 const Blog = () => {
   const { id } = useParams();
@@ -57,7 +51,12 @@ const Blog = () => {
       .then((blog) => {
         if (blog?.error) throw new Error(blog.error.message);
 
-        if (blog) {
+        if (blog && blog.body) {
+          if (blog.format === 'markdown') {
+            blog.body = marked(blog.body);
+          }
+
+          blog.body = DOMPurify.sanitize(blog.body);
           setBlogData(blog as IBlogData);
         } else {
           throw new Error('No blog found');
@@ -109,12 +108,10 @@ const Blog = () => {
                 }).format(new Date(blogData?.updatedAt as string))}
               </Info>
 
-              {blogData?.body
-                .split(/[\n\r]/)
-                .filter((item) => item.trim() !== '')
-                .map((paragraph) => (
-                  <BodyBlog key={crypto.randomUUID()}>{paragraph}</BodyBlog>
-                ))}
+              <Content
+                className="blog-content"
+                dangerouslySetInnerHTML={{ __html: blogData.body }}
+              />
             </>
           )}
         </Main>

@@ -10,6 +10,7 @@ interface IBlog extends Document, DocumentResult<IBlog> {
   title: string;
   snippet: string;
   body: string;
+  format: string;
 }
 
 export default IBlog;

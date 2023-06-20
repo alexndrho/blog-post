@@ -105,7 +105,12 @@ const getBlogsUsernames = async (blogs: IBlogData[]) => {
 };
 
 // post
-const createBlog = async (title: string, snippet: string, body: string) => {
+const createBlog = async (
+  title: string,
+  snippet: string,
+  body: string,
+  format: string
+) => {
   try {
     const response = await fetch(
       `${import.meta.env.VITE_BASE_URL_SERVER}/blogs/`,
@@ -115,7 +120,7 @@ const createBlog = async (title: string, snippet: string, body: string) => {
           'Content-Type': 'application/json',
           'x-access-token': localStorage.getItem('token') as string,
         },
-        body: JSON.stringify({ title, snippet, body }),
+        body: JSON.stringify({ title, snippet, body, format }),
       }
     );
 
