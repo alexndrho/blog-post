@@ -1,10 +1,13 @@
 import { styled } from '../../stitches.config';
+import { useUser } from '../../context/useUser';
 import { UsernameLink } from '../../components/common/UsernameLink';
 import { getBlog, getBlogsUsernames } from '../../utils/blogsApi';
 import NotFound from '../NotFound';
 import { IBlogData } from '../../types/IBlog';
+import EditBlog from '../../components/layout/EditBlog';
+import meatballMenuIcon from '../../assets/images/meatball-menu.png';
 
-import { useEffect, useState } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import { Link } from 'react-router-dom';
 import { marked } from 'marked';
@@ -15,24 +18,95 @@ const Main = styled('main', {
   padding: '3rem 0',
   width: '80%',
   maxWidth: '$contentWidthS',
-});
+  fontSize: '$m-1',
 
-const TitleBlog = styled('h2', {
-  fontSize: '3rem',
   '@desktop': {
-    fontSize: '3.25rem',
+    fontSize: '$2',
   },
 });
 
+const TopContainer = styled('div', {
+  display: 'flex',
+  justifyContent: 'space-between',
+});
+
+const TitleInfoContainer = styled('div', {
+  display: 'flex',
+  flexDirection: 'column',
+});
+
+const TitleBlog = styled('h2', {
+  fontSize: '1em',
+});
+
 const Info = styled('p', {
-  marginBottom: '$fontSizes$5',
   color: 'DimGray',
-  fontSize: 'm-5',
+  fontSize: '0.45em',
   fontWeight: 500,
+});
+
+const EditContainer = styled('div', {
+  position: 'relative',
+  marginLeft: '0.75em',
+});
+
+const Icon = styled('img');
+
+const EditButton = styled('button', {
+  fontSize: '0.5em',
+  width: '1em',
+  height: '1em',
+  border: 'none',
+  padding: 0,
+  backgroundColor: 'transparent',
+
+  [`& ${Icon}`]: {
+    width: '100%',
+    height: '100%',
+  },
+});
+
+const EditMenu = styled('dialog', {
+  position: 'absolute',
+  inset: 'auto 0 auto auto',
+
+  border: 'none',
+  borderRadius: '0.125em',
+  padding: '0.125em 0',
+  backgroundColor: 'Black',
+  color: 'White',
+});
+
+const EditItem = styled('button', {
+  width: '100%',
+  padding: '0.35em 0.5em',
+  display: 'block',
+  border: 'none',
+  backgroundColor: 'transparent',
+  fontFamily: 'inherit',
+  fontSize: '$m-5',
+  fontWeight: '500',
+  color: 'inherit',
+  overflow: 'hidden',
+  textOverflow: 'ellipsis',
 
   '@desktop': {
-    marginBottom: '$fontSizes$5',
     fontSize: '$5',
+  },
+
+  '&:hover': {
+    backgroundColor: 'Gray',
+  },
+});
+
+const Divider = styled('div', {
+  width: '100%',
+  height: '0.125rem',
+  backgroundColor: 'Black',
+  margin: '1rem 0 1.5rem 0',
+
+  '@desktop': {
+    margin: '1rem 0 2rem 0',
   },
 });
 
@@ -40,65 +114,84 @@ const Content = styled('section');
 
 const Blog = () => {
   const { id } = useParams();
+  const { user } = useUser();
+
   const [loading, setLoading] = useState<boolean>(true);
   const [blogData, setBlogData] = useState<IBlogData | null>(null);
-  const [userName, setUserName] = useState<string | null>(null);
+  const [username, setUsername] = useState<string | null>(null);
+  const [parsedBody, setParsedBody] = useState<string | null>(null);
+  const [isEditing, setIsEditing] = useState<boolean>(false);
 
-  useEffect(() => {
+  const editMenuRef = useRef<HTMLDialogElement>(null);
+
+  const updateBlog = useCallback(async () => {
     if (!id) return;
 
-    getBlog(id)
-      .then((blog) => {
-        if (blog?.error) throw new Error(blog.error.message);
+    try {
+      setLoading(true);
+      const blog = await getBlog(id);
 
-        if (blog && blog.body) {
-          if (blog.format === 'markdown') {
-            blog.body = marked(blog.body);
-          }
+      if (blog?.error) throw new Error(blog.error.message);
+      if (!(blog && blog.body)) throw new Error('No blog found');
 
-          blog.body = DOMPurify.sanitize(blog.body);
-          setBlogData(blog as IBlogData);
-        } else {
-          throw new Error('No blog found');
-        }
-      })
-      .catch((err) => console.error(err));
+      let parsedBody = blog.body;
+      if (blog.format === 'markdown') {
+        parsedBody = marked(blog.body);
+      }
+
+      parsedBody = DOMPurify.sanitize(parsedBody);
+      setParsedBody(parsedBody);
+
+      setBlogData(blog as IBlogData);
+
+      const usernames = await getBlogsUsernames([blog as IBlogData]);
+      if (!usernames) throw new Error('No username found');
+
+      setUsername(usernames[0]);
+      setLoading(false);
+    } catch (err) {
+      console.error(err);
+      setLoading(false);
+    }
   }, [id]);
 
   useEffect(() => {
-    if (!blogData) return;
+    updateBlog();
+  }, [updateBlog]);
 
-    getBlogsUsernames([blogData])
-      .then((usernames) => {
-        if (usernames?.length === 1) {
-          setUserName(usernames[0]);
-          setLoading(false);
-        } else {
-          throw new Error('No usernames found');
-        }
-      })
-      .catch((err) => {
-        setLoading(false);
-        console.error(err);
-      });
-  }, [blogData]);
+  const toggleEditMenu = () => {
+    if (editMenuRef.current?.open) {
+      editMenuRef.current.close();
+    } else {
+      editMenuRef.current?.show();
+    }
+  };
+
+  const handleEdit = () => {
+    setIsEditing(true);
+    toggleEditMenu();
+  };
+
+  const handleCancelEdit = () => {
+    setIsEditing(false);
+    updateBlog();
+  };
+
+  if (blogData == null && !loading) return <NotFound />;
 
   return (
-    <>
-      {blogData == null && !loading ? (
-        <NotFound />
+    <Main>
+      {!(blogData && username && parsedBody) ? (
+        <TitleBlog>Loading...</TitleBlog>
       ) : (
-        <Main>
-          <TitleBlog>
-            {blogData && userName ? blogData.title : 'Loading...'}
-          </TitleBlog>
-
-          {blogData && userName && (
-            <>
+        <>
+          <TopContainer>
+            <TitleInfoContainer>
+              <TitleBlog>{blogData?.title}</TitleBlog>
               <Info>
                 By{' '}
-                <UsernameLink as={Link} to={`/${userName}`}>
-                  {userName}
+                <UsernameLink as={Link} to={`/${username}`}>
+                  {username}
                 </UsernameLink>{' '}
                 -{' '}
                 {new Intl.DateTimeFormat('en-US', {
@@ -107,16 +200,42 @@ const Blog = () => {
                   year: 'numeric',
                 }).format(new Date(blogData?.updatedAt as string))}
               </Info>
+            </TitleInfoContainer>
 
-              <Content
-                className="blog-content"
-                dangerouslySetInnerHTML={{ __html: blogData.body }}
-              />
-            </>
+            {user?.username === username && (
+              <EditContainer>
+                <EditButton onClick={toggleEditMenu}>
+                  <Icon src={meatballMenuIcon} alt="menu-icon" />
+                </EditButton>
+
+                <EditMenu ref={editMenuRef}>
+                  <EditItem onClick={handleEdit}>Edit</EditItem>
+                  <EditItem>Delete</EditItem>
+                </EditMenu>
+              </EditContainer>
+            )}
+          </TopContainer>
+
+          <Divider />
+
+          {isEditing ? (
+            <EditBlog
+              id={blogData._id}
+              title={blogData.title}
+              snippet={blogData.snippet}
+              body={blogData.body}
+              format={blogData.format}
+              onCancel={handleCancelEdit}
+            />
+          ) : (
+            <Content
+              className="blog-content"
+              dangerouslySetInnerHTML={{ __html: parsedBody }}
+            />
           )}
-        </Main>
+        </>
       )}
-    </>
+    </Main>
   );
 };
 

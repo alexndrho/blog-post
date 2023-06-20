@@ -24,5 +24,13 @@ interface IBlogCreateResponse extends Partial<IError> {
   id?: string;
 }
 
+type IBlogSuccessResponse = Partial<IError>;
+
 export default IBlog;
-export type { IBlogData, IBlogsResponse, IBlogResponse, IBlogCreateResponse };
+export type {
+  IBlogData,
+  IBlogsResponse,
+  IBlogResponse,
+  IBlogCreateResponse,
+  IBlogSuccessResponse,
+};

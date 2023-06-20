@@ -2,6 +2,7 @@ import {
   IBlogCreateResponse,
   IBlogData,
   IBlogResponse,
+  IBlogSuccessResponse,
   IBlogsResponse,
 } from '../types/IBlog';
 import { IGetUsernameByIdResponse } from '../types/IUser';
@@ -133,4 +134,40 @@ const createBlog = async (
   }
 };
 
-export { getBlogs, getBlogsByUserId, getBlog, getBlogsUsernames, createBlog };
+const updateBlog = async (
+  id: IBlogData['_id'],
+  title: IBlogData['title'],
+  snippet: IBlogData['snippet'],
+  body: IBlogData['body'],
+  format: IBlogData['format']
+) => {
+  try {
+    const response = await fetch(
+      `${import.meta.env.VITE_BASE_URL_SERVER}/blogs/${id}`,
+      {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json',
+          'x-access-token': localStorage.getItem('token') || '',
+        },
+        body: JSON.stringify({ title, snippet, body, format }),
+      }
+    );
+
+    const responseData: IBlogSuccessResponse = await response.json();
+
+    return responseData;
+  } catch (err) {
+    console.log(err);
+    return null;
+  }
+};
+
+export {
+  getBlogs,
+  getBlogsByUserId,
+  getBlog,
+  getBlogsUsernames,
+  createBlog,
+  updateBlog,
+};
