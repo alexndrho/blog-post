@@ -16,11 +16,29 @@ const A = styled('a', {
 });
 
 const TitleItem = styled('h2', {
+  position: 'relative',
+  display: 'inline-block',
   fontSize: '$m-3',
   marginBottom: '0.125rem',
 
   '@desktop': {
     fontSize: '$3',
+  },
+
+  '&::after': {
+    content: '',
+    position: 'absolute',
+    left: 0,
+    bottom: 0,
+
+    width: 0,
+    height: '0.2rem',
+    backgroundColor: 'Black',
+    transition: 'width 0.25s ease',
+  },
+
+  '&:hover::after': {
+    width: '100%',
   },
 });
 
