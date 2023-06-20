@@ -1,6 +1,5 @@
 import { useAuth } from './context/useAuth';
 import { useUser } from './context/useUser';
-import Loading from './pages/Loading';
 import Navigation from './components/layout/Navigation';
 import Login from './pages/auth/Login';
 import SignUp from './pages/auth/SignUp';
@@ -15,7 +14,7 @@ import { getUser } from './utils/userApi';
 import { convertImageDataToBlobUrl } from './utils/convertImage';
 import IUser from './types/IUser';
 
-import { useCallback, useEffect, useState } from 'react';
+import { useCallback, useEffect } from 'react';
 import { Routes, Route } from 'react-router-dom';
 import '@fontsource/raleway/400.css';
 import '@fontsource/raleway/500.css';
@@ -29,27 +28,9 @@ const App = () => {
 
   const { isLoggedIn, setLoggedIn, setLoggedOut } = useAuth();
   const { setUser, setUserIcon } = useUser();
-  const [isLoading, setIsLoading] = useState(true);
-
-  const delayLoadingDone = (duration: number) => {
-    if (duration > 1000) {
-      setIsLoading(false);
-      return;
-    }
-
-    setTimeout(() => {
-      setIsLoading(false);
-    }, 1000 - duration);
-  };
 
   const updateUser = useCallback(async () => {
-    if (!isLoggedIn) {
-      delayLoadingDone(0);
-      return;
-    }
-
-    setIsLoading(true);
-    const startTime = Date.now();
+    if (!isLoggedIn) return;
 
     await getUser()
       .then((data) => {
@@ -71,8 +52,6 @@ const App = () => {
       .catch((err) => {
         console.error(err);
       });
-
-    delayLoadingDone(Date.now() - startTime);
   }, [isLoggedIn, setUser, setUserIcon]);
 
   useEffect(() => {
@@ -85,8 +64,6 @@ const App = () => {
 
   return (
     <>
-      {isLoading && <Loading />}
-
       <Navigation />
       <Routes>
         <Route path="/" element={<AllBlogs />} />
