@@ -1,4 +1,5 @@
 import { styled } from '../../stitches.config';
+import { useAuth } from '../../context/useAuth';
 import LoginToContinue from '../LoginToContinue';
 import { createBlog } from '../../utils/blogsApi';
 import {
@@ -10,9 +11,8 @@ import {
   Button,
 } from '../../components/common/form';
 
-import React, { useState } from 'react';
+import React, { useRef, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { useAuth } from '../../context/useAuth';
 
 const Main = styled('main', {
   minHeight: '80%',
@@ -22,18 +22,37 @@ const Main = styled('main', {
   alignItems: 'center',
 });
 
+const BodyLabelContainer = styled('div', {
+  marginBottom: '0.5em',
+  display: 'flex',
+  justifyContent: 'space-between',
+  alignItems: 'center',
+});
+
+const SelectTextFormat = styled('select', {
+  border: 'none',
+  padding: '0.35em',
+  borderRadius: '0.25em',
+  fontSize: '$5',
+  fontFamily: 'inherit',
+});
+
+const TextFormatOption = styled('option');
+
 const CreateBlog = () => {
   const { isLoggedIn } = useAuth();
   const [title, setTitle] = useState('');
   const [snippet, setSnippet] = useState('');
   const [body, setBody] = useState('');
+  const textFormatRef = useRef<HTMLSelectElement | null>(null);
 
   const navigate = useNavigate();
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    if (!textFormatRef.current) throw new Error('No format selected');
 
-    createBlog(title, snippet, body)
+    createBlog(title, snippet, body, textFormatRef.current.value)
       .then((blog) => {
         if (blog?.error) throw new Error(blog.error.message);
 
@@ -62,6 +81,7 @@ const CreateBlog = () => {
               onChange={(e) => setTitle(e.target.value)}
               mb1
             />
+
             <Label htmlFor="form-snippet" mb0_5>
               Snippet:
             </Label>
@@ -70,9 +90,17 @@ const CreateBlog = () => {
               onChange={(e) => setSnippet(e.target.value)}
               mb1
             />
-            <Label htmlFor="form-body" mb0_5>
-              Body:
-            </Label>
+
+            <BodyLabelContainer>
+              <Label htmlFor="form-body" mb0_5 css={{ marginBottom: '0' }}>
+                Body:
+              </Label>
+
+              <SelectTextFormat ref={textFormatRef}>
+                <TextFormatOption value="markdown">Markdown</TextFormatOption>
+                <TextFormatOption value="html">HTML</TextFormatOption>
+              </SelectTextFormat>
+            </BodyLabelContainer>
             <TextArea
               id="form-body"
               onChange={(e) => setBody(e.target.value)}

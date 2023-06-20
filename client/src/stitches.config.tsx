@@ -5,19 +5,15 @@ const { styled, globalCss, css } = createStitches({
     colors: {
       lightBlack: '#4C4C4C',
       lightGray: '#CBCBCB',
+      blue: '#007BFF',
       danger: '#CC0000',
+
+      terminal: '#1E1E1E',
     },
     fonts: {
       default: 'Raleway, sans-serif',
     },
     fontSizes: {
-      // xxs: '0.75rem',
-      // xs: '1rem',
-      // s: '1.25rem',
-      // m: '2rem',
-      // l: '2.5rem',
-      // xl: '3.5rem',
-
       title: '2.5rem',
 
       // desktop
@@ -83,6 +79,103 @@ const useGlobalCss = globalCss({
   },
   img: {
     pointerEvents: 'none',
+  },
+
+  // blog
+  '.blog-content': {
+    fontSize: '0.875rem',
+    margin: '0 auto',
+    maxWidth: '100%',
+    lineHeight: '1.5',
+
+    h1: {
+      fontSize: '2.5rem',
+    },
+
+    h2: {
+      fontSize: '2rem',
+    },
+
+    'h3, h4, h5, h6': {
+      fontSize: '1.5rem',
+    },
+
+    p: {
+      marginBottom: '1.25rem',
+    },
+
+    a: {
+      color: '$blue',
+    },
+
+    li: {
+      listStylePosition: 'inside',
+    },
+
+    pre: {
+      marginBottom: '1.25',
+      backgroundColor: '$terminal',
+      color: 'White',
+      borderRadius: '0.5em',
+      padding: '1rem',
+      overflowX: 'auto',
+    },
+
+    code: {
+      backgroundColor: '$terminal',
+      color: 'White',
+      borderRadius: '0.5em',
+      padding: '0.25rem',
+    },
+
+    blockquote: {
+      borderLeft: '0.25rem solid Black',
+      paddingLeft: '1rem',
+      marginLeft: '0',
+      marginRight: '0',
+
+      '& > p': {
+        fontStyle: 'italic',
+      },
+      '& > footer': {
+        fontStyle: 'italic',
+      },
+
+      '& > footer:before': {
+        content: '"— "',
+      },
+    },
+
+    table: {
+      width: '100%',
+      marginBottom: '1rem',
+      color: 'inherit',
+      borderCollapse: 'collapse',
+    },
+
+    'table th': {
+      fontWeight: 'bold',
+    },
+
+    'table th, table td': {
+      padding: '0.75rem',
+      verticalAlign: 'top',
+      border: '1px solid Black',
+    },
+
+    '@desktop': {
+      fontSize: '16px',
+
+      h1: {
+        fontSize: '3rem',
+      },
+      h2: {
+        fontSize: '2.5rem',
+      },
+      'h3, h4, h5, h6': {
+        fontSize: '2rem',
+      },
+    },
   },
 });
 
