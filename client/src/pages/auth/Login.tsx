@@ -25,6 +25,7 @@ const Login = () => {
   const { isLoggedIn, setLoggedIn } = useAuth();
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
+  const [isLoggingIn, setIsLoggingIn] = useState(false);
   const [errorMessage, setErrorMessage] = useState('');
 
   const navigate = useNavigate();
@@ -36,20 +37,26 @@ const Login = () => {
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
 
-    logIn(username, password, setLoggedIn)
-      .then((data) => {
-        if (data?.error?.message) {
-          setErrorMessage(data.error.message + '!');
-        } else if (data?.token) {
-          localStorage.setItem('token', data.token);
-          navigate('/');
-        } else {
-          setErrorMessage('Something went wrong!');
-        }
-      })
-      .catch((err) => {
-        console.error(err);
-      });
+    setIsLoggingIn(true);
+    try {
+      const data = await logIn(username, password, setLoggedIn);
+
+      if (data?.error?.message) {
+        throw new Error(data.error.message + '!');
+      } else if (data?.token) {
+        localStorage.setItem('token', data.token);
+
+        setIsLoggingIn(false);
+        navigate('/');
+      } else {
+        throw new Error('Something went wrong!');
+      }
+    } catch (err) {
+      setIsLoggingIn(false);
+      if (err instanceof Error) {
+        setErrorMessage(err.message);
+      }
+    }
   };
 
   return (
@@ -78,7 +85,9 @@ const Login = () => {
           onChange={(e) => setPassword(e.target.value)}
           mb1
         />
-        <Button>Submit</Button>
+        <Button type="submit" disabled={isLoggingIn}>
+          {isLoggingIn ? 'Logging in...' : 'Log in'}
+        </Button>
       </Form>
     </Main>
   );
