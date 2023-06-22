@@ -125,7 +125,6 @@ const EditBlog = ({ id, title, snippet, body, format, onCancel }: Props) => {
 
           <Select value={selectedFormat} onChange={handleSelectChange}>
             <Option value="markdown">Markdown</Option>
-            <Option value="html">HTML</Option>
           </Select>
         </BodyLabelContainer>
         <TextArea

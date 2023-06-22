@@ -97,7 +97,6 @@ const CreateBlog = () => {
 
               <Select ref={textFormatRef}>
                 <Option value="markdown">Markdown</Option>
-                <Option value="html">HTML</Option>
               </Select>
             </BodyLabelContainer>
             <TextArea

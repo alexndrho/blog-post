@@ -6,7 +6,7 @@ interface IBlogData {
   title: string;
   snippet: string;
   body: string;
-  format: 'markdown' | 'html';
+  format: 'markdown';
   createdAt?: string;
   updatedAt?: string;
 }
