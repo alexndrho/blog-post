@@ -8,6 +8,7 @@ import {
   Select,
   Option,
 } from '../common/form';
+import Modal from './Modal';
 import { updateBlog } from '../../utils/blogsApi';
 import { IBlogData } from '../../types/IBlog';
 import { ChangeEvent, useState } from 'react';
@@ -44,9 +45,21 @@ const EditBlog = ({ id, title, snippet, body, format, onCancel }: Props) => {
   const [inputBody, setInputBody] = useState(body);
   const [selectedFormat, setSelectedFormat] = useState(format);
   const [isSaving, setIsSaving] = useState(false);
+  const [isShowModalEdit, setIsShowModalEdit] = useState(false);
 
-  const handleSave = async (e: React.FormEvent<HTMLFormElement>) => {
+  const showModalEdit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+
+    setIsShowModalEdit(true);
+  };
+
+  const hideModalEdit = () => {
+    setIsShowModalEdit(false);
+  };
+
+  const handleSave = async () => {
+    console.log('witf');
+    setIsShowModalEdit(false);
 
     try {
       setIsSaving(true);
@@ -76,49 +89,60 @@ const EditBlog = ({ id, title, snippet, body, format, onCancel }: Props) => {
   };
 
   return (
-    <Form onSubmit={handleSave}>
-      <Label htmlFor="form-title" mb0_5>
-        Title
-      </Label>
-      <Input
-        id="form-title"
-        defaultValue={title}
-        onChange={(e) => setInputTitle(e.target.value)}
-        mb1
+    <>
+      <Modal
+        show={isShowModalEdit}
+        message="Are you sure you want to save?"
+        btnText="Save"
+        onConfirm={() => handleSave()}
+        onCancel={hideModalEdit}
+        btnColor="secondary"
       />
 
-      <Label htmlFor="form-snippet" mb0_5>
-        Snippet
-      </Label>
-      <Input
-        id="form-snippet"
-        defaultValue={snippet}
-        onChange={(e) => setInputSnippet(e.target.value)}
-        mb1
-      />
+      <Form onSubmit={showModalEdit}>
+        <Label htmlFor="form-title" mb0_5>
+          Title
+        </Label>
+        <Input
+          id="form-title"
+          defaultValue={title}
+          onChange={(e) => setInputTitle(e.target.value)}
+          mb1
+        />
 
-      <BodyLabelContainer>
-        <Label htmlFor="form-body">Body</Label>
+        <Label htmlFor="form-snippet" mb0_5>
+          Snippet
+        </Label>
+        <Input
+          id="form-snippet"
+          defaultValue={snippet}
+          onChange={(e) => setInputSnippet(e.target.value)}
+          mb1
+        />
 
-        <Select value={selectedFormat} onChange={handleSelectChange}>
-          <Option value="markdown">Markdown</Option>
-          <Option value="html">HTML</Option>
-        </Select>
-      </BodyLabelContainer>
-      <TextArea
-        id="form-body"
-        defaultValue={body}
-        onChange={(e) => setInputBody(e.target.value)}
-        mb1
-      />
+        <BodyLabelContainer>
+          <Label htmlFor="form-body">Body</Label>
 
-      <ButtonContainer>
-        <Button type="submit">{!isSaving ? 'Save' : 'Saving...'}</Button>
-        <Button type="button" color="danger" onClick={onCancel}>
-          Cancel
-        </Button>
-      </ButtonContainer>
-    </Form>
+          <Select value={selectedFormat} onChange={handleSelectChange}>
+            <Option value="markdown">Markdown</Option>
+            <Option value="html">HTML</Option>
+          </Select>
+        </BodyLabelContainer>
+        <TextArea
+          id="form-body"
+          defaultValue={body}
+          onChange={(e) => setInputBody(e.target.value)}
+          mb1
+        />
+
+        <ButtonContainer>
+          <Button type="submit">{!isSaving ? 'Save' : 'Saving...'}</Button>
+          <Button type="button" color="outline" onClick={onCancel}>
+            Cancel
+          </Button>
+        </ButtonContainer>
+      </Form>
+    </>
   );
 };
 

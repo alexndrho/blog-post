@@ -1,10 +1,11 @@
 import { styled } from '../../stitches.config';
 import { useUser } from '../../context/useUser';
 import { UsernameLink } from '../../components/common/UsernameLink';
-import { deleteBlog, getBlog, getBlogsUsernames } from '../../utils/blogsApi';
+import Modal from '../../components/layout/Modal';
 import NotFound from '../NotFound';
-import { IBlogData } from '../../types/IBlog';
+import { deleteBlog, getBlog, getBlogsUsernames } from '../../utils/blogsApi';
 import EditBlog from '../../components/layout/EditBlog';
+import { IBlogData } from '../../types/IBlog';
 import meatballMenuIcon from '../../assets/images/meatball-menu.png';
 
 import { useCallback, useEffect, useRef, useState } from 'react';
@@ -123,9 +124,11 @@ const Blog = () => {
   const [username, setUsername] = useState<string | null>(null);
   const [parsedBody, setParsedBody] = useState<string | null>(null);
   const [isEditing, setIsEditing] = useState<boolean>(false);
+  const [isShowModalDelete, setIsShowModalDelete] = useState<boolean>(false);
 
   const editMenuRef = useRef<HTMLDialogElement>(null);
 
+  // callbacks
   const updateBlog = useCallback(async () => {
     if (!id) return;
 
@@ -157,6 +160,7 @@ const Blog = () => {
     }
   }, [id]);
 
+  // effects
   useEffect(() => {
     updateBlog();
   }, [updateBlog]);
@@ -169,6 +173,16 @@ const Blog = () => {
     }
   };
 
+  // modal handlers
+  const showModalDelete = () => {
+    setIsShowModalDelete(true);
+  };
+
+  const hideModalDelete = () => {
+    setIsShowModalDelete(false);
+  };
+
+  // handlers
   const handleEdit = () => {
     setIsEditing(true);
     toggleEditMenu();
@@ -228,13 +242,22 @@ const Blog = () => {
 
                 <EditMenu ref={editMenuRef}>
                   <EditItem onClick={handleEdit}>Edit</EditItem>
-                  <EditItem onClick={handleDelete}>Delete</EditItem>
+                  <EditItem onClick={showModalDelete}>Delete</EditItem>
                 </EditMenu>
               </EditContainer>
             )}
           </TopContainer>
 
           <Divider />
+
+          <Modal
+            show={isShowModalDelete}
+            message={`Are you sure you want to delete "${blogData.title}"?`}
+            btnText="Delete"
+            onConfirm={handleDelete}
+            onCancel={hideModalDelete}
+            btnColor="inverted"
+          />
 
           {isEditing ? (
             <EditBlog

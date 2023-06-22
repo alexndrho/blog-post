@@ -5,6 +5,7 @@ const { styled, globalCss, css } = createStitches({
     colors: {
       lightBlack: '#4C4C4C',
       lightGray: '#CBCBCB',
+      darkGray: '#6F7378',
       blue: '#007BFF',
       danger: '#CC0000',
       dangerDark: '#8B0000',
