@@ -33,7 +33,7 @@ const BodyLabelContainer = styled('div', {
 
 const CreateBlog = () => {
   const { isLoggedIn } = useAuth();
-  const [creatingBlog, setCreatingBlog] = useState(false);
+  const [isCreatingBlog, setIsCreatingBlog] = useState(false);
 
   const [title, setTitle] = useState('');
   const [snippet, setSnippet] = useState('');
@@ -44,10 +44,9 @@ const CreateBlog = () => {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (creatingBlog) return;
     if (!textFormatRef.current) throw new Error('No format selected');
 
-    setCreatingBlog(true);
+    setIsCreatingBlog(true);
     createBlog(title, snippet, body, textFormatRef.current.value)
       .then((blog) => {
         if (blog?.error) throw new Error(blog.error.message);
@@ -59,7 +58,7 @@ const CreateBlog = () => {
         }
       })
       .catch((err) => {
-        setCreatingBlog(false);
+        setIsCreatingBlog(false);
         console.error(err);
       });
   };
@@ -104,7 +103,9 @@ const CreateBlog = () => {
               onChange={(e) => setBody(e.target.value)}
               mb1
             />
-            <Button>{!creatingBlog ? 'Create' : 'Creating...'}</Button>
+            <Button disabled={isCreatingBlog}>
+              {!isCreatingBlog ? 'Create' : 'Creating...'}
+            </Button>
           </Form>
         </Main>
       )}

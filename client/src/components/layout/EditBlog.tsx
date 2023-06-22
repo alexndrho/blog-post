@@ -58,13 +58,10 @@ const EditBlog = ({ id, title, snippet, body, format, onCancel }: Props) => {
   };
 
   const handleSave = async () => {
-    console.log('witf');
     setIsShowModalEdit(false);
 
     try {
       setIsSaving(true);
-
-      console.log(id, inputTitle, inputSnippet, inputBody, selectedFormat);
 
       const data = await updateBlog(
         id,
@@ -135,7 +132,9 @@ const EditBlog = ({ id, title, snippet, body, format, onCancel }: Props) => {
         />
 
         <ButtonContainer>
-          <Button type="submit">{!isSaving ? 'Save' : 'Saving...'}</Button>
+          <Button type="submit" disabled={isSaving}>
+            {!isSaving ? 'Save' : 'Saving...'}
+          </Button>
           <Button type="button" color="outline" onClick={onCancel}>
             Cancel
           </Button>
