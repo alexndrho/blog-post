@@ -103,13 +103,28 @@ const createBlog = async (req: Request, res: Response) => {
   }
 };
 
-const deleteBlog = async (req: Request, res: Response) => {
+const updateBlog = async (req: Request, res: Response) => {
   try {
-    const deletedBlog = await Blog.findByIdAndDelete(req.params.id);
+    const id = req.params.id;
+    const body = req.body as Pick<
+      IBlog,
+      'title' | 'snippet' | 'body' | 'format'
+    >;
 
-    if (!deletedBlog) throw 'Unable to find blog';
+    const blog = await Blog.findById(id);
+    if (!blog) throw 'Unable to update blog';
 
-    res.status(200).json({ ...deletedBlog._doc });
+    if (req.user?.id !== blog.userId) throw new Error('User not authorized');
+
+    blog.title = body.title;
+    blog.snippet = body.snippet;
+    blog.body = body.body;
+    blog.format = body.format;
+
+    const updatedBlog = await blog.save();
+    if (!updatedBlog) throw new Error('Unable to update blog');
+
+    res.status(200).json({});
   } catch (err) {
     if (!res.headersSent) {
       if (err instanceof Error) {
@@ -121,4 +136,35 @@ const deleteBlog = async (req: Request, res: Response) => {
   }
 };
 
-export { getBlogs, getBlogsByUserId, getBlog, createBlog, deleteBlog };
+const deleteBlog = async (req: Request, res: Response) => {
+  try {
+    const id = req.params.id;
+
+    const blog = await Blog.findById(id).select('userId');
+
+    if (!blog) throw 'Unable to delete blog';
+    if (req.user?.id !== blog.userId) throw new Error('User not authorized');
+
+    const deletedBlog = await Blog.findByIdAndRemove(id);
+    if (!deletedBlog) throw new Error('Unable to delete blog');
+
+    res.status(200).json({});
+  } catch (err) {
+    if (!res.headersSent) {
+      if (err instanceof Error) {
+        res.status(400).json({ error: { message: err.message } });
+      } else {
+        res.status(500).json({ error: { message: 'An error occured' } });
+      }
+    }
+  }
+};
+
+export {
+  getBlogs,
+  getBlogsByUserId,
+  getBlog,
+  createBlog,
+  updateBlog,
+  deleteBlog,
+};

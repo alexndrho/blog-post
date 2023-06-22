@@ -5,8 +5,10 @@ const { styled, globalCss, css } = createStitches({
     colors: {
       lightBlack: '#4C4C4C',
       lightGray: '#CBCBCB',
+      darkGray: '#6F7378',
       blue: '#007BFF',
       danger: '#CC0000',
+      dangerDark: '#8B0000',
 
       terminal: '#1E1E1E',
     },
@@ -83,29 +85,32 @@ const useGlobalCss = globalCss({
 
   // blog
   '.blog-content': {
-    fontSize: '0.875rem',
+    fontSize: '0.75rem',
     margin: '0 auto',
     maxWidth: '100%',
-    lineHeight: '1.5',
 
     h1: {
-      fontSize: '2.5rem',
-    },
-
-    h2: {
       fontSize: '2rem',
     },
 
-    'h3, h4, h5, h6': {
+    h2: {
       fontSize: '1.5rem',
     },
 
+    'h3, h4, h5, h6': {
+      fontSize: '1.25rem',
+    },
+
     p: {
-      marginBottom: '1.25rem',
+      marginBottom: '1.25em',
     },
 
     a: {
       color: '$blue',
+    },
+
+    ul: {
+      marginBottom: '1em',
     },
 
     li: {
@@ -113,23 +118,29 @@ const useGlobalCss = globalCss({
     },
 
     pre: {
-      marginBottom: '1.25',
+      marginBottom: '1.25em',
       backgroundColor: '$terminal',
       color: 'White',
       borderRadius: '0.5em',
-      padding: '1rem',
+      padding: '1em',
       overflowX: 'auto',
+    },
+
+    'pre > code': {
+      backgroundColor: 'transparent',
+      color: 'inherit',
+      padding: 0,
     },
 
     code: {
       backgroundColor: '$terminal',
       color: 'White',
-      borderRadius: '0.5em',
-      padding: '0.25rem',
+      borderRadius: '0.25em',
+      padding: '0.0625em',
     },
 
     blockquote: {
-      borderLeft: '0.25rem solid Black',
+      borderLeft: '0.25em solid Black',
       paddingLeft: '1rem',
       marginLeft: '0',
       marginRight: '0',
@@ -148,7 +159,7 @@ const useGlobalCss = globalCss({
 
     table: {
       width: '100%',
-      marginBottom: '1rem',
+      marginBottom: '1em',
       color: 'inherit',
       borderCollapse: 'collapse',
     },
@@ -158,13 +169,31 @@ const useGlobalCss = globalCss({
     },
 
     'table th, table td': {
-      padding: '0.75rem',
+      padding: '0.75em',
       verticalAlign: 'top',
       border: '1px solid Black',
     },
 
+    '@tablet': {
+      fontSize: '0.875rem',
+      lineHeight: '1.25',
+
+      h1: {
+        fontSize: '2.5rem',
+      },
+
+      h2: {
+        fontSize: '2rem',
+      },
+
+      'h3, h4, h5, h6': {
+        fontSize: '1.5rem',
+      },
+    },
+
     '@desktop': {
-      fontSize: '16px',
+      fontSize: '1rem',
+      lineHeight: '1.5',
 
       h1: {
         fontSize: '3rem',

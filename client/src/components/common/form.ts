@@ -194,6 +194,15 @@ const Button = styled('button', {
         },
       },
 
+      danger: {
+        backgroundColor: '$danger',
+        color: 'White',
+
+        '&:active': {
+          backgroundColor: '$dangerDark',
+        },
+      },
+
       outline: {
         border: '0.15rem solid Black',
         background: 'none',
@@ -254,4 +263,18 @@ const Info = styled('p', {
   },
 });
 
-export { Form, Title, Label, Input, TextArea, Button, Info };
+const Select = styled('select', {
+  border: 'none',
+  padding: '0.35em',
+  fontSize: '$m-5',
+  borderRadius: '0.25em',
+  fontFamily: 'inherit',
+
+  '@desktop': {
+    fontSize: '$5',
+  },
+});
+
+const Option = styled('option');
+
+export { Form, Title, Label, Input, TextArea, Button, Info, Select, Option };

@@ -9,6 +9,8 @@ import {
   Input,
   TextArea,
   Button,
+  Select,
+  Option,
 } from '../../components/common/form';
 
 import React, { useRef, useState } from 'react';
@@ -28,16 +30,6 @@ const BodyLabelContainer = styled('div', {
   justifyContent: 'space-between',
   alignItems: 'center',
 });
-
-const SelectTextFormat = styled('select', {
-  border: 'none',
-  padding: '0.35em',
-  borderRadius: '0.25em',
-  fontSize: '$5',
-  fontFamily: 'inherit',
-});
-
-const TextFormatOption = styled('option');
 
 const CreateBlog = () => {
   const { isLoggedIn } = useAuth();
@@ -103,10 +95,10 @@ const CreateBlog = () => {
                 Body:
               </Label>
 
-              <SelectTextFormat ref={textFormatRef}>
-                <TextFormatOption value="markdown">Markdown</TextFormatOption>
-                <TextFormatOption value="html">HTML</TextFormatOption>
-              </SelectTextFormat>
+              <Select ref={textFormatRef}>
+                <Option value="markdown">Markdown</Option>
+                <Option value="html">HTML</Option>
+              </Select>
             </BodyLabelContainer>
             <TextArea
               id="form-body"
