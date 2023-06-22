@@ -51,10 +51,12 @@ const Nav = styled('nav', {
   top: 0,
   left: '100%',
   zIndex: 98,
+
   padding: '5rem',
-  display: 'block',
   width: '100vw',
+  backgroundColor: 'White',
   minHeight: '100vh',
+  display: 'block',
   transition: 'left 0.5s ease',
 
   '@desktop': {
