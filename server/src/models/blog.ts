@@ -22,6 +22,7 @@ const blogSchema = new Schema(
     },
     format: {
       type: String,
+      enum: ['markdown'],
       required: true,
     },
   },
