@@ -76,6 +76,7 @@ const CreateBlog = () => {
             </Label>
             <Input
               id="form-title"
+              required
               onChange={(e) => setTitle(e.target.value)}
               mb1
             />
@@ -85,6 +86,7 @@ const CreateBlog = () => {
             </Label>
             <Input
               id="form-snippet"
+              required
               onChange={(e) => setSnippet(e.target.value)}
               mb1
             />
@@ -100,6 +102,7 @@ const CreateBlog = () => {
             </BodyLabelContainer>
             <TextArea
               id="form-body"
+              required
               onChange={(e) => setBody(e.target.value)}
               mb1
             />

@@ -73,6 +73,7 @@ const Login = () => {
         </Label>
         <Input
           id="form-username"
+          required
           onChange={(e) => setUsername(e.target.value)}
           mb1
         />
@@ -82,6 +83,7 @@ const Login = () => {
         <Input
           id="form-password"
           type="password"
+          required
           onChange={(e) => setPassword(e.target.value)}
           mb1
         />

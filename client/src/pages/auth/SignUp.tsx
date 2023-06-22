@@ -74,6 +74,7 @@ const SignUp = () => {
         </Label>
         <Input
           id="form-username"
+          required
           onChange={(e) => setUsername(e.target.value)}
           mb1
         />
@@ -84,6 +85,7 @@ const SignUp = () => {
         <Input
           id="form-email"
           type="email"
+          required
           onChange={(e) => setEmail(e.target.value)}
           mb1
         />
@@ -94,6 +96,7 @@ const SignUp = () => {
         <Input
           id="form-password"
           type="password"
+          required
           onChange={(e) => setPassword(e.target.value)}
           mb1
         />
