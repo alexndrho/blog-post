@@ -30,6 +30,7 @@ const SignUp = () => {
   const [username, setUsername] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [isSigningUp, setIsSigningUp] = useState(false);
   const [errorMessage, setErrorMessage] = useState('');
 
   const navigate = useNavigate();
@@ -41,20 +42,21 @@ const SignUp = () => {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
+    setIsSigningUp(true);
     try {
-      signUp(username, email, password)
-        .then((data) => {
-          if (data?.error?.message) {
-            setErrorMessage(data.error.message) + '!';
-          } else if (data) {
-            navigate('/login');
-          } else {
-            throw new Error('No data returned');
-          }
-        })
-        .catch((err) => console.error(err));
+      const data = await signUp(username, email, password);
+
+      if (data?.error?.message) {
+        throw new Error(data.error.message + '!');
+      } else {
+        setIsSigningUp(false);
+        navigate('/login');
+      }
     } catch (err) {
-      console.error(err);
+      setIsSigningUp(false);
+      if (err instanceof Error) {
+        setErrorMessage(err.message);
+      }
     }
   };
 
@@ -95,7 +97,9 @@ const SignUp = () => {
           onChange={(e) => setPassword(e.target.value)}
           mb1
         />
-        <Button>Submit</Button>
+        <Button disabled={isSigningUp}>
+          {isSigningUp ? 'Signing up...' : 'Sign up'}
+        </Button>
         <Info>
           Already have an account?{' '}
           <A as={Link} to="/login">
