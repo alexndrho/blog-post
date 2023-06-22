@@ -1,14 +1,14 @@
 import { styled } from '../../stitches.config';
 import { useUser } from '../../context/useUser';
 import { UsernameLink } from '../../components/common/UsernameLink';
-import { getBlog, getBlogsUsernames } from '../../utils/blogsApi';
+import { deleteBlog, getBlog, getBlogsUsernames } from '../../utils/blogsApi';
 import NotFound from '../NotFound';
 import { IBlogData } from '../../types/IBlog';
 import EditBlog from '../../components/layout/EditBlog';
 import meatballMenuIcon from '../../assets/images/meatball-menu.png';
 
 import { useCallback, useEffect, useRef, useState } from 'react';
-import { useParams } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import { Link } from 'react-router-dom';
 import { marked } from 'marked';
 import DOMPurify from 'dompurify';
@@ -113,6 +113,8 @@ const Divider = styled('div', {
 const Content = styled('section');
 
 const Blog = () => {
+  const navigate = useNavigate();
+
   const { id } = useParams();
   const { user } = useUser();
 
@@ -177,6 +179,22 @@ const Blog = () => {
     updateBlog();
   };
 
+  const handleDelete = async () => {
+    if (!id) return;
+
+    toggleEditMenu();
+
+    try {
+      const blog = await deleteBlog(id);
+
+      if (blog?.error) throw new Error(blog.error.message);
+
+      navigate('/');
+    } catch (err) {
+      console.error(err);
+    }
+  };
+
   if (blogData == null && !loading) return <NotFound />;
 
   return (
@@ -210,7 +228,7 @@ const Blog = () => {
 
                 <EditMenu ref={editMenuRef}>
                   <EditItem onClick={handleEdit}>Edit</EditItem>
-                  <EditItem>Delete</EditItem>
+                  <EditItem onClick={handleDelete}>Delete</EditItem>
                 </EditMenu>
               </EditContainer>
             )}

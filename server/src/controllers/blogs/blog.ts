@@ -114,7 +114,7 @@ const updateBlog = async (req: Request, res: Response) => {
     const blog = await Blog.findById(id);
     if (!blog) throw 'Unable to update blog';
 
-    if (req.user?.id !== blog.userId) throw 'User not authorized';
+    if (req.user?.id !== blog.userId) throw new Error('User not authorized');
 
     blog.title = body.title;
     blog.snippet = body.snippet;
@@ -122,7 +122,7 @@ const updateBlog = async (req: Request, res: Response) => {
     blog.format = body.format;
 
     const updatedBlog = await blog.save();
-    if (!updatedBlog) throw 'Unable to update blog';
+    if (!updatedBlog) throw new Error('Unable to update blog');
 
     res.status(200).json({});
   } catch (err) {
@@ -138,11 +138,17 @@ const updateBlog = async (req: Request, res: Response) => {
 
 const deleteBlog = async (req: Request, res: Response) => {
   try {
-    const deletedBlog = await Blog.findByIdAndDelete(req.params.id);
+    const id = req.params.id;
 
-    if (!deletedBlog) throw 'Unable to find blog';
+    const blog = await Blog.findById(id).select('userId');
 
-    res.status(200).json({ ...deletedBlog._doc });
+    if (!blog) throw 'Unable to delete blog';
+    if (req.user?.id !== blog.userId) throw new Error('User not authorized');
+
+    const deletedBlog = await Blog.findByIdAndRemove(id);
+    if (!deletedBlog) throw new Error('Unable to delete blog');
+
+    res.status(200).json({});
   } catch (err) {
     if (!res.headersSent) {
       if (err instanceof Error) {

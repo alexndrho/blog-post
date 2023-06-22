@@ -15,9 +15,9 @@ router.get('/', getBlogs);
 router.post('/', verifyToken, createBlog);
 
 router.get('/user/:id', getBlogsByUserId);
-router.delete('/delete-blog/:id', deleteBlog);
 
 router.get('/:id', getBlog);
 router.put('/:id', verifyToken, updateBlog);
+router.delete('/:id', verifyToken, deleteBlog);
 
 export default router;

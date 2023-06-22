@@ -163,6 +163,28 @@ const updateBlog = async (
   }
 };
 
+const deleteBlog = async (id: IBlogData['_id']) => {
+  try {
+    const response = await fetch(
+      `${import.meta.env.VITE_BASE_URL_SERVER}/blogs/${id}`,
+      {
+        method: 'DELETE',
+        headers: {
+          'Content-Type': 'application/json',
+          'x-access-token': localStorage.getItem('token') || '',
+        },
+      }
+    );
+
+    const responseData: IBlogSuccessResponse = await response.json();
+
+    return responseData;
+  } catch (err) {
+    console.log(err);
+    return null;
+  }
+};
+
 export {
   getBlogs,
   getBlogsByUserId,
@@ -170,4 +192,5 @@ export {
   getBlogsUsernames,
   createBlog,
   updateBlog,
+  deleteBlog,
 };
