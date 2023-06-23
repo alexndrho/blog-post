@@ -41,13 +41,13 @@ const A = styled('a', {
 });
 
 const Info = styled('p', {
-  marginBottom: '1rem',
+  marginBottom: '0.5rem',
   color: 'DimGray',
   fontSize: '$m-6',
   fontWeight: 500,
 
   '@desktop': {
-    marginBottom: '1.25rem',
+    marginBottom: '0.75em',
     fontSize: '$6',
   },
 });
