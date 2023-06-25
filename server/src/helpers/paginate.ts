@@ -3,12 +3,13 @@ import mongoose from 'mongoose';
 const paginate = async (
   Model: mongoose.Model<any>,
   page: number,
-  documentCount = 10
+  documentCount = 10,
+  findOptions = {}
 ) => {
   try {
     if (page < 1) throw new Error('Invalid page number');
 
-    const documents = await Model.find()
+    const documents = await Model.find(findOptions)
       .sort({ createdAt: -1 })
       .skip(documentCount * (page - 1))
       .limit(documentCount);
@@ -17,7 +18,7 @@ const paginate = async (
 
     const totalPages = Math.max(
       1,
-      Math.ceil((await Model.countDocuments()) / documentCount)
+      Math.ceil((await Model.countDocuments(findOptions)) / documentCount)
     );
 
     return { documents, totalPages };

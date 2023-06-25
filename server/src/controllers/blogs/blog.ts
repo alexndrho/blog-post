@@ -28,11 +28,13 @@ const getBlogs = async (req: Request, res: Response) => {
 
 const getBlogsByUserId = async (req: Request, res: Response) => {
   try {
+    const userId: IBlog['userId'] = req.params.id;
+
     const page: number = req.query.page
       ? parseInt(req.query.page as string)
       : 1;
 
-    const { documents: blogs, totalPages } = await paginate(Blog, page);
+    const { documents: blogs, totalPages } = await paginate(Blog, page, 10, {userId: userId});
 
     res.status(200).json({ dataBlogs: [...blogs], totalPages });
   } catch (err) {
